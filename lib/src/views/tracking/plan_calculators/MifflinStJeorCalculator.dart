@@ -126,7 +126,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                     builder: (BuildContext ctx, AsyncSnapshot<SharedPreferences> snapshot) {
                       if (snapshot.hasData) {
                         return AnimatedToggle(
-                          initialValue: snapshot.data?.getBool("msj_use_metric") == true ? "Metric" : "Imperial",
+                          initialValue: snapshot.data?.getBool("msj_use_metric") ?? true == true ? "Metric" : "Imperial",
                           values: ["Metric", "Imperial"],
                           onToggleCallback: (value) {
                             _preferences.then((SharedPreferences prefs) {
