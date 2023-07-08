@@ -1,3 +1,4 @@
+import 'package:calorie_tracker/src/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/AnimatedToggle.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,7 +55,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
 
   void handleSwapSystem(bool toMetric, SharedPreferences prefs) {
     _isMetric = toMetric;
-    prefs.setBool("msj_use_metric", toMetric);
+    prefs.setBool(MSJ_USE_METRIC_BOOL, toMetric);
     if (toMetric) {
       _height = (_height + _heightFt * 12) * 2.54;
       _weight = _weight * 0.4535924;
@@ -63,11 +64,11 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
       _height = _height / 2.54 % 12;
       _weight = _weight * 2.204623;
       _heightFtController.text = _heightFt.toString();
-      prefs.setInt("user_height_ft", _heightFt);
+      prefs.setInt(USER_HEIGHT_FT_INT, _heightFt);
     }
-    prefs.setDouble("user_height", _height);
-    prefs.setDouble("user_weight", _weight);
-    setState((){});
+    prefs.setDouble(USER_HEIGHT_DOUBLE, _height);
+    prefs.setDouble(USER_WEIGHT_DOUBLE, _weight);
+    setState(() {});
 
     _heightController.text = _height.toStringAsFixed(2);
     _weightController.text = _weight.toStringAsFixed(2);
@@ -78,13 +79,13 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
     super.initState();
     _preferences.then((SharedPreferences prefs) {
       setState(() {
-        _gender = prefs.getString("user_gender") ?? _gender;
-        _isMetric = prefs.getBool("msj_use_metric") ?? _isMetric;
-        _weight = prefs.getDouble("user_weight") ?? _weight;
-        _height = prefs.getDouble("user_height") ?? _height;
-        _heightFt = prefs.getInt("user_height_ft") ?? _heightFt;
-        _age = prefs.getInt("user_age") ?? _age;
-        _activityLevel = prefs.getString("user_activity_level") ?? _activityLevel;
+        _gender = prefs.getString(USER_GENDER_STRING) ?? _gender;
+        _isMetric = prefs.getBool(MSJ_USE_METRIC_BOOL) ?? _isMetric;
+        _weight = prefs.getDouble(USER_WEIGHT_DOUBLE) ?? _weight;
+        _height = prefs.getDouble(USER_HEIGHT_DOUBLE) ?? _height;
+        _heightFt = prefs.getInt(USER_HEIGHT_FT_INT) ?? _heightFt;
+        _age = prefs.getInt(USER_AGE_INT) ?? _age;
+        _activityLevel = prefs.getString(USER_ACTIVITY_LEVEL_STRING) ?? _activityLevel;
 
         _weightController.text = _weight.toStringAsFixed(3);
         _heightController.text = _height.toStringAsFixed(2);
@@ -108,7 +109,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                 setState(() {
                   _gender = newValue!;
                 });
-                _preferences.then((SharedPreferences prefs) => prefs.setString("user_gender", newValue!));
+                _preferences.then((SharedPreferences prefs) => prefs.setString(USER_GENDER_STRING, newValue!));
               },
               items: <String>['Male', 'Female'].map((String value) {
                 return DropdownMenuItem<String>(
@@ -126,7 +127,8 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                     builder: (BuildContext ctx, AsyncSnapshot<SharedPreferences> snapshot) {
                       if (snapshot.hasData) {
                         return AnimatedToggle(
-                          initialValue: snapshot.data?.getBool("msj_use_metric") ?? true == true ? "Metric" : "Imperial",
+                          initialValue:
+                              snapshot.data?.getBool(MSJ_USE_METRIC_BOOL) ?? true == true ? "Metric" : "Imperial",
                           values: ["Metric", "Imperial"],
                           onToggleCallback: (value) {
                             _preferences.then((SharedPreferences prefs) {
@@ -153,7 +155,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
               onChanged: (value) {
                 setState(() {
                   _weight = double.tryParse(value) ?? 0.0;
-                  _preferences.then((SharedPreferences prefs) => prefs.setDouble("user_weight", _weight));
+                  _preferences.then((SharedPreferences prefs) => prefs.setDouble(USER_WEIGHT_DOUBLE, _weight));
                 });
               },
             ),
@@ -173,7 +175,8 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                             onChanged: (value) {
                               setState(() {
                                 _height = double.parse(value);
-                                _preferences.then((SharedPreferences prefs) => prefs.setDouble("user_height", _height));
+                                _preferences
+                                    .then((SharedPreferences prefs) => prefs.setDouble(USER_HEIGHT_DOUBLE, _height));
                               });
                             },
                           ),
@@ -190,7 +193,8 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                           onChanged: (value) {
                             setState(() {
                               _heightFt = int.tryParse(value) ?? 0;
-                              _preferences.then((SharedPreferences prefs) => prefs.setInt("user_height_ft", _heightFt));
+                              _preferences
+                                  .then((SharedPreferences prefs) => prefs.setInt(USER_HEIGHT_FT_INT, _heightFt));
                             });
                           },
                         )),
@@ -204,7 +208,8 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                           onChanged: (value) {
                             setState(() {
                               _height = double.tryParse(value) ?? 0;
-                              _preferences.then((SharedPreferences prefs) => prefs.setDouble("user_height", _height));
+                              _preferences
+                                  .then((SharedPreferences prefs) => prefs.setDouble(USER_HEIGHT_DOUBLE, _height));
                             });
                           },
                         )),
@@ -217,7 +222,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
               onChanged: (value) {
                 setState(() {
                   _age = int.tryParse(value) ?? 0;
-                  _preferences.then((SharedPreferences prefs) => prefs.setInt("user_age", _age));
+                  _preferences.then((SharedPreferences prefs) => prefs.setInt(USER_AGE_INT, _age));
                 });
               },
             ),
@@ -227,7 +232,9 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
               value: _activityLevel,
               onChanged: (newValue) {
                 setState(() {
-                  _activityLevel = newValue!;
+                  _activityLevel = newValue ?? "";
+                  _preferences
+                      .then((SharedPreferences prefs) => prefs.setString(USER_ACTIVITY_LEVEL_STRING, _activityLevel));
                 });
               },
               items: _activityLevelOptions.keys.map((String value) {
