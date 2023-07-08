@@ -36,15 +36,11 @@ class _CalendarPageState extends State<CalendarPage> {
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          title: const Center(
-            child: Text("Calorie Entry History"),
-          ),
-        ),
         body: Column(
           children: [
+            Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Text("Your first entry was on date: ${DateFormat.yMMMd().format(_startDate!)}"),
+              child: Text("Your first entry was on ${DateFormat.yMMMd().format(_startDate!)}"),
             ),
             TableCalendar(
               focusedDay: DateTime.now(),

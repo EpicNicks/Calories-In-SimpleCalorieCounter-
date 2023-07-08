@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
@@ -23,8 +25,9 @@ class DailyCaloriesPage extends StatefulWidget {
   State<DailyCaloriesPage> createState() => _DailyCaloriesPageState();
 }
 
-class _DailyCaloriesPageState extends State<DailyCaloriesPage> {
+class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindingObserver {
   List<Entry> entries = [];
+  DateTime? _today;
 
   Future<void> loadItems() async {
     final foodItemEntries = await DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly);
@@ -122,14 +125,33 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    if (state == AppLifecycleState.resumed){
+      loadItems();
+    }
+  }
+
+
+  @override
   void initState() {
     super.initState();
+    _today = DateTime.now();
+    Timer.periodic(Duration(seconds: 1), (Timer timer){
+      final now = DateTime.now();
+      if (now.dateOnly != _today?.dateOnly) {
+        print("here");
+        loadItems();
+        _today = DateTime.now();
+      }
+    });
+    WidgetsBinding.instance.addObserver(this);
     loadItems();
   }
 
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     for (var entry in entries) {
       entry.dispose();
     }
