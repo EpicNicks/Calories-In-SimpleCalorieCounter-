@@ -61,7 +61,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   shape: BoxShape.circle,
                 ),
                 todayDecoration: BoxDecoration(
-                  color: Colors.orange[400],
+                  color: Colors.orange[200],
                   shape: BoxShape.circle,
                 ),
               ),

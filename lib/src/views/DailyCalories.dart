@@ -28,6 +28,7 @@ class DailyCaloriesPage extends StatefulWidget {
 class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindingObserver {
   List<Entry> entries = [];
   DateTime? _today;
+  Timer? _timer;
 
   Future<void> loadItems() async {
     final foodItemEntries = await DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly);
@@ -136,7 +137,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   void initState() {
     super.initState();
     _today = DateTime.now();
-    Timer.periodic(Duration(seconds: 1), (Timer timer){
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer){
       final now = DateTime.now();
       if (now.dateOnly != _today?.dateOnly) {
         print("here");
@@ -151,6 +152,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   @override
   void dispose() {
     super.dispose();
+    _timer?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     for (var entry in entries) {
       entry.dispose();

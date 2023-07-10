@@ -1,4 +1,4 @@
-import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeorCalculator.dart';
+import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/PlanCalculators.dart';
 import 'package:flutter/material.dart';
 import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
@@ -15,7 +15,7 @@ class _TrackingMainState extends State<TrackingMain> {
 
   final List<String> appbarTitles = [
     "Calorie Entry History",
-    "Graphs",
+    "Charts",
     "Your Plan"
   ];
 
@@ -34,7 +34,7 @@ class _TrackingMainState extends State<TrackingMain> {
       ),
       body: [
         CalendarPage(),
-        Center(child: Text("Not Implemented Yet")),
+        Graphing(),
         PlanCalculators()
       ][_selectedIndex],
       drawer: Drawer(

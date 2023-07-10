@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const DAY_MILLIS = 86400000;
+
   DatabaseHelper._privateConstructor();
 
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -35,7 +36,16 @@ class DatabaseHelper {
   Future<List<FoodItemEntry>> getFoodItems(DateTime dateTime) async {
     Database db = await instance.database;
     final foodEntries =
-        await db.query('food_item', orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
+    await db.query('food_item', orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
+    return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
+  }
+
+  Future<List<FoodItemEntry>> getFoodItemsInRange(DateTime startInclusive, DateTime endInclusive) async {
+    Database db = await instance.database;
+    final foodEntries = await db.query(
+        'food_item',
+        orderBy: 'id ASC',
+        where: 'date>=${startInclusive.dateOnly.millisecondsSinceEpoch} AND date <= ${endInclusive.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
@@ -94,6 +104,9 @@ class DatabaseHelper {
   // delete all empty entries from previous days, will probably run in a service
   Future<int> purgePreviousEmpty() async {
     Database db = await instance.database;
-    return await db.delete('food_item', where: 'calorieExpression = "" AND date < ${DateTime.now().dateOnly.millisecondsSinceEpoch - DAY_MILLIS}');
+    return await db.delete('food_item', where: 'calorieExpression = "" AND date < ${DateTime
+        .now()
+        .dateOnly
+        .millisecondsSinceEpoch - DAY_MILLIS}');
   }
 }

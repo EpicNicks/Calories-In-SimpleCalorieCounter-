@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class FoodItemEntry {

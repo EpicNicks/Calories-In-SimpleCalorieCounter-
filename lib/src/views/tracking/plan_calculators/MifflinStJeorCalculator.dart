@@ -5,12 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MifflinStJeorCalculator extends StatefulWidget {
   @override
-  _MifflinStJeorCalculatorState createState() => _MifflinStJeorCalculatorState();
+  State<MifflinStJeorCalculator> createState() => MifflinStJeorCalculatorState();
 }
 
-class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
+class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
   final Future<SharedPreferences> _preferences = SharedPreferences.getInstance();
-  static const _activityLevelOptions = <String, double>{
+  static const activityLevelOptions = <String, double>{
     'Bedridden': 1,
     'Sedentary': 1.2,
     'Light/1-3 Days Per Week': 1.375,
@@ -28,7 +28,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
   int _heightFt = 0;
   int _age = 0;
   String _gender = 'Male';
-  String _activityLevel = _activityLevelOptions.keys.toList()[1];
+  String _activityLevel = activityLevelOptions.keys.toList()[1];
   double _calculatedCalories = 0.0;
   bool _isMetric = true;
 
@@ -49,7 +49,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
       }
     }
     setState(() {
-      _calculatedCalories = bmr * _activityLevelOptions[_activityLevel]!;
+      _calculatedCalories = bmr * activityLevelOptions[_activityLevel]!;
     });
   }
 
@@ -237,7 +237,7 @@ class _MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                       .then((SharedPreferences prefs) => prefs.setString(USER_ACTIVITY_LEVEL_STRING, _activityLevel));
                 });
               },
-              items: _activityLevelOptions.keys.map((String value) {
+              items: activityLevelOptions.keys.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value),
