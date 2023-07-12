@@ -188,6 +188,7 @@ class _GraphingState extends State<Graphing> {
                                     .toList(),
                                 color: Colors.deepOrange,
                               ),
+                              // needs to be updated for plans variations which aren't constant
                               LineChartBarData(
                                   spots: dailyTotals
                                       .map((e) => FlSpot(

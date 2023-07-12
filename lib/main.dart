@@ -1,7 +1,7 @@
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
-import 'package:calorie_tracker/src/views/Settings.dart';
+import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

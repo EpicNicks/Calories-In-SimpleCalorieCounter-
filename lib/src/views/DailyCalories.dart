@@ -32,6 +32,12 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
 
   Future<void> loadItems() async {
     final foodItemEntries = await DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly);
+    final getLabelText = (FoodItemEntry e){
+      if (e.calorieExpression != "" && double.tryParse(e.calorieExpression) == null){
+        return "= " + evaluateFoodItem(e.calorieExpression).round().toString();
+      }
+      return "";
+    };
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();
@@ -42,7 +48,8 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
           textField: TextField(
             controller: controller,
             cursorColor: Colors.black,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
+              labelText: getLabelText(e),
               enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
