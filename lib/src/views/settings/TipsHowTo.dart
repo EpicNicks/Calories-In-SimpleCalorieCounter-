@@ -1,27 +1,21 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-class Faq extends StatelessWidget {
-
+class TipsHowTo extends StatelessWidget {
   final _mdString =
 """
-# FAQ
+# Tips and How Tos
 ---
-## Usable Math Symbols for entries
-- +, -, x and *, / for mathematical operations
-- , (comma) to separate items within an entry  
-  \(this is semantically equivalent to addition\)
+## How to Calculate Partial Servings
+Partial Servings can be entered as:
 
----
+calories-per-serving x amount / amount-per-serving
 
-## Optional Notes on Entries
-You may label additional information, such as the name of the food logged or whatever else you would like in a comment
-by adding a : (colon) to your entry and adding your comment after, such as\\
-**100+80+50: egg and toast w/ jam**
+So if you had cereal that was measured in 60 gram servings, you ate 90 grams of it, and the
+amount of calories per serving is 200, The total calories can be entered as:\\
+**200 x 90 / 60** ***(=300)***
 
 ---
-
 """;
 
   @override
@@ -40,4 +34,5 @@ by adding a : (colon) to your entry and adding your comment after, such as\\
         )
     );
   }
+
 }

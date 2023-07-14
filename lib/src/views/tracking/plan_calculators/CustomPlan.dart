@@ -27,9 +27,9 @@ class _CustomPlanState extends State<CustomPlan> {
                   padding: EdgeInsets.only(left: paddingWidth, right: paddingWidth),
                   child: Column(children: [
                     TextFormField(
-                      initialValue: (snapshot.data?.getInt(USER_CUSTOM_TARGET_DOUBLE) ?? 0).toString(),
+                      initialValue: (snapshot.data?.getInt(USER_CUSTOM_TARGET_INT) ?? 0).toString(),
                       onChanged: (value){
-                        snapshot.data?.setInt(USER_CUSTOM_TARGET_DOUBLE, int.tryParse(value) ?? 0);
+                        snapshot.data?.setInt(USER_CUSTOM_TARGET_INT, int.tryParse(value) ?? 0);
                       },
                       keyboardType: TextInputType.number,
                     ),

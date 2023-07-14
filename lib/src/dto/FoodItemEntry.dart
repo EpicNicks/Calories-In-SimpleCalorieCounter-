@@ -27,6 +27,8 @@ bool isConstant(String calorieExpression) {
 
 double evaluateFoodItem(String calorieExpression) {
   try {
+    // split off optional comment string
+    calorieExpression = calorieExpression.split(":")[0].trim();
     // enable alternate expression symbols here
     calorieExpression = calorieExpression
         .replaceAll("x", "*")

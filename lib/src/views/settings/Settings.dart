@@ -1,6 +1,8 @@
+import 'package:calorie_tracker/src/views/settings/TipsHowTo.dart';
 import 'package:flutter/material.dart';
 
 import 'FAQ.dart';
+import 'VersionPage.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -10,7 +12,11 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  final Map<String, Widget> menuButtons = {"FAQ": Faq()};
+  final Map<String, Widget> menuButtons = {
+    "FAQ": Faq(),
+    "Tips and How Tos": TipsHowTo(),
+    "Version/Update": VersionPage()
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +50,7 @@ class _SettingsState extends State<Settings> {
                             )),
                         child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text("FAQ", style: Theme.of(context).textTheme.titleLarge)),
+                            child: Text(k, style: Theme.of(context).textTheme.titleLarge)),
                       ))
                     ]))
                 .toList()));

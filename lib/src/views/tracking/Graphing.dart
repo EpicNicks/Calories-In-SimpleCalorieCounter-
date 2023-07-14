@@ -71,7 +71,7 @@ class _GraphingState extends State<Graphing> {
       return (bmr * (MifflinStJeorCalculatorState.activityLevelOptions[activityLevel] ?? 0.0)).round();
     }
     if (_selectedPlan == _planOptions[1]) {
-      return preferences.getDouble(USER_CUSTOM_TARGET_DOUBLE)?.round() ?? 0;
+      return preferences.getInt(USER_CUSTOM_TARGET_INT) ?? 0;
     }
     return 0;
   }

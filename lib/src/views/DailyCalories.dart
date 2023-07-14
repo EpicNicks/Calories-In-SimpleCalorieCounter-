@@ -66,8 +66,14 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             },
             onSubmitted: (value) {
               if (value.isNotEmpty) {
-                addTextField();
-                focusNode.unfocus();
+                final lastEntry = entries.lastOrNull;
+                if (lastEntry != null && lastEntry.textField.controller?.text == ""){
+                  lastEntry.textField.focusNode?.requestFocus();
+                }
+                else {
+                  addTextField();
+                  focusNode.unfocus();
+                }
               }
             },
             onEditingComplete: () {

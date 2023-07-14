@@ -2,7 +2,7 @@
 const MSJ_USE_METRIC_BOOL = "msj_use_metric";
 
 // custom plan
-const USER_CUSTOM_TARGET_DOUBLE = "user_custom_target";
+const USER_CUSTOM_TARGET_INT = "user_custom_target";
 
 // user profile general constants
 const USER_GENDER_STRING = "user_gender";

@@ -5,4 +5,10 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" android:host="github.com" android:path="/EpicNicks/SimpleCalorieCounter/releases/latest" />
+        </intent>
+    </queries>
 </manifest>
