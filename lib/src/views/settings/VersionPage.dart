@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../constants/ColorConstants.dart';
+
 class VersionPage extends StatelessWidget {
   final releasesUrl = "github.com/EpicNicks/SimpleCalorieCounter/releases/latest";
 
@@ -10,7 +12,7 @@ class VersionPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.orange.shade500,
+              backgroundColor: ORANGE_FRUIT,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -18,7 +20,8 @@ class VersionPage extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: Colors.orange.shade300,
+              color: ORANGE_FRUIT,
+              height: 40,
               child: FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),
                 builder: (context, snapshot) {
@@ -26,7 +29,7 @@ class VersionPage extends StatelessWidget {
                   if (snapshot.hasData){
                     versionString = snapshot.data!.version;
                   }
-                  return Center(child: Text("version number: $versionString"));
+                  return Align(child: Text("version number: $versionString"), alignment: Alignment.topCenter);
                 },
               ),
             ),

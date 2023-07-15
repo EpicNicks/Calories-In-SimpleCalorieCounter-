@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
@@ -49,7 +50,19 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             controller: controller,
             cursorColor: Colors.black,
             decoration: InputDecoration(
-              labelText: getLabelText(e),
+              label: getLabelText(e) != "" ?
+              Container(
+                decoration: BoxDecoration(
+                  color: ORANGE_FRUIT,
+                    border: Border.all(
+                      width: 2,
+                        color: Colors.orange.shade800
+                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(20))
+                ),
+                child: Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Text(getLabelText(e), style: TextStyle(color: Colors.white))),
+              ) : null,
+              //labelText: getLabelText(e),
               enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
@@ -176,21 +189,24 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: ORANGE_FRUIT,
           title: Center(child: Text("Total Calories: ${totalCalories()}")),
         ),
-        body: Column(
+        body: Stack(
           children: [
-            Expanded(
-                child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: FractionalOffset.bottomCenter,
-                        colors: [Colors.white70, Colors.orange.shade100],
-                        stops: const [0, 1],
-                      ),
-                    ),
+            Container(
+                decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: FractionalOffset.bottomCenter,
+                colors: [Colors.white70, ORANGE_FRUIT],
+                stops: const [0, 1],
+              ),
+            ),
+                child: SingleChildScrollView(
                     child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
                       itemCount: entries.length,
                       itemBuilder: (context, index) {
                         return ListTile(
@@ -203,7 +219,9 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
                           ),
                         );
                       },
-                    ))),
+                    )
+                )
+            ),
           ],
         ),
         bottomNavigationBar: Container(

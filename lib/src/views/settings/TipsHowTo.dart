@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
+import '../../constants/ColorConstants.dart';
+
 class TipsHowTo extends StatelessWidget {
   final _mdString =
 """
@@ -23,10 +25,10 @@ amount of calories per serving is 200, The total calories can be entered as:\\
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.orange.shade500,
+            backgroundColor: ORANGE_FRUIT,
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.orange.shade500,
+            color: ORANGE_FRUIT,
           ),
           body: Markdown(
             data: _mdString,

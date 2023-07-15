@@ -1,4 +1,4 @@
-import 'package:calorie_tracker/src/prefs_keys/PlanConstants.dart';
+import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/AnimatedToggle.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

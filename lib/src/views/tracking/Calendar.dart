@@ -1,3 +1,4 @@
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _CalendarPageState extends State<CalendarPage> {
               },
               calendarStyle: CalendarStyle(
                 selectedDecoration: BoxDecoration(
-                  color: Colors.orange.shade500,
+                  color: ORANGE_FRUIT,
                   shape: BoxShape.circle,
                 ),
                 todayDecoration: BoxDecoration(

@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
-import 'package:calorie_tracker/src/prefs_keys/PlanConstants.dart';
+import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeorCalculator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';

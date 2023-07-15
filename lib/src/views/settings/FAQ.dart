@@ -1,4 +1,5 @@
 
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
@@ -29,10 +30,10 @@ by adding a : (colon) to your entry and adding your comment after, such as\\
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.orange.shade500,
+            backgroundColor: ORANGE_FRUIT,
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.orange.shade500,
+            color: ORANGE_FRUIT,
           ),
           body: Markdown(
             data: _mdString,
