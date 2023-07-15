@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VersionPage extends StatelessWidget {
@@ -17,7 +18,17 @@ class VersionPage extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: Colors.orange.shade500,
+              color: Colors.orange.shade300,
+              child: FutureBuilder<PackageInfo>(
+                future: PackageInfo.fromPlatform(),
+                builder: (context, snapshot) {
+                  var versionString = "loading";
+                  if (snapshot.hasData){
+                    versionString = snapshot.data!.version;
+                  }
+                  return Center(child: Text("version number: $versionString"));
+                },
+              ),
             ),
             body: Padding(
               padding: EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -34,7 +45,7 @@ class VersionPage extends StatelessWidget {
                           onPressed: () async {
                             final uri = Uri(scheme: "https", path: releasesUrl);
                             try {
-                              await launchUrl(uri, mode: LaunchMode.platformDefault);
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
                             } catch(ex) {}
                           },
                           child: Text(

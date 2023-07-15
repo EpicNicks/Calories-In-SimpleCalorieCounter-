@@ -1,5 +1,6 @@
 import 'package:calorie_tracker/src/views/settings/TipsHowTo.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'FAQ.dart';
 import 'VersionPage.dart';
@@ -27,6 +28,20 @@ class _SettingsState extends State<Settings> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [Spacer(flex: 5), Text("Settings"), Spacer(flex: 1), Icon(Icons.settings), Spacer(flex: 5)],
           ),
+        ),
+        bottomNavigationBar: FutureBuilder<PackageInfo>(
+          future: PackageInfo.fromPlatform(),
+          builder: (context, snapshot){
+            String version = "loading...";
+            if (snapshot.hasData){
+              version = snapshot.data!.version;
+              print(version);
+            }
+            else {
+              version = "error fetching version";
+            }
+            return BottomAppBar(padding: EdgeInsets.zero, height: 50, child: Center(child: Text("version number: $version")));
+          },
         ),
         body: Column(
             mainAxisAlignment: MainAxisAlignment.start,
