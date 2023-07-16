@@ -33,8 +33,8 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
 
   Future<void> loadItems() async {
     final foodItemEntries = await DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly);
-    final getLabelText = (FoodItemEntry e){
-      if (e.calorieExpression != "" && double.tryParse(e.calorieExpression) == null){
+    final getLabelText = (FoodItemEntry e) {
+      if (e.calorieExpression != "" && double.tryParse(e.calorieExpression) == null) {
         return "= " + evaluateFoodItem(e.calorieExpression).round().toString();
       }
       return "";
@@ -50,18 +50,17 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             controller: controller,
             cursorColor: Colors.black,
             decoration: InputDecoration(
-              label: getLabelText(e) != "" ?
-              Container(
-                decoration: BoxDecoration(
-                  color: ORANGE_FRUIT,
-                    border: Border.all(
-                      width: 2,
-                        color: Colors.orange.shade800
-                    ),
-                    borderRadius: BorderRadius.all(Radius.circular(20))
-                ),
-                child: Padding(padding: EdgeInsets.only(left: 10, right: 10), child: Text(getLabelText(e), style: TextStyle(color: Colors.white))),
-              ) : null,
+              label: getLabelText(e) != ""
+                  ? Container(
+                      decoration: BoxDecoration(
+                          color: ORANGE_FRUIT,
+                          border: Border.all(width: 2, color: Colors.orange.shade800),
+                          borderRadius: BorderRadius.all(Radius.circular(20))),
+                      child: Padding(
+                          padding: EdgeInsets.only(left: 10, right: 10),
+                          child: Text(getLabelText(e), style: TextStyle(color: Colors.white))),
+                    )
+                  : null,
               //labelText: getLabelText(e),
               enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
@@ -80,10 +79,9 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             onSubmitted: (value) {
               if (value.isNotEmpty) {
                 final lastEntry = entries.lastOrNull;
-                if (lastEntry != null && lastEntry.textField.controller?.text == ""){
+                if (lastEntry != null && lastEntry.textField.controller?.text == "") {
                   lastEntry.textField.focusNode?.requestFocus();
-                }
-                else {
+                } else {
                   addTextField();
                   focusNode.unfocus();
                 }
@@ -112,8 +110,8 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("AlertDialog"),
-            content: const Text("Really CLEAR the List?"),
+            title: const Text("Really clear the List?"),
+            content: const Text("This will delete ALL of today's items", style: TextStyle(color: Colors.red)),
             actions: [
               TextButton(
                 child: const Text("Cancel"),
@@ -152,18 +150,17 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state){
-    if (state == AppLifecycleState.resumed){
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
       loadItems();
     }
   }
-
 
   @override
   void initState() {
     super.initState();
     _today = DateTime.now();
-    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer){
+    _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       final now = DateTime.now();
       if (now.dateOnly != _today?.dateOnly) {
         print("here");
@@ -190,44 +187,42 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
     return Scaffold(
         appBar: AppBar(
           backgroundColor: ORANGE_FRUIT,
-          title: Center(child: Text("Total Calories: ${totalCalories()}")),
+          title: Center(child: Text("Total Daily Calories: ${totalCalories()}")),
         ),
-        body: Stack(
-          children: [
-            Container(
-                decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: FractionalOffset.bottomCenter,
-                colors: [Colors.white70, ORANGE_FRUIT],
-                stops: const [0, 1],
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: FractionalOffset.bottomCenter,
+              colors: [Colors.white70, ORANGE_FRUIT],
+              stops: const [0, 1],
             ),
-                child: SingleChildScrollView(
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: entries.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: entries[index].textField,
-                          trailing: IconButton(
-                            icon: const Icon(Icons.close, color: Colors.red),
-                            onPressed: () {
-                              deleteTextField(entries[index].dbId);
-                            },
-                          ),
-                        );
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                  child: SingleChildScrollView(
+                      child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: entries.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: entries[index].textField,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.close, color: Colors.red),
+                      onPressed: () {
+                        deleteTextField(entries[index].dbId);
                       },
-                    )
-                )
-            ),
-          ],
+                    ),
+                  );
+                },
+              )))
+            ],
+          ),
         ),
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 0.25)
-          ),
+          decoration: BoxDecoration(border: Border.all(color: Colors.black, width: 0.25)),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
+import 'package:calorie_tracker/src/extensions/list_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeorCalculator.dart';
@@ -158,11 +157,10 @@ class _GraphingState extends State<Graphing> {
                         LineChartData(
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 2,
-                            minY: 0,
-                            maxY: dailyTotals
-                                    .map((e) => e.$1)
-                                    .fold(double.negativeInfinity, (prev, cur) => cur > prev ? cur : prev) *
-                                2,
+                            minY: (dailyTotals
+                                    .map((e) => e.$1).toList()..add(planTarget.toDouble())).min - 200,
+                            maxY: (dailyTotals
+                                    .map((e) => e.$1).toList()..add(planTarget.toDouble())).max + 200,
                             gridData: FlGridData(
                               show: true,
                               getDrawingHorizontalLine: (value) => FlLine(color: Colors.blueGrey, strokeWidth: 1),

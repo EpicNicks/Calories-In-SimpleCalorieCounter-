@@ -79,6 +79,15 @@ class DatabaseHelper {
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
+  Future<List<List<dynamic>>> getAllItemsAsCsvRows() async {
+    final entries = await getAllFoodItems();
+    List<List<dynamic>> res = [['id', 'calorieExpression', 'date']];
+    for (final entry in entries) {
+      res.add([entry.id, entry.calorieExpression, entry.date]);
+    }
+    return res;
+  }
+
   Future<int> add(FoodItemEntry foodItemEntry) async {
     Database db = await instance.database;
     return await db.insert('food_item', foodItemEntry.toMap());
@@ -108,5 +117,12 @@ class DatabaseHelper {
         .now()
         .dateOnly
         .millisecondsSinceEpoch - DAY_MILLIS}');
+  }
+
+  // purges previous entries and runs VACUUM on the db
+  Future<void> optimize() async {
+    await purgePreviousEmpty();
+    Database db = await instance.database;
+    await db.execute("VACUUM");
   }
 }

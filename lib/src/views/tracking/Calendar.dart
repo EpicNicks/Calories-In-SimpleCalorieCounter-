@@ -92,7 +92,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: FractionalOffset.bottomCenter,
-                              colors: [Colors.orange.shade50, Colors.orange.shade100],
+                              colors: [ORANGE_FRUIT, Colors.orange.shade100],
                               stops: const [0, 1],
                             ),
                           ),

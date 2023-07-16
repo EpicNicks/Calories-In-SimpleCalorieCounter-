@@ -1,5 +1,4 @@
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
-import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
@@ -8,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  DatabaseHelper.instance.purgePreviousEmpty();
+  DatabaseHelper.instance.optimize();
   runApp(const MyApp());
 }
 
