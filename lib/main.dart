@@ -1,12 +1,36 @@
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:media_store_plus/media_store_plus.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+final mediaStorePlugin = MediaStore();
+
+void main() async {
+  await WidgetsFlutterBinding.ensureInitialized();
+
+  List<Permission> permissions = [
+    Permission.storage,
+  ];
+
+  if ((await mediaStorePlugin.getPlatformSDKInt()) >= 33) {
+    permissions
+      ..add(Permission.photos)
+      ..add(Permission.audio)
+      ..add(Permission.videos)
+      ..add(Permission.manageExternalStorage)
+      ..add(Permission.accessMediaLocation);
+  }
+
+  Map<Permission, PermissionStatus> permissionsResult = await permissions.request();
+  if (permissionsResult.keys.every((k) => permissionsResult[k]!.isGranted)) {
+    MediaStore.appFolder = "MediaStorePlugin";
+  }
+
   DatabaseHelper.instance.optimize();
   runApp(const MyApp());
 }
@@ -14,13 +38,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-          textTheme: GoogleFonts.notoSansTextTheme(), useMaterial3: true
-      ),
+      theme: ThemeData(textTheme: GoogleFonts.notoSansTextTheme(), primarySwatch: Colors.orange, useMaterial3: true),
       home: const BottomTabBar(),
     );
   }
@@ -46,8 +67,7 @@ class BottomTabBar extends StatelessWidget {
               child: TabBar(
                 indicatorColor: Colors.red[500],
                 labelColor: Colors.redAccent,
-                overlayColor:
-                    MaterialStatePropertyAll(Colors.redAccent.shade100),
+                overlayColor: MaterialStatePropertyAll(Colors.redAccent.shade100),
                 tabs: const <Widget>[
                   Tab(
                     icon: Icon(Icons.calendar_month),
