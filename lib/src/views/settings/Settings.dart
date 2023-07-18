@@ -19,7 +19,7 @@ class _SettingsState extends State<Settings> {
     "FAQ": Faq(),
     "Tips and How Tos": TipsHowTo(),
     "Version/Update": VersionPage(),
-    "Import/Export Data": ImportExport(),
+    "Export/Import Data": ImportExport(),
   };
 
   @override

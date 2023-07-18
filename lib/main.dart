@@ -1,4 +1,3 @@
-import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
@@ -21,9 +20,7 @@ void main() async {
     permissions
       ..add(Permission.photos)
       ..add(Permission.audio)
-      ..add(Permission.videos)
-      ..add(Permission.manageExternalStorage)
-      ..add(Permission.accessMediaLocation);
+      ..add(Permission.videos);
   }
 
   Map<Permission, PermissionStatus> permissionsResult = await permissions.request();
