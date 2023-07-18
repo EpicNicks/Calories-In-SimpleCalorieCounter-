@@ -42,6 +42,11 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();
+        focusNode.addListener(() {
+          if (!focusNode.hasFocus){
+            loadItems();
+          }
+        });
         final controller = TextEditingController()..text = e.calorieExpression;
         return Entry(
           controller: controller,
@@ -201,23 +206,25 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
           child: Stack(
             children: [
               Positioned.fill(
-                  child: SingleChildScrollView(
-                      child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: entries.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: entries[index].textField,
-                    trailing: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.red),
-                      onPressed: () {
-                        deleteTextField(entries[index].dbId);
-                      },
-                    ),
-                  );
-                },
-              )))
+                  child: Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: SingleChildScrollView(
+                          child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: entries.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: entries[index].textField,
+                            trailing: IconButton(
+                              icon: const Icon(Icons.close, color: Colors.red),
+                              onPressed: () {
+                                deleteTextField(entries[index].dbId);
+                              },
+                            ),
+                          );
+                        },
+                      ))))
             ],
           ),
         ),
