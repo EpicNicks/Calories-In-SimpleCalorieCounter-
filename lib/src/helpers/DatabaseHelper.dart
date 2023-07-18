@@ -8,6 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   static const DAY_MILLIS = 86400000;
+  static const FOOD_ITEM_TABLE = 'food_item';
 
   DatabaseHelper._privateConstructor();
 
@@ -36,14 +37,14 @@ class DatabaseHelper {
   Future<List<FoodItemEntry>> getFoodItems(DateTime dateTime) async {
     Database db = await instance.database;
     final foodEntries =
-    await db.query('food_item', orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
+    await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
   Future<List<FoodItemEntry>> getFoodItemsInRange(DateTime startInclusive, DateTime endInclusive) async {
     Database db = await instance.database;
     final foodEntries = await db.query(
-        'food_item',
+        FOOD_ITEM_TABLE,
         orderBy: 'id ASC',
         where: 'date>=${startInclusive.dateOnly.millisecondsSinceEpoch} AND date <= ${endInclusive.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
@@ -51,7 +52,7 @@ class DatabaseHelper {
 
   Future<FoodItemEntry?> getFirstEntry() async {
     Database db = await instance.database;
-    final topEntry = await db.query('food_item', orderBy: 'date ASC', limit: 1);
+    final topEntry = await db.query(FOOD_ITEM_TABLE, orderBy: 'date ASC', limit: 1);
     if (topEntry.isNotEmpty) {
       final top = topEntry.map((c) => FoodItemEntry.fromMap(c));
       if (top.isNotEmpty) {
@@ -63,7 +64,7 @@ class DatabaseHelper {
 
   Future<FoodItemEntry?> getLastEntry() async {
     Database db = await instance.database;
-    final lastEntry = await db.query('food_item', orderBy: 'date DESC', limit: 1);
+    final lastEntry = await db.query(FOOD_ITEM_TABLE, orderBy: 'date DESC', limit: 1);
     if (lastEntry.isNotEmpty) {
       final last = lastEntry.map((e) => FoodItemEntry.fromMap(e));
       if (last.isNotEmpty) {
@@ -75,7 +76,7 @@ class DatabaseHelper {
 
   Future<List<FoodItemEntry>> getAllFoodItems() async {
     Database db = await instance.database;
-    final foodEntries = await db.query('food_item', orderBy: 'id ASC');
+    final foodEntries = await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
@@ -90,13 +91,22 @@ class DatabaseHelper {
 
   Future<int> add(FoodItemEntry foodItemEntry) async {
     Database db = await instance.database;
-    return await db.insert('food_item', foodItemEntry.toMap());
+    return await db.insert(FOOD_ITEM_TABLE, foodItemEntry.toMap());
+  }
+
+  Future<void> batchAdd(List<FoodItemEntry> foodItemEntries) async {
+    Database db = await instance.database;
+    final Batch batch = db.batch();
+    for (final entry in foodItemEntries) {
+      batch.insert(FOOD_ITEM_TABLE, entry.toMap());
+    }
+    await batch.commit(noResult: true);
   }
 
   Future<int> update(FoodItemEntry foodItemEntry) async {
     Database db = await instance.database;
     return await db.update(
-        'food_item',
+        FOOD_ITEM_TABLE,
         {
           'id': foodItemEntry.id,
           'calorieExpression': foodItemEntry.calorieExpression,
@@ -107,16 +117,21 @@ class DatabaseHelper {
 
   Future<int> delete(int id) async {
     Database db = await instance.database;
-    return await db.delete('food_item', where: "id=$id");
+    return await db.delete(FOOD_ITEM_TABLE, where: "id=$id");
   }
 
   // delete all empty entries from previous days, will probably run in a service
   Future<int> purgePreviousEmpty() async {
     Database db = await instance.database;
-    return await db.delete('food_item', where: 'calorieExpression = "" AND date < ${DateTime
+    return await db.delete(FOOD_ITEM_TABLE, where: 'calorieExpression = "" AND date < ${DateTime
         .now()
         .dateOnly
         .millisecondsSinceEpoch - DAY_MILLIS}');
+  }
+  
+  Future<int> clearFoodEntriesTable() async {
+    final Database db = await instance.database;
+    return await db.delete(FOOD_ITEM_TABLE);
   }
 
   // purges previous entries and runs VACUUM on the db

@@ -44,7 +44,7 @@ class _SettingsState extends State<Settings> {
             else {
               version = "error fetching version";
             }
-            return BottomAppBar(padding: EdgeInsets.zero, height: 50, child: Center(child: Text("version number: $version")));
+            return BottomAppBar(padding: EdgeInsets.zero, height: 48, child: Center(child: Text("version number: $version")));
           },
         ),
         body: Container(

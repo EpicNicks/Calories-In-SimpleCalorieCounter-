@@ -5,28 +5,11 @@ import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:media_store_plus/media_store_plus.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 final mediaStorePlugin = MediaStore();
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
-
-  List<Permission> permissions = [
-    Permission.storage,
-  ];
-
-  if ((await mediaStorePlugin.getPlatformSDKInt()) >= 33) {
-    permissions
-      ..add(Permission.photos)
-      ..add(Permission.audio)
-      ..add(Permission.videos);
-  }
-
-  Map<Permission, PermissionStatus> permissionsResult = await permissions.request();
-  if (permissionsResult.keys.every((k) => permissionsResult[k]!.isGranted)) {
-    MediaStore.appFolder = "MediaStorePlugin";
-  }
 
   DatabaseHelper.instance.optimize();
   runApp(const MyApp());

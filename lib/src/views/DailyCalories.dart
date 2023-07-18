@@ -110,7 +110,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Really clear the List?"),
+            title: const Text("Really CLEAR the List?"),
             content: const Text("This will delete ALL of today's items", style: TextStyle(color: Colors.red)),
             actions: [
               TextButton(

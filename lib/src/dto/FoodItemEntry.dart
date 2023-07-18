@@ -19,6 +19,9 @@ class FoodItemEntry {
       'date': DateTime(date.year, date.month, date.day).millisecondsSinceEpoch
     };
   }
+
+  @override
+  String toString() => "{ id: $id, calorieExpression: $calorieExpression, date: $date }";
 }
 
 bool isConstant(String calorieExpression) {
