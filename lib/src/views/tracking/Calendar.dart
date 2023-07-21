@@ -88,14 +88,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         fit: FlexFit.tight,
                         flex: 1,
                         child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: FractionalOffset.bottomCenter,
-                              colors: [ORANGE_FRUIT, Theme.of(context).colorScheme.onSurfaceVariant],
-                              stops: const [0, 1],
-                            ),
-                          ),
+                          color: Theme.of(context).colorScheme.primaryContainer,
                           child: Center(
                             child: Text(
                               "Total Calories: ${filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()}",
