@@ -12,7 +12,7 @@ class VersionPage extends StatelessWidget {
     return SafeArea(
         child: Scaffold(
             appBar: AppBar(
-              backgroundColor: ORANGE_FRUIT,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -20,7 +20,7 @@ class VersionPage extends StatelessWidget {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: ORANGE_FRUIT,
+              color: Theme.of(context).colorScheme.primaryContainer,
               height: 40,
               child: FutureBuilder<PackageInfo>(
                 future: PackageInfo.fromPlatform(),

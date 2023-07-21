@@ -27,7 +27,6 @@ class _TrackingMainState extends State<TrackingMain> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitles[_selectedIndex]),
-        backgroundColor: ORANGE_FRUIT,
       ),
       body: [CalendarPage(), Graphing(), PlanCalculators()][_selectedIndex],
       drawer: Drawer(
@@ -35,7 +34,7 @@ class _TrackingMainState extends State<TrackingMain> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(color: ORANGE_FRUIT),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer),
             child: Center(
               child: Text("Progress Tracking Options", style: Theme.of(context).textTheme.titleMedium),
             ),

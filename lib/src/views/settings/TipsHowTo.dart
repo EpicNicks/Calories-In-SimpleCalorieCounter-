@@ -25,10 +25,10 @@ amount of calories per serving is 200, The total calories can be entered as:\\
     return SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: ORANGE_FRUIT,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
           ),
           bottomNavigationBar: BottomAppBar(
-            color: ORANGE_FRUIT,
+            color: Theme.of(context).colorScheme.primaryContainer,
           ),
           body: Markdown(
             data: _mdString,

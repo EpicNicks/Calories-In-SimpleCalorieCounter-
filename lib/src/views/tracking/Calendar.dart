@@ -92,7 +92,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: FractionalOffset.bottomCenter,
-                              colors: [ORANGE_FRUIT, Colors.orange.shade100],
+                              colors: [ORANGE_FRUIT, Theme.of(context).colorScheme.onSurfaceVariant],
                               stops: const [0, 1],
                             ),
                           ),
@@ -114,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               itemCount: filteredSnapshotData.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  tileColor: index % 2 == 1 ? Colors.yellow[100] : Colors.white,
+                                  tileColor: index % 2 == 1 ? Theme.of(context).colorScheme.secondaryContainer : Theme.of(context).colorScheme.primaryContainer,
                                   dense: true,
                                   title: Text(
                                     style: Theme.of(context).textTheme.titleSmall,

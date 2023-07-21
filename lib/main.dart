@@ -1,12 +1,11 @@
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:media_store_plus/media_store_plus.dart';
-
-final mediaStorePlugin = MediaStore();
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
@@ -15,13 +14,100 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
+}
+
+class _MyAppState extends State<MyApp> {
+  static const String THEME_MODE_INT ="THEME_MODE_INT";
+  ThemeMode _themeMode = ThemeMode.system;
+
+  ThemeMode get themeMode => _themeMode;
+
+  void changeTheme(ThemeMode themeMode) {
+    SharedPreferences.getInstance().then((preferences){
+      preferences.setInt(THEME_MODE_INT, themeMode.index);
+    });
+    setState(() {
+      _themeMode = themeMode;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((preferences){
+      setState(() {
+        final int index = preferences.getInt(THEME_MODE_INT) ?? ThemeMode.system.index;
+        _themeMode = ThemeMode.values[index];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(textTheme: GoogleFonts.notoSansTextTheme(), primarySwatch: Colors.orange, useMaterial3: true),
+      theme: ThemeData(
+          fontFamily: GoogleFonts.notoSans().fontFamily,
+          textTheme: ThemeData.light().textTheme,
+          textButtonTheme: ThemeData.light().textButtonTheme,
+          primarySwatch: Colors.orange,
+          useMaterial3: true,
+          colorScheme: ColorScheme(
+            brightness: Brightness.light,
+            background: Colors.white,
+            onBackground: Colors.orange,
+            error: Colors.white,
+            onError: Colors.red,
+            onPrimary: ORANGE_FRUIT,
+            primary: Colors.black,
+            secondary: ORANGE_FRUIT,
+            onSecondary: ORANGE_FRUIT,
+            tertiary: Colors.black,
+            onTertiary: ORANGE_FRUIT,
+            surface: ORANGE_FRUIT,
+            onSurface: Colors.black,
+            onSurfaceVariant: Colors.orange,
+            primaryContainer: ORANGE_FRUIT,
+            onPrimaryContainer: ORANGE_FRUIT,
+            secondaryContainer: ORANGE_FRUIT,
+            onSecondaryContainer: ORANGE_FRUIT,
+          ),
+          drawerTheme: DrawerThemeData(backgroundColor: Colors.white)),
+      darkTheme: ThemeData(
+          fontFamily: GoogleFonts.notoSans().fontFamily,
+          textTheme: ThemeData.dark().textTheme,
+          textButtonTheme: ThemeData.dark().textButtonTheme,
+          textSelectionTheme: TextSelectionThemeData(
+              cursorColor: Colors.orange, selectionColor: Colors.red, selectionHandleColor: Colors.purple),
+          primarySwatch: Colors.orange,
+          colorScheme: ColorScheme(
+            brightness: Brightness.dark,
+            background: Colors.black,
+            onBackground: Colors.orange,
+            error: Colors.black,
+            onError: Colors.red,
+            onPrimary: ORANGE_FRUIT,
+            primary: Colors.black,
+            secondary: ORANGE_FRUIT,
+            onSecondary: ORANGE_FRUIT,
+            tertiary: Colors.black,
+            onTertiary: ORANGE_FRUIT,
+            surface: Colors.black54,
+            onSurface: Colors.orange,
+            onSurfaceVariant: Colors.orange,
+            primaryContainer: Colors.black38,
+            onPrimaryContainer: ORANGE_FRUIT,
+            secondaryContainer: Colors.grey.shade900,
+            onSecondaryContainer: ORANGE_FRUIT,
+          ),
+          useMaterial3: true),
+      themeMode: _themeMode,
       home: const BottomTabBar(),
     );
   }

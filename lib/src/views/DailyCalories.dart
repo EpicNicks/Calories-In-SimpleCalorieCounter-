@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:calorie_tracker/main.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
@@ -63,7 +64,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       child: Padding(
                           padding: EdgeInsets.only(left: 10, right: 10),
-                          child: Text(getLabelText(e), style: TextStyle(color: Colors.white))),
+                          child: Text(getLabelText(e), style: TextStyle(color: Theme.of(context).colorScheme.primary))),
                     )
                   : null,
               //labelText: getLabelText(e),
@@ -71,7 +72,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
               border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
               filled: true,
-              fillColor: Color.fromARGB(200, 255, 255, 255),
+              fillColor: Theme.of(context).colorScheme.background,
             ),
             keyboardType: TextInputType.text,
             focusNode: focusNode,
@@ -191,7 +192,6 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: ORANGE_FRUIT,
           title: Center(child: Text("Total Daily Calories: ${totalCalories()}")),
         ),
         body: Container(
@@ -199,7 +199,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: FractionalOffset.bottomCenter,
-              colors: [Colors.white70, ORANGE_FRUIT],
+              colors: [Theme.of(context).colorScheme.background, ORANGE_FRUIT],
               stops: const [0, 1],
             ),
           ),

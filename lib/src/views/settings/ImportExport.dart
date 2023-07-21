@@ -61,78 +61,83 @@ class _ImportExportState extends State<ImportExport> {
                             "This will clear all previous content. Ensure you have made a backup of your current data with 'Export' before proceeding"),
                         actions: [
                           TextButton(
+                            style: Theme.of(context).textButtonTheme.style,
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text("Cancel"),
+                            child: Text("Cancel", style: Theme.of(context).textTheme.bodyMedium),
                           ),
                           TextButton(
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                          title: Text("Are you sure?", style: TextStyle(color: Colors.red)),
-                                          content: Text(
-                                            "Ensure you have backed up your data with 'Export'. You cannot recover your initial data after.",
-                                            style: TextStyle(color: Colors.red),
+                            style: Theme.of(context).textButtonTheme.style,
+                            child: Text("Continue", style: Theme.of(context).textTheme.bodyMedium),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                        title: Text("Are you sure?", style: TextStyle(color: Colors.red)),
+                                        content: Text(
+                                          "Ensure you have backed up your data with 'Export'. You cannot recover your initial data after.",
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            style: Theme.of(context).textButtonTheme.style,
+                                            child: Text("Cancel", style: Theme.of(context).textTheme.bodyMedium),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+                                            },
                                           ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("Cancel"),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                // overwrite data (validate data, purge db table, write data)
-                                                String csvString = utf8.decode(file.bytes!);
-                                                final List<List<dynamic>> csvData =
-                                                    CsvToListConverter().convert(csvString);
-                                                // confirm all rows are valid
-                                                for (final row in csvData) {
-                                                  if (row.length != 3) {
-                                                    showDialog(
-                                                        context: context,
-                                                        builder: (context) => AlertDialog(
-                                                              title: Text(
-                                                                  "Data was malformed, not all rows were length 3"),
-                                                              actions: [
-                                                                TextButton(
-                                                                    onPressed: () {
-                                                                      Navigator.of(context).pop();
-                                                                      Navigator.of(context).pop();
-                                                                      Navigator.of(context).pop();
-                                                                    },
-                                                                    child: Text("Ok"))
-                                                              ],
-                                                            ));
-                                                    return;
-                                                  }
+                                          TextButton(
+                                            style: Theme.of(context).textButtonTheme.style,
+                                            child: Text("Confirm Overwrite", style: Theme.of(context).textTheme.bodyMedium),
+                                            onPressed: () async {
+                                              // overwrite data (validate data, purge db table, write data)
+                                              String csvString = utf8.decode(file.bytes!);
+                                              final List<List<dynamic>> csvData =
+                                                  CsvToListConverter().convert(csvString);
+                                              // confirm all rows are valid
+                                              for (final row in csvData) {
+                                                if (row.length != 3) {
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                            title:
+                                                                Text("Data was malformed, not all rows were length 3"),
+                                                            actions: [
+                                                              TextButton(
+                                                                  onPressed: () {
+                                                                    Navigator.of(context).pop();
+                                                                    Navigator.of(context).pop();
+                                                                    Navigator.of(context).pop();
+                                                                  },
+                                                                  child: Text("Ok"))
+                                                            ],
+                                                          ));
+                                                  return;
                                                 }
-                                                // ids can be ignored because they are auto-incremented by the db anyway
-                                                final List<FoodItemEntry> entries = csvData
-                                                    .skip(1)
-                                                    .map((row) => FoodItemEntry.fromMap({
-                                                          "id": null, // auto-increment handles this already
-                                                          "calorieExpression": row[1].toString(),
-                                                          "date": DateTime.parse(row[2]).millisecondsSinceEpoch
-                                                        }))
-                                                    .toList();
+                                              }
+                                              // ids can be ignored because they are auto-incremented by the db anyway
+                                              final List<FoodItemEntry> entries = csvData
+                                                  .skip(1)
+                                                  .map((row) => FoodItemEntry.fromMap({
+                                                        "id": null, // auto-increment handles this already
+                                                        "calorieExpression": row[1].toString(),
+                                                        "date": DateTime.parse(row[2]).millisecondsSinceEpoch
+                                                      }))
+                                                  .toList();
 
-                                                await DatabaseHelper.instance.clearFoodEntriesTable();
-                                                await DatabaseHelper.instance.batchAdd(entries);
+                                              await DatabaseHelper.instance.clearFoodEntriesTable();
+                                              await DatabaseHelper.instance.batchAdd(entries);
 
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("Confirm Overwrite"),
-                                            )
-                                          ],
-                                        ));
-                              },
-                              child: const Text("Continue"))
+                                              Navigator.of(context).pop();
+                                              Navigator.of(context).pop();
+                                            },
+                                          )
+                                        ],
+                                      ));
+                            },
+                          )
                         ],
                       ));
 
@@ -187,7 +192,7 @@ class _ImportExportState extends State<ImportExport> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Import/Export Calorie Data"),
-          backgroundColor: ORANGE_FRUIT,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20),

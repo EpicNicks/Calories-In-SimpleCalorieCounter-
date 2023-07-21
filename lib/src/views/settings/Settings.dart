@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'FAQ.dart';
+import 'ThemeChange.dart';
 import 'VersionPage.dart';
 
 class Settings extends StatefulWidget {
@@ -20,13 +21,13 @@ class _SettingsState extends State<Settings> {
     "Tips and How Tos": TipsHowTo(),
     "Version/Update": VersionPage(),
     "Export/Import Data": ImportExport(),
+    "App Theme": ThemeChange(),
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: ORANGE_FRUIT,
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,7 +53,7 @@ class _SettingsState extends State<Settings> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: FractionalOffset.bottomCenter,
-                colors: [Colors.white70, ORANGE_FRUIT],
+                colors: [Theme.of(context).colorScheme.background, ORANGE_FRUIT],
                 stops: const [0, 1],
               ),
             ),
@@ -68,9 +69,9 @@ class _SettingsState extends State<Settings> {
                       style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.resolveWith((materialState) {
                             if (materialState.contains(MaterialState.pressed)) {
-                              return Colors.orange.shade500;
+                              return Theme.of(context).colorScheme.background;
                             }
-                            return Colors.orange[50];
+                            return Theme.of(context).colorScheme.background;
                           }),
                           shape: MaterialStatePropertyAll(
                             RoundedRectangleBorder(
