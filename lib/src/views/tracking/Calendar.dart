@@ -114,7 +114,7 @@ class _CalendarPageState extends State<CalendarPage> {
                               itemCount: filteredSnapshotData.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  tileColor: index % 2 == 1 ? Theme.of(context).colorScheme.secondaryContainer : Theme.of(context).colorScheme.primaryContainer,
+                                  tileColor: index % 2 == 0 ? Theme.of(context).colorScheme.secondaryContainer : Theme.of(context).colorScheme.primaryContainer,
                                   dense: true,
                                   title: Text(
                                     style: Theme.of(context).textTheme.titleSmall,

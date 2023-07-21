@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
             onSurfaceVariant: Colors.orange,
             primaryContainer: ORANGE_FRUIT,
             onPrimaryContainer: ORANGE_FRUIT,
-            secondaryContainer: ORANGE_FRUIT,
+            secondaryContainer: Colors.yellow[100],
             onSecondaryContainer: ORANGE_FRUIT,
           ),
           drawerTheme: DrawerThemeData(backgroundColor: Colors.white)),
