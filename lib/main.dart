@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const String THEME_MODE_INT ="THEME_MODE_INT";
+const String THEME_MODE_INT = "THEME_MODE_INT";
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
-  final themeIndex = await SharedPreferences.getInstance().then((preferences) => preferences.getInt(THEME_MODE_INT)) ?? ThemeMode.system.index;
+  final themeIndex = await SharedPreferences.getInstance().then((preferences) => preferences.getInt(THEME_MODE_INT)) ??
+      ThemeMode.system.index;
   DatabaseHelper.instance.optimize();
   runApp(MyApp(themeMode: ThemeMode.values[themeIndex]));
 }
@@ -35,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   ThemeMode get themeMode => _themeMode;
 
   void changeTheme(ThemeMode newThemeMode) {
-    SharedPreferences.getInstance().then((preferences){
+    SharedPreferences.getInstance().then((preferences) {
       preferences.setInt(THEME_MODE_INT, _themeMode.index);
     });
     setState(() {
@@ -77,8 +78,7 @@ class _MyAppState extends State<MyApp> {
           fontFamily: GoogleFonts.notoSans().fontFamily,
           textTheme: ThemeData.dark().textTheme,
           textButtonTheme: ThemeData.dark().textButtonTheme,
-          textSelectionTheme: TextSelectionThemeData(
-              cursorColor: Colors.orange, selectionColor: Colors.red, selectionHandleColor: Colors.purple),
+          textSelectionTheme: ThemeData.dark().textSelectionTheme,
           primarySwatch: Colors.orange,
           colorScheme: ColorScheme(
             brightness: Brightness.dark,
