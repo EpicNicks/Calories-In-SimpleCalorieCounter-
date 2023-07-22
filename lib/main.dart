@@ -7,45 +7,39 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+const String THEME_MODE_INT ="THEME_MODE_INT";
+
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
-
+  final themeIndex = await SharedPreferences.getInstance().then((preferences) => preferences.getInt(THEME_MODE_INT)) ?? ThemeMode.system.index;
   DatabaseHelper.instance.optimize();
-  runApp(const MyApp());
+  runApp(MyApp(themeMode: ThemeMode.values[themeIndex]));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final ThemeMode themeMode;
+
+  MyApp({super.key, required this.themeMode});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState(themeMode);
 
   static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
 }
 
 class _MyAppState extends State<MyApp> {
-  static const String THEME_MODE_INT ="THEME_MODE_INT";
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode;
+
+  _MyAppState(this._themeMode);
 
   ThemeMode get themeMode => _themeMode;
 
-  void changeTheme(ThemeMode themeMode) {
+  void changeTheme(ThemeMode newThemeMode) {
     SharedPreferences.getInstance().then((preferences){
-      preferences.setInt(THEME_MODE_INT, themeMode.index);
+      preferences.setInt(THEME_MODE_INT, _themeMode.index);
     });
     setState(() {
-      _themeMode = themeMode;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    SharedPreferences.getInstance().then((preferences){
-      setState(() {
-        final int index = preferences.getInt(THEME_MODE_INT) ?? ThemeMode.system.index;
-        _themeMode = ThemeMode.values[index];
-      });
+      _themeMode = newThemeMode;
     });
   }
 

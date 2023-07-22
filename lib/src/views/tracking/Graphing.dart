@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/extensions/list_extensions.dart';
@@ -157,10 +159,8 @@ class _GraphingState extends State<Graphing> {
                         LineChartData(
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 2,
-                            minY: (dailyTotals
-                                    .map((e) => e.$1).toList()..add(planTarget.toDouble())).min - 200,
-                            maxY: (dailyTotals
-                                    .map((e) => e.$1).toList()..add(planTarget.toDouble())).max + 200,
+                            minY: max((dailyTotals.map((e) => e.$1).toList()..add(planTarget.toDouble())).min - 200, 0),
+                            maxY: min((dailyTotals.map((e) => e.$1).toList()..add(planTarget.toDouble())).max + 200, 2000),
                             gridData: FlGridData(
                               show: true,
                               getDrawingHorizontalLine: (value) => FlLine(color: Colors.blueGrey, strokeWidth: 1),
