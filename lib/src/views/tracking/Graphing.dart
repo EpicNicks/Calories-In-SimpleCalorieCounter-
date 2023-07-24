@@ -92,6 +92,16 @@ class _GraphingState extends State<Graphing> {
     return 0;
   }
 
+  double calculateHorizontalInterval(DateTime startDate, DateTime endDate) {
+    final int dateDifference = endDate.difference(startDate).inDays;
+    return switch (dateDifference) {
+      <= 10 => 1,
+      <= 50 => 5,
+      <= 100 => 10,
+      _ => 1,
+    };
+  }
+
   @override
   void initState() {
     super.initState();
@@ -153,10 +163,10 @@ class _GraphingState extends State<Graphing> {
             future: SharedPreferences.getInstance(),
             builder: (context, prefs) {
               if (prefs.hasData) {
-                final DateTime endDate = _excludeToday ? DateTime.now().dateOnly.subtract(Duration(days: 1)) : DateTime.now();
+                final DateTime endDate = _excludeToday ? DateTime.now().dateOnly.daysAgo(1) : DateTime.now();
                 DateTime startDate = switch (_selectedRange) {
-                  "Past 7 Days" => endDate.daysAgo(6 + (_excludeToday ? 1 : 0)),
-                  "Past 30 Days" => endDate.daysAgo(29 + (_excludeToday ? 1 : 0)),
+                  "Past 7 Days" => endDate.daysAgo(6),
+                  "Past 30 Days" => endDate.daysAgo(29),
                   "Max" => endDate.daysAgo(100000000),
                   _ => endDate.daysAgo(6)
                 };
@@ -177,8 +187,39 @@ class _GraphingState extends State<Graphing> {
                       return Expanded(
                           child: LineChart(
                         LineChartData(
+                            titlesData: FlTitlesData(
+                                bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  interval: calculateHorizontalInterval(startDate, endDate),
+                                  showTitles: true,
+                                  getTitlesWidget: (double d, TitleMeta tm) {
+                                    return Text(d.round().toString());
+                                  },
+                                )),
+                                leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                        reservedSize: 50,
+                                        showTitles: true,
+                                        getTitlesWidget: (double d, TitleMeta tm) {
+                                          return Text(d.round().toString());
+                                        })),
+                                topTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  interval: calculateHorizontalInterval(startDate, endDate),
+                                  showTitles: true,
+                                  getTitlesWidget: (double d, TitleMeta tm) {
+                                    return Text("");
+                                  },
+                                )),
+                                rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                        reservedSize: 50,
+                                        showTitles: true,
+                                        getTitlesWidget: (double d, TitleMeta tm) {
+                                          return Text("");
+                                        }))),
                             minX: 1,
-                            maxX: endDate.difference(startDate).inDays.toDouble() + 2,
+                            maxX: endDate.difference(startDate).inDays.toDouble() + 1,
                             minY: max(
                                 (dailyTotals.map((e) => e.totalCalories).toList()..add(planTarget.toDouble())).min -
                                     200,
@@ -194,6 +235,8 @@ class _GraphingState extends State<Graphing> {
                             ),
                             lineTouchData: LineTouchData(
                                 touchTooltipData: LineTouchTooltipData(
+                                  fitInsideHorizontally: true,
+                                    fitInsideVertically: true,
                                     tooltipBgColor: Colors.orange.shade50,
                                     tooltipBorder: BorderSide(color: Colors.black),
                                     getTooltipItems: (touchedSpots) => touchedSpots

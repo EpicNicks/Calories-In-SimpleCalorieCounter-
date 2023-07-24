@@ -3,6 +3,6 @@ extension DateTimeExtensions on DateTime {
     return DateTime(year, month, day);
   }
   DateTime daysAgo(int days){
-    return DateTime.now().subtract(Duration(days: days));
+    return subtract(Duration(days: days));
   }
 }
