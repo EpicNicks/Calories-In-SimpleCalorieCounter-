@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/extensions/list_extensions.dart';
@@ -19,11 +20,24 @@ class Graphing extends StatefulWidget {
 
 class _GraphingState extends State<Graphing> {
   List<String> _rangeOptions = ["Past 7 Days", "Past 30 Days", "Max"];
-  List<String> _planOptions = ["Mifflin-St Jeor", "Custom"];
+  List<String> _planOptions = ["None", "Mifflin-St Jeor", "Custom"];
   String _selectedRange = "Past 7 Days";
-  String _selectedPlan = "Mifflin-St Jeor";
+  String _selectedPlan = "None";
 
-  List<(double, DateTime)> foodItemDailyTotals(List<FoodItemEntry> entries) {
+  bool _showAverage = false;
+
+  String getLineTooltipTitle(int index) {
+    if (index == 0) {
+      return "Day's Calories";
+    }
+    if (_selectedPlan.toUpperCase() != "NONE") {
+      if (index == 1) return "Maintenance Calories";
+    }
+    // only Average remains
+    return "Range Average";
+  }
+
+  List<({double totalCalories, DateTime dateTime})> foodItemDailyTotals(List<FoodItemEntry> entries) {
     // sort the list into lists of entries and then fold them
     Map<DateTime, double> dailyEntriesMap = {};
     for (FoodItemEntry entry in entries) {
@@ -34,9 +48,9 @@ class _GraphingState extends State<Graphing> {
           dailyEntriesMap[entry.date.dateOnly]! + evaluateFoodItem(entry.calorieExpression);
     }
     final sortedKeys = dailyEntriesMap.keys.toList()..sort((a, b) => a.dateOnly.difference(b.dateOnly).inDays);
-    final List<(double, DateTime)> res = [];
+    final List<({double totalCalories, DateTime dateTime})> res = [];
     for (DateTime key in sortedKeys) {
-      res.add((dailyEntriesMap[key]!, key));
+      res.add((totalCalories: dailyEntriesMap[key]!, dateTime: key));
     }
     return res;
   }
@@ -149,9 +163,14 @@ class _GraphingState extends State<Graphing> {
                   future: DatabaseHelper.instance.getFoodItemsInRange(startDate, endDate),
                   builder: (context, foodItemEntries) {
                     if (foodItemEntries.hasData) {
-                      final dailyTotals = foodItemDailyTotals(foodItemEntries.data!);
+                      final List<({double totalCalories, DateTime dateTime})> dailyTotals =
+                          foodItemDailyTotals(foodItemEntries.data!);
+                      final double average = dailyTotals.length > 0
+                          ? dailyTotals.map((t) => t.totalCalories).fold(0.0, (prev, cur) => prev + cur) /
+                              dailyTotals.length
+                          : 0;
                       if (_selectedRange == "Max") {
-                        startDate = endDate.daysAgo(endDate.difference(dailyTotals[0].$2.dateOnly).inDays);
+                        startDate = endDate.daysAgo(endDate.difference(dailyTotals[0].dateTime.dateOnly).inDays);
                       }
                       final planTarget = getPlanTarget(prefs.data);
                       return Expanded(
@@ -159,8 +178,14 @@ class _GraphingState extends State<Graphing> {
                         LineChartData(
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 2,
-                            minY: max((dailyTotals.map((e) => e.$1).toList()..add(planTarget.toDouble())).min - 200, 0),
-                            maxY: max((dailyTotals.map((e) => e.$1).toList()..add(planTarget.toDouble())).max + 200, 2000),
+                            minY: max(
+                                (dailyTotals.map((e) => e.totalCalories).toList()..add(planTarget.toDouble())).min -
+                                    200,
+                                0),
+                            maxY: max(
+                                (dailyTotals.map((e) => e.totalCalories).toList()..add(planTarget.toDouble())).max +
+                                    200,
+                                2000),
                             gridData: FlGridData(
                               show: true,
                               getDrawingHorizontalLine: (value) => FlLine(color: Colors.blueGrey, strokeWidth: 1),
@@ -172,8 +197,7 @@ class _GraphingState extends State<Graphing> {
                                     tooltipBorder: BorderSide(color: Colors.black),
                                     getTooltipItems: (touchedSpots) => touchedSpots
                                         .map((e) => LineTooltipItem(
-                                            (e.barIndex == 0 ? "Day's Calories: " : "Maintenance Calories: ") +
-                                                e.y.round().toString(),
+                                            "${getLineTooltipTitle(e.barIndex)} ${e.y.round()}",
                                             TextStyle(
                                               color: e.bar.color,
                                             )))
@@ -182,18 +206,28 @@ class _GraphingState extends State<Graphing> {
                               LineChartBarData(
                                 spots: dailyTotals
                                     .map((e) => FlSpot(
-                                        e.$2.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1, e.$1))
+                                        e.dateTime.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,
+                                        e.totalCalories))
                                     .toList(),
                                 color: Colors.deepOrange,
                               ),
                               // needs to be updated for plans variations which aren't constant
                               LineChartBarData(
+                                  show: _selectedPlan.toUpperCase() != "NONE",
                                   spots: dailyTotals
                                       .map((e) => FlSpot(
-                                          e.$2.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,
+                                          e.dateTime.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,
                                           planTarget.toDouble()))
                                       .toList(),
-                                  color: Colors.red.shade800)
+                                  color: Colors.red.shade800),
+                              LineChartBarData(
+                                  show: _showAverage,
+                                  spots: dailyTotals
+                                      .map((e) => FlSpot(
+                                          e.dateTime.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,
+                                          average))
+                                      .toList(),
+                                  color: Colors.green)
                             ]),
                       ));
                     }
@@ -203,6 +237,21 @@ class _GraphingState extends State<Graphing> {
               }
               return Text("Loading User Data...");
             }),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Show Average"),
+            Switch(
+                activeColor: ORANGE_FRUIT,
+                inactiveTrackColor: Colors.grey,
+                value: _showAverage,
+                onChanged: (bool value) {
+                  setState(() {
+                    _showAverage = value;
+                  });
+                })
+          ],
+        )
       ],
     ));
   }

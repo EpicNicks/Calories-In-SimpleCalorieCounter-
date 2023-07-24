@@ -89,7 +89,7 @@ class _MyAppState extends State<MyApp> {
             onPrimary: ORANGE_FRUIT,
             primary: Colors.black,
             secondary: ORANGE_FRUIT,
-            onSecondary: ORANGE_FRUIT,
+            onSecondary: Colors.black,
             tertiary: Colors.black,
             onTertiary: ORANGE_FRUIT,
             surface: Colors.black54,

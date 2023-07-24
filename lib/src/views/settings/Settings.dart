@@ -19,9 +19,9 @@ class _SettingsState extends State<Settings> {
   final Map<String, Widget> menuButtons = {
     "FAQ": Faq(),
     "Tips and How Tos": TipsHowTo(),
-    "Version/Update": VersionPage(),
-    "Export/Import Data": ImportExport(),
     "App Theme": ThemeChange(),
+    "Export/Import Data": ImportExport(),
+    "Version/Update": VersionPage(),
   };
 
   @override
