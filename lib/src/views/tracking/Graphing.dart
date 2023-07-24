@@ -193,7 +193,7 @@ class _GraphingState extends State<Graphing> {
                                   interval: calculateHorizontalInterval(startDate, endDate),
                                   showTitles: true,
                                   getTitlesWidget: (double d, TitleMeta tm) {
-                                    return Text(d.round().toString());
+                                    return Center(child: Text(d.round().toString()));
                                   },
                                 )),
                                 leftTitles: AxisTitles(
@@ -201,14 +201,14 @@ class _GraphingState extends State<Graphing> {
                                         reservedSize: 50,
                                         showTitles: true,
                                         getTitlesWidget: (double d, TitleMeta tm) {
-                                          return Text(d.round().toString());
+                                          return Center(child: Text(d.round().toString()));
                                         })),
                                 topTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                   interval: calculateHorizontalInterval(startDate, endDate),
                                   showTitles: true,
                                   getTitlesWidget: (double d, TitleMeta tm) {
-                                    return Text("");
+                                    return Center(child: Text(""));
                                   },
                                 )),
                                 rightTitles: AxisTitles(
@@ -216,7 +216,7 @@ class _GraphingState extends State<Graphing> {
                                         reservedSize: 50,
                                         showTitles: true,
                                         getTitlesWidget: (double d, TitleMeta tm) {
-                                          return Text("");
+                                          return Center(child: Text(""));
                                         }))),
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 1,
@@ -235,7 +235,7 @@ class _GraphingState extends State<Graphing> {
                             ),
                             lineTouchData: LineTouchData(
                                 touchTooltipData: LineTouchTooltipData(
-                                  fitInsideHorizontally: true,
+                                    fitInsideHorizontally: true,
                                     fitInsideVertically: true,
                                     tooltipBgColor: Colors.orange.shade50,
                                     tooltipBorder: BorderSide(color: Colors.black),
