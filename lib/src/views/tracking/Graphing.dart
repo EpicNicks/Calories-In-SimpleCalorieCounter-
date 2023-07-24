@@ -25,6 +25,7 @@ class _GraphingState extends State<Graphing> {
   String _selectedPlan = "None";
 
   bool _showAverage = false;
+  bool _excludeToday = false;
 
   String getLineTooltipTitle(int index) {
     if (index == 0) {
@@ -59,7 +60,7 @@ class _GraphingState extends State<Graphing> {
     if (preferences == null) {
       return -1;
     }
-    if (_selectedPlan == _planOptions[0]) {
+    if (_selectedPlan == _planOptions[1]) {
       double height = preferences.getDouble(USER_HEIGHT_DOUBLE) ?? 0.0;
       int heightFt = preferences.getInt(USER_HEIGHT_FT_INT) ?? 0;
       String gender = preferences.getString(USER_GENDER_STRING) ?? "";
@@ -85,7 +86,7 @@ class _GraphingState extends State<Graphing> {
       }
       return (bmr * (MifflinStJeorCalculatorState.activityLevelOptions[activityLevel] ?? 0.0)).round();
     }
-    if (_selectedPlan == _planOptions[1]) {
+    if (_selectedPlan == _planOptions[2]) {
       return preferences.getInt(USER_CUSTOM_TARGET_INT) ?? 0;
     }
     return 0;
@@ -152,10 +153,10 @@ class _GraphingState extends State<Graphing> {
             future: SharedPreferences.getInstance(),
             builder: (context, prefs) {
               if (prefs.hasData) {
-                final DateTime endDate = DateTime.now().dateOnly;
+                final DateTime endDate = _excludeToday ? DateTime.now().dateOnly.subtract(Duration(days: 1)) : DateTime.now();
                 DateTime startDate = switch (_selectedRange) {
-                  "Past 7 Days" => endDate.daysAgo(6),
-                  "Past 30 Days" => endDate.daysAgo(29),
+                  "Past 7 Days" => endDate.daysAgo(6 + (_excludeToday ? 1 : 0)),
+                  "Past 30 Days" => endDate.daysAgo(29 + (_excludeToday ? 1 : 0)),
                   "Max" => endDate.daysAgo(100000000),
                   _ => endDate.daysAgo(6)
                 };
@@ -240,6 +241,7 @@ class _GraphingState extends State<Graphing> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(flex: 1),
             Text("Show Average"),
             Switch(
                 activeColor: ORANGE_FRUIT,
@@ -249,7 +251,19 @@ class _GraphingState extends State<Graphing> {
                   setState(() {
                     _showAverage = value;
                   });
-                })
+                }),
+            Spacer(flex: 1),
+            Text("Exclude Today"),
+            Switch(
+                activeColor: ORANGE_FRUIT,
+                inactiveTrackColor: Colors.grey,
+                value: _excludeToday,
+                onChanged: (value) {
+                  setState(() {
+                    _excludeToday = value;
+                  });
+                }),
+            Spacer(flex: 1)
           ],
         )
       ],
