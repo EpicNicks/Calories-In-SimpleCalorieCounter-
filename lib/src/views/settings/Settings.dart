@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'FAQ.dart';
+import 'SupportPage.dart';
 import 'ThemeChange.dart';
-import 'VersionPage.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -21,7 +21,8 @@ class _SettingsState extends State<Settings> {
     "Tips and How Tos": TipsHowTo(),
     "App Theme": ThemeChange(),
     "Export/Import Data": ImportExport(),
-    "Version/Update": VersionPage(),
+    "Support the Developer": SupportPage(),
+    //"Version/Update": VersionPage(),
   };
 
   @override

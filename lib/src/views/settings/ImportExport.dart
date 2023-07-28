@@ -203,6 +203,8 @@ class _ImportExportState extends State<ImportExport> {
                 SizedBox(height: 10),
                 Text(
                     "For export, this app requires you allow it to write to external storage as it is a .csv file and will ask for permission to do so"),
+                SizedBox(height: 10),
+                Text("The resulting file may be opened in Excel or any other program that accepts CSVs, as well as be used to import and overwrite data in this app."),
                 Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Row(

@@ -11,5 +11,9 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" android:host="github.com" android:path="/EpicNicks/SimpleCalorieCounter/releases/latest" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" android:host="ko-fi.com" android:path="/epicnicks" />
+        </intent>
     </queries>
 </manifest>

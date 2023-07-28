@@ -184,6 +184,10 @@ class _GraphingState extends State<Graphing> {
                         startDate = endDate.daysAgo(endDate.difference(dailyTotals[0].dateTime.dateOnly).inDays);
                       }
                       final planTarget = getPlanTarget(prefs.data);
+                      final dailyTotalsList = dailyTotals.map((e) => e.totalCalories).toList();
+                      final minY = max((_selectedPlan == "None" ? dailyTotalsList.min : (dailyTotalsList..add(planTarget.toDouble())).min) - 200, 0.0);
+                      final maxY = max((_selectedPlan == "None" ? dailyTotalsList.max : (dailyTotalsList..add(planTarget.toDouble())).max) + 200, 2000.0);
+
                       return Expanded(
                           child: LineChart(
                         LineChartData(
@@ -220,14 +224,8 @@ class _GraphingState extends State<Graphing> {
                                         }))),
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 1,
-                            minY: max(
-                                (dailyTotals.map((e) => e.totalCalories).toList()..add(planTarget.toDouble())).min -
-                                    200,
-                                0),
-                            maxY: max(
-                                (dailyTotals.map((e) => e.totalCalories).toList()..add(planTarget.toDouble())).max +
-                                    200,
-                                2000),
+                            minY: minY,
+                            maxY: maxY,
                             gridData: FlGridData(
                               show: true,
                               getDrawingHorizontalLine: (value) => FlLine(color: Colors.blueGrey, strokeWidth: 1),
