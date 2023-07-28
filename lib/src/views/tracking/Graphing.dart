@@ -220,7 +220,7 @@ class _GraphingState extends State<Graphing> {
                                         reservedSize: 50,
                                         showTitles: true,
                                         getTitlesWidget: (double d, TitleMeta tm) {
-                                          return Center(child: Text(""));
+                                          return Center(child: Text(d.round().toString()));
                                         }))),
                             minX: 1,
                             maxX: endDate.difference(startDate).inDays.toDouble() + 1,
