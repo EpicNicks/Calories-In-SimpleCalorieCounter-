@@ -185,8 +185,10 @@ class _GraphingState extends State<Graphing> {
                       }
                       final planTarget = getPlanTarget(prefs.data);
                       final dailyTotalsList = dailyTotals.map((e) => e.totalCalories).toList();
-                      final minY = max((_selectedPlan == "None" ? dailyTotalsList.min : (dailyTotalsList..add(planTarget.toDouble())).min) - 200, 0.0);
-                      final maxY = max((_selectedPlan == "None" ? dailyTotalsList.max : (dailyTotalsList..add(planTarget.toDouble())).max) + 200, 2000.0);
+                      final dailyTotalsMin = dailyTotalsList.min == double.infinity ? 0.0 : dailyTotalsList.min;
+                      final dailyTotalsMax = dailyTotalsList.max == double.negativeInfinity ? 0.0 : dailyTotalsList.max;
+                      final minY = max((_selectedPlan == "None" ? dailyTotalsMin : min(dailyTotalsMin, planTarget.toDouble())) - 200, 0.0);
+                      final maxY = max((_selectedPlan == "None" ? dailyTotalsMax : max(dailyTotalsMax, planTarget.toDouble())) + 200, 2000.0);
 
                       return Expanded(
                           child: LineChart(

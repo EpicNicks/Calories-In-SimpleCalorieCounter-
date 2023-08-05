@@ -1,11 +1,18 @@
 extension list_extensions<T extends num> on List<T>{
+  /**
+   * Returns the min of the list, or infinity if the list is empty
+   */
   double get min {
-    return toList().fold(double.infinity, (prev, cur) => cur < prev ? cur.toDouble() : prev);
+    return fold(double.infinity, (prev, cur) => cur < prev ? cur.toDouble() : prev);
   }
+
+  /**
+   * Returns the max of the list, or negative infinity if the list is empty
+   */
   double get max {
-    return toList().fold(double.negativeInfinity, (prev, cur) => cur > prev ? cur.toDouble() : prev);
+    return fold(double.negativeInfinity, (prev, cur) => cur > prev ? cur.toDouble() : prev);
   }
   double sum(){
-    return toList().fold(0, (prev, cur) => prev + cur);
+    return fold(0, (prev, cur) => prev + cur);
   }
 }
