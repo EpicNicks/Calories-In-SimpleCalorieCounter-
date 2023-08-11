@@ -2,8 +2,10 @@ import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/views/settings/ImportExport.dart';
 import 'package:calorie_tracker/src/views/settings/TipsHowTo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import 'dart:io';
 import 'FAQ.dart';
 import 'SupportPage.dart';
 import 'ThemeChange.dart';
@@ -20,13 +22,26 @@ class _SettingsState extends State<Settings> {
     "FAQ": Faq(),
     "Tips and How Tos": TipsHowTo(),
     "App Theme": ThemeChange(),
-    "Export/Import Data": ImportExport(),
     "Support the Developer": SupportPage(),
     //"Version/Update": VersionPage(),
   };
 
   @override
   Widget build(BuildContext context) {
+    if (Platform.isAndroid){
+      final methodChannel = MethodChannel("android_version");
+      methodChannel.invokeMethod("version_int").then((value){
+        final int version = value as int;
+        if (version >= 30 && !menuButtons.keys.contains("Export/Import Data")){
+          menuButtons.addAll({
+            "Export/Import Data": ImportExport()
+          });
+          setState(() {});
+        }
+      });
+    }
+
+
     return Scaffold(
         appBar: AppBar(
           title: const Row(

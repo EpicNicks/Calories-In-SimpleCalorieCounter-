@@ -37,6 +37,17 @@ class MainActivity: FlutterActivity() {
                     else -> result.notImplemented()
                 }
         }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "android_version").setMethodCallHandler {
+            call, result ->
+                when (call.method) {
+                    "version_int" -> {
+                        val versionInt = android.os.Build.VERSION.SDK_INT
+                        result.success(versionInt)
+                    }
+                    else -> result.notImplemented()
+                }
+        }
     }
     private fun downloadCsv(csvString: String): String? {
         val fileName = "calories_in_backup_${LocalDateTime.now().toString().split(" ").joinToString("_")}.csv" // Set the desired filename and extension
