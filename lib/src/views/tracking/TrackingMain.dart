@@ -3,6 +3,7 @@ import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/PlanCalculators.dart';
 import 'package:flutter/material.dart';
 import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrackingMain extends StatefulWidget {
   const TrackingMain({super.key});
@@ -14,8 +15,6 @@ class TrackingMain extends StatefulWidget {
 class _TrackingMainState extends State<TrackingMain> {
   int _selectedIndex = 0;
 
-  final List<String> appbarTitles = ["Calorie Entry History", "Charts", "Your Plan"];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -24,6 +23,12 @@ class _TrackingMainState extends State<TrackingMain> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> appbarTitles = [
+      AppLocalizations.of(context)!.calorieEntryHistoryTitle,
+      AppLocalizations.of(context)!.chartsMenuItem,
+      AppLocalizations.of(context)!.yourPlanMenuItem,
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(appbarTitles[_selectedIndex]),
@@ -36,11 +41,11 @@ class _TrackingMainState extends State<TrackingMain> {
           DrawerHeader(
             decoration: BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer),
             child: Center(
-              child: Text("Progress Tracking Options", style: Theme.of(context).textTheme.titleMedium),
+              child: Text(AppLocalizations.of(context)!.calorieTrackingSubmenuTitle, style: Theme.of(context).textTheme.titleMedium),
             ),
           ),
           ListTile(
-            title: const Text("Calendar"),
+            title: Text(AppLocalizations.of(context)!.calendarMenuItem),
             selected: _selectedIndex == 0,
             selectedColor: ORANGE_FRUIT,
             trailing: Icon(Icons.calendar_month),
@@ -50,7 +55,7 @@ class _TrackingMainState extends State<TrackingMain> {
             },
           ),
           ListTile(
-            title: const Text("Charts"),
+            title: Text(AppLocalizations.of(context)!.chartsMenuItem),
             selected: _selectedIndex == 1,
             selectedColor: ORANGE_FRUIT,
             trailing: Icon(Icons.stacked_line_chart),
@@ -60,7 +65,7 @@ class _TrackingMainState extends State<TrackingMain> {
             },
           ),
           ListTile(
-            title: const Text("Your Plan"),
+            title: Text(AppLocalizations.of(context)!.yourPlanMenuItem),
             selected: _selectedIndex == 2,
             selectedColor: ORANGE_FRUIT,
             trailing: Icon(Icons.monitor_weight_outlined),

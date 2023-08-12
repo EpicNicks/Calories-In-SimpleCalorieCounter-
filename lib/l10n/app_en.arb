@@ -1,0 +1,100 @@
+{
+  "language": "English",
+  "@language":{
+    "description": "The current language"
+  },
+  "dailyCalorieTotal": "Total Daily Calories: {totalCalories}",
+  "@dailyCalorieTotal": {
+    "placeholders": {
+      "totalCalories": {
+        "type": "int"
+      }
+    }
+  },
+  "clearListWarningTitle": "Really CLEAR the List?",
+  "clearListWarningBody": "This will delete ALL of today's items",
+
+  "calorieEntryHistoryTitle": "Calorie Entry History",
+  "calorieTrackingSubmenuTitle": "Progress Tracking Options",
+  "calendarMenuItem": "Calendar",
+  "caloriesTotalLabel": "Total Calories: {totalCalories}",
+  "@caloriesTotalLabel": {
+    "placeholders": {
+      "totalCalories": {
+        "type": "int"
+      }
+    }
+  },
+  "yourFirstEntryText": "Your first entry was on",
+
+  "chartsMenuItem": "Charts",
+  "showAverageLabel": "Show Average",
+  "excludeTodayLabel": "Exclude Today",
+  "dateRangeLabel": "Date Range",
+  "dateRage7Days": "Past 7 Days",
+  "dateRange30Days": "Past 30 Days",
+  "dateRangeMax":  "Max",
+  "caloriesGoalPlanLabel": "Calories Goal Plan",
+  "caloriesGoalPlanNone": "None",
+  "caloriesGoalPlanMSJ": "Mifflin-St Jeor",
+  "caloriesGoalPlanCustom": "Custom",
+
+  "yourPlanMenuItem": "Your Plan",
+  "metricOption": "Metric",
+  "imperialOption": "Imperial",
+  "genderMale": "Male",
+  "genderFemale": "Female",
+  "weightKg": "Weight (kg)",
+  "weightLbs": "Weight (lbs)",
+  "heightMetric": "Height (cm)",
+  "heightFeet": "Height (ft)",
+  "heightInches": "Height (in)",
+  "age": "Age",
+  "activityLevelLabel": "Your activity level",
+  "activityLevelBedridden": "Bedridden",
+  "activityLevelSedentary": "Sedentary",
+  "activityLevelLight": "Light/1-3 Days Per Week",
+  "activityLevelModerate": "Moderate/3-5 Days Per Week",
+  "activityLevelHard": "Hard Exercise/6-7 Days Per Week",
+  "activityLevelExtreme": "Extremely Active/Sports and Physical Job",
+  "calculateButtonLabel": "Calculate",
+  "estimatedDailyNeedsLabel": "Estimated Daily Calorie Needs",
+
+  "settingsTitle": "Settings",
+  "faqLabel": "FAQ",
+  "tipsLabel": "Tips and How Tos",
+  "themeLabel": "App Theme",
+  "exportImportLabel": "Export/Import Data",
+  "supportLabel": "Support the Developer",
+
+  "faqMarkdown": "# FAQ\n---\n## Usable Math Symbols for entries\n- +, -, x and *, / for mathematical operations\n- , (comma) to separate items within an entry  \n  \\(this is semantically equivalent to addition\\)\n\n---\n\n## Optional Notes on Entries\nYou may label additional information, such as the name of the food logged or whatever else you would like in a comment\nby adding a : (colon) to your entry and adding your comment after, such as\\\\\n**100+80+50: egg and toast w/ jam**\n\n---\n\n",
+  "tipsMarkdown": "# Tips and How Tos\n---\n## How to Calculate Partial Servings\nPartial Servings can be entered as:\n\ncalories-per-serving x amount / amount-per-serving\n\nSo if you had cereal that was measured in 60 gram servings, you ate 90 grams of it, and the\namount of calories per serving is 200, The total calories can be entered as:\\\\\n**200 x 90 / 60** ***(=300)***\n\n---\n",
+  "appThemeTitle": "Change App Theme",
+  "lightLabel": "Light",
+  "darkLabel": "Dark",
+  "systemLabel": "System",
+  "exportImportDataTitle": "Import/Export Calorie Data",
+  "exportImportText1": "You can convert your entry data to a CSV, saved locally. Ensure that you back up data before overwriting.",
+  "exportImportText2": "For export, this app requires you allow it to write to external storage as it is a .csv file and will ask for permission to do so",
+  "exportImportText3": "The resulting file may be opened in Excel or any other program that accepts CSVs, as well as be used to import and overwrite data in this app.",
+  "exportImportExportLabel": "Export",
+  "exportImportImportLabel": "Import",
+  "exportImportSavingMsg": "saving file...",
+  "exportImportSavedFileMsg": "Saved file to ",
+  "exportImportFailureMsg": "Export unsuccessful.",
+
+  "supportTitle": "Support the Developer",
+  "supportBody": "If this app has helped you achieve your goals, or you appreciate it over other apps available to you, or whatever the reason, consider supporting me by sending me a tip on the ko-fi link below.",
+
+  "versionLabel": "version number: {versionNumber}",
+  "@versionLabel": {
+    "placeholders": {
+      "versionNumber": {
+        "type": "int"
+      }
+    }
+  },
+
+  "continueButton": "Continue",
+  "cancelButton": "Cancel"
+}

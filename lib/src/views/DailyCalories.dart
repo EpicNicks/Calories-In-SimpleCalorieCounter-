@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:calorie_tracker/main.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
@@ -116,17 +116,17 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("Really CLEAR the List?"),
-            content: const Text("This will delete ALL of today's items", style: TextStyle(color: Colors.red)),
+            title: Text(AppLocalizations.of(context)!.clearListWarningTitle),
+            content: Text(AppLocalizations.of(context)!.clearListWarningBody, style: TextStyle(color: Colors.red)),
             actions: [
               TextButton(
-                child: const Text("Cancel"),
+                child: Text(AppLocalizations.of(context)!.cancelButton),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               TextButton(
-                child: const Text("Continue"),
+                child: Text(AppLocalizations.of(context)!.continueButton),
                 onPressed: () async {
                   List<int> ids = entries.map((e) => e.dbId).toList();
                   for (int id in ids) {
@@ -192,7 +192,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text("Total Daily Calories: ${totalCalories()}")),
+          title: Center(child: Text(AppLocalizations.of(context)!.dailyCalorieTotal(totalCalories()))),
         ),
         body: Container(
           decoration: BoxDecoration(

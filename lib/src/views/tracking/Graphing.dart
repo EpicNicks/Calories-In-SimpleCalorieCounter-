@@ -10,6 +10,7 @@ import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeo
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Graphing extends StatefulWidget {
   Graphing({super.key});
@@ -19,19 +20,18 @@ class Graphing extends StatefulWidget {
 }
 
 class _GraphingState extends State<Graphing> {
-  List<String> _rangeOptions = ["Past 7 Days", "Past 30 Days", "Max"];
-  List<String> _planOptions = ["None", "Mifflin-St Jeor", "Custom"];
-  String _selectedRange = "Past 7 Days";
-  String _selectedPlan = "None";
+
+  int _selectedRangeIndex = 0;
+  int _selectedPlanIndex = 0;
 
   bool _showAverage = false;
   bool _excludeToday = false;
 
-  String getLineTooltipTitle(int index) {
+  String getLineTooltipTitle(List<String> rangeOptions, int index, BuildContext context) {
     if (index == 0) {
       return "Day's Calories";
     }
-    if (_selectedPlan.toUpperCase() != "NONE") {
+    if (rangeOptions[_selectedRangeIndex] != AppLocalizations.of(context)!.caloriesGoalPlanNone) {
       if (index == 1) return "Maintenance Calories";
     }
     // only Average remains
@@ -60,7 +60,7 @@ class _GraphingState extends State<Graphing> {
     if (preferences == null) {
       return -1;
     }
-    if (_selectedPlan == _planOptions[1]) {
+    if (_selectedPlanIndex == 1) {
       double height = preferences.getDouble(USER_HEIGHT_DOUBLE) ?? 0.0;
       int heightFt = preferences.getInt(USER_HEIGHT_FT_INT) ?? 0;
       String gender = preferences.getString(USER_GENDER_STRING) ?? "";
@@ -86,7 +86,7 @@ class _GraphingState extends State<Graphing> {
       }
       return (bmr * (MifflinStJeorCalculatorState.activityLevelOptions[activityLevel] ?? 0.0)).round();
     }
-    if (_selectedPlan == _planOptions[2]) {
+    if (_selectedPlanIndex == 2) {
       return preferences.getInt(USER_CUSTOM_TARGET_INT) ?? 0;
     }
     return 0;
@@ -105,14 +105,21 @@ class _GraphingState extends State<Graphing> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _selectedRange = _rangeOptions[0];
-      _selectedPlan = _planOptions[0];
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final planOptions = [
+      AppLocalizations.of(context)!.caloriesGoalPlanNone,
+      AppLocalizations.of(context)!.caloriesGoalPlanMSJ,
+      AppLocalizations.of(context)!.caloriesGoalPlanCustom
+    ];
+    final rangeOptions = [
+      AppLocalizations.of(context)!.dateRage7Days,
+      AppLocalizations.of(context)!.dateRange30Days,
+      AppLocalizations.of(context)!.dateRangeMax
+    ];
+
     return Scaffold(
         body: Column(
       children: [
@@ -122,14 +129,14 @@ class _GraphingState extends State<Graphing> {
             Expanded(
                 child: Center(
                     child: DropdownButtonFormField(
-              decoration: InputDecoration(labelText: "Date Range"),
-              value: _selectedRange,
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.dateRangeLabel),
+              value: rangeOptions[_selectedRangeIndex],
               onChanged: (newValue) {
                 setState(() {
-                  _selectedRange = newValue!;
+                  _selectedRangeIndex = rangeOptions.indexOf(newValue!);
                 });
               },
-              items: _rangeOptions.map((String value) {
+              items: rangeOptions.map((String value) {
                 return DropdownMenuItem(
                   value: value,
                   child: Text(value),
@@ -141,14 +148,14 @@ class _GraphingState extends State<Graphing> {
                 child: Center(
               child: Center(
                   child: DropdownButtonFormField(
-                decoration: InputDecoration(labelText: "Calories Goal Plan"),
-                value: _selectedPlan,
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.caloriesGoalPlanLabel),
+                value: planOptions[_selectedPlanIndex],
                 onChanged: (newValue) {
                   setState(() {
-                    _selectedPlan = newValue!;
+                    _selectedPlanIndex = planOptions.indexOf(newValue!);
                   });
                 },
-                items: _planOptions.map((String value) {
+                items: planOptions.map((String value) {
                   return DropdownMenuItem(
                     value: value,
                     child: Text(value),
@@ -164,10 +171,10 @@ class _GraphingState extends State<Graphing> {
             builder: (context, prefs) {
               if (prefs.hasData) {
                 final DateTime endDate = _excludeToday ? DateTime.now().dateOnly.daysAgo(1) : DateTime.now();
-                DateTime startDate = switch (_selectedRange) {
-                  "Past 7 Days" => endDate.daysAgo(6),
-                  "Past 30 Days" => endDate.daysAgo(29),
-                  "Max" => endDate.daysAgo(100000000),
+                DateTime startDate = switch (_selectedRangeIndex) {
+                  0 => endDate.daysAgo(6),
+                  1 => endDate.daysAgo(29),
+                  2 => endDate.daysAgo(100000000),
                   _ => endDate.daysAgo(6)
                 };
                 return FutureBuilder<List<FoodItemEntry>>(
@@ -180,15 +187,15 @@ class _GraphingState extends State<Graphing> {
                           ? dailyTotals.map((t) => t.totalCalories).fold(0.0, (prev, cur) => prev + cur) /
                               dailyTotals.length
                           : 0;
-                      if (_selectedRange == "Max") {
+                      if (_selectedRangeIndex == 2) {
                         startDate = endDate.daysAgo(endDate.difference(dailyTotals[0].dateTime.dateOnly).inDays);
                       }
                       final planTarget = getPlanTarget(prefs.data);
                       final dailyTotalsList = dailyTotals.map((e) => e.totalCalories).toList();
                       final dailyTotalsMin = dailyTotalsList.min == double.infinity ? 0.0 : dailyTotalsList.min;
                       final dailyTotalsMax = dailyTotalsList.max == double.negativeInfinity ? 0.0 : dailyTotalsList.max;
-                      final minY = max((_selectedPlan == "None" ? dailyTotalsMin : min(dailyTotalsMin, planTarget.toDouble())) - 200, 0.0);
-                      final maxY = max((_selectedPlan == "None" ? dailyTotalsMax : max(dailyTotalsMax, planTarget.toDouble())) + 200, 2000.0);
+                      final minY = max((planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone ? dailyTotalsMin : min(dailyTotalsMin, planTarget.toDouble())) - 200, 0.0);
+                      final maxY = max((planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone ? dailyTotalsMax : max(dailyTotalsMax, planTarget.toDouble())) + 200, 2000.0);
 
                       return Expanded(
                           child: LineChart(
@@ -241,7 +248,7 @@ class _GraphingState extends State<Graphing> {
                                     tooltipBorder: BorderSide(color: Colors.black),
                                     getTooltipItems: (touchedSpots) => touchedSpots
                                         .map((e) => LineTooltipItem(
-                                            "${getLineTooltipTitle(e.barIndex)} ${e.y.round()}",
+                                            "${getLineTooltipTitle(rangeOptions, e.barIndex, context)} ${e.y.round()}",
                                             TextStyle(
                                               color: e.bar.color,
                                             )))
@@ -257,7 +264,7 @@ class _GraphingState extends State<Graphing> {
                               ),
                               // needs to be updated for plans variations which aren't constant
                               LineChartBarData(
-                                  show: _selectedPlan.toUpperCase() != "NONE",
+                                  show: planOptions[_selectedPlanIndex] != AppLocalizations.of(context)!.caloriesGoalPlanNone,
                                   spots: dailyTotals
                                       .map((e) => FlSpot(
                                           e.dateTime.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,

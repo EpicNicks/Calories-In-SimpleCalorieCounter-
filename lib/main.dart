@@ -4,8 +4,12 @@ import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'l10n/l10n.dart';
 
 const String THEME_MODE_INT = "THEME_MODE_INT";
 
@@ -102,6 +106,13 @@ class _MyAppState extends State<MyApp> {
           ),
           useMaterial3: true),
       themeMode: _themeMode,
+      supportedLocales: L10n.all,
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
       home: const BottomTabBar(),
     );
   }
