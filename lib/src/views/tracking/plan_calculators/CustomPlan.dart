@@ -1,6 +1,7 @@
 import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomPlan extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _CustomPlanState extends State<CustomPlan> {
     return Scaffold(
         appBar: AppBar(
           title: Center(
-            child: Text("Enter your daily calories target"),
+            child: Text(AppLocalizations.of(context)!.customGoalPlanPrompt),
           ),
         ),
         body: FutureBuilder<SharedPreferences>(
@@ -35,7 +36,7 @@ class _CustomPlanState extends State<CustomPlan> {
                     ),
                   ]));
             } else {
-              return const Column(children: [Text("Loading...")]);
+              return Column(children: [Text(AppLocalizations.of(context)!.loadingText)]);
             }
           },
         ));

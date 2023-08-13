@@ -1,9 +1,9 @@
 {
-  "language": "English",
+  "language": "日本語",
   "@language":{
-    "description": "The current language"
+    "description": "現在の言語"
   },
-  "dailyCalorieTotal": "Total Daily Calories: {totalCalories}",
+  "dailyCalorieTotal": "今日のカロリー合計: {totalCalories}",
   "@dailyCalorieTotal": {
     "placeholders": {
       "totalCalories": {
@@ -11,13 +11,13 @@
       }
     }
   },
-  "clearListWarningTitle": "Really CLEAR the List?",
-  "clearListWarningBody": "This will delete ALL of today's items",
+  "clearListWarningTitle": "リストを本当にクリアしますか？",
+  "clearListWarningBody": "これで今日の全てのアイテムが削除されます",
 
-  "calorieEntryHistoryTitle": "Calorie Entry History",
-  "calorieTrackingSubmenuTitle": "Progress Tracking Options",
-  "calendarMenuItem": "Calendar",
-  "caloriesTotalLabel": "Total Calories: {totalCalories}",
+  "calorieEntryHistoryTitle": "カロリー入力ログ",
+  "calorieTrackingSubmenuTitle": "\"進捗トラッキングオプション",
+  "calendarMenuItem": "カレンダー",
+  "caloriesTotalLabel": "総カロリー: {totalCalories}",
   "@caloriesTotalLabel": {
     "placeholders": {
       "totalCalories": {
@@ -25,7 +25,7 @@
       }
     }
   },
-  "yourFirstEntryText": "Your first entry was on {date}",
+  "yourFirstEntryText": "最初の記録は{date}です",
   "@yourFirstEntryText": {
     "placeholders": {
       "date": {
@@ -33,40 +33,40 @@
       }
     }
   },
-  "emptyHistoryMsg": "You have no entries in your history yet",
+  "emptyHistoryMsg": "まだ履歴にエントリーがない",
 
-  "chartsMenuItem": "Charts",
-  "showAverageLabel": "Show Average",
-  "excludeTodayLabel": "Exclude Today",
-  "dateRangeLabel": "Date Range",
-  "dateRage7Days": "Past 7 Days",
-  "dateRange30Days": "Past 30 Days",
-  "dateRangeMax":  "Max",
-  "caloriesGoalPlanLabel": "Calories Goal Plan",
-  "caloriesGoalPlanNone": "None",
-  "caloriesGoalPlanMSJ": "Mifflin-St Jeor",
-  "caloriesGoalPlanCustom": "Custom",
+  "chartsMenuItem": "グラフ",
+  "showAverageLabel": "平均",
+  "excludeTodayLabel": "今日除外",
+  "dateRangeLabel": "日付の範囲",
+  "dateRage7Days": "過去7日間",
+  "dateRange30Days": "過去30日間",
+  "dateRangeMax":  "最大範囲",
+  "caloriesGoalPlanLabel": "カロリーゴールプラン",
+  "caloriesGoalPlanNone": "なし",
+  "caloriesGoalPlanMSJ": "ミフリンセイントジョア",
+  "caloriesGoalPlanCustom": "カスタム",
 
-  "yourPlanMenuItem": "Your Plan",
-  "metricOption": "Metric",
-  "imperialOption": "Imperial",
-  "genderMale": "Male",
-  "genderFemale": "Female",
-  "weightKg": "Weight (kg)",
-  "weightLbs": "Weight (lbs)",
-  "heightMetric": "Height (cm)",
-  "heightFeet": "Height (ft)",
-  "heightInches": "Height (in)",
-  "age": "Age",
-  "activityLevelLabel": "Your activity level",
-  "activityLevelBedridden": "Bedridden",
-  "activityLevelSedentary": "Sedentary",
-  "activityLevelLight": "Light/1-3 Days Per Week",
-  "activityLevelModerate": "Moderate/3-5 Days Per Week",
-  "activityLevelHard": "Hard Exercise/6-7 Days Per Week",
-  "activityLevelExtreme": "Extremely Active/Sports and Physical Job",
-  "calculateButtonLabel": "Calculate",
-  "estimatedDailyNeedsLabel": "Estimated Daily Calorie Needs: {calories}",
+  "yourPlanMenuItem": "プラン",
+  "metricOption": "メートル法",
+  "imperialOption": "ヤードポンド法",
+  "genderMale": "男",
+  "genderFemale": "女",
+  "weightKg": "体重（kg）",
+  "weightLbs": "体重（ポンド）",
+  "heightMetric": "身長（cm）",
+  "heightFeet": "身長（フィート）",
+  "heightInches": "身長（インチ）",
+  "age": "年齢（歳）",
+  "activityLevelLabel": "活動レベル",
+  "activityLevelBedridden": "寝たきり",
+  "activityLevelSedentary": "低い運動レベル",
+  "activityLevelLight": "軽い（週1-3日）",
+  "activityLevelModerate": "適度な（週3-5日）",
+  "activityLevelHard": "激しい運動（週6-7日）",
+  "activityLevelExtreme": "非常に活発（スポーツ・肉体労働）",
+  "calculateButtonLabel": "計算する",
+  "estimatedDailyNeedsLabel": "推定1日のカロリー必要量: {calories}",
   "@estimatedDailyNeedsLabel": {
     "placeholders": {
       "calories": {
@@ -112,7 +112,7 @@
     }
   },
 
-  "continueButton": "Continue",
-  "cancelButton": "Cancel",
-  "loadingText": "Loading..."
+  "continueButton": "OK",
+  "cancelButton": "キャンセル",
+  "loadingText": "読み込み中..."
 }

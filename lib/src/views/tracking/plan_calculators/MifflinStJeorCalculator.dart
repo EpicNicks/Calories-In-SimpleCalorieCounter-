@@ -2,6 +2,7 @@ import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/AnimatedToggle.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MifflinStJeorCalculator extends StatefulWidget {
   @override
@@ -10,7 +11,7 @@ class MifflinStJeorCalculator extends StatefulWidget {
 
 class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
   final Future<SharedPreferences> _preferences = SharedPreferences.getInstance();
-  static const activityLevelOptions = <String, double>{
+  static const Map<String, double> activityLevelOptions = {
     'Bedridden': 1,
     'Sedentary': 1.2,
     'Light/1-3 Days Per Week': 1.375,
@@ -97,6 +98,23 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    // handles the fact that items are stored with keys that are language non-specific
+    // language changes should only be reflected in the UI
+    final genders = ["Male", "Female"];
+    final measurementSystems = ["Metric", "Imperial"];
+    final Map<String, String> translationMap = {
+      AppLocalizations.of(context)!.genderMale: "Male",
+      AppLocalizations.of(context)!.genderFemale: "Female",
+      AppLocalizations.of(context)!.metricOption: "Metric",
+      AppLocalizations.of(context)!.imperialOption: "Imperial",
+      AppLocalizations.of(context)!.activityLevelBedridden: activityLevelOptions.keys.elementAt(0),
+      AppLocalizations.of(context)!.activityLevelSedentary: activityLevelOptions.keys.elementAt(1),
+      AppLocalizations.of(context)!.activityLevelLight: activityLevelOptions.keys.elementAt(2),
+      AppLocalizations.of(context)!.activityLevelModerate: activityLevelOptions.keys.elementAt(3),
+      AppLocalizations.of(context)!.activityLevelHard: activityLevelOptions.keys.elementAt(4),
+      AppLocalizations.of(context)!.activityLevelExtreme: activityLevelOptions.keys.elementAt(5)
+    };
+
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -106,15 +124,16 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
             DropdownButton<String>(
               value: _gender,
               onChanged: (newValue) {
+                final value = translationMap[newValue!]!;
                 setState(() {
                   _gender = newValue!;
                 });
-                _preferences.then((SharedPreferences prefs) => prefs.setString(USER_GENDER_STRING, newValue!));
+                _preferences.then((SharedPreferences prefs) => prefs.setString(USER_GENDER_STRING, value));
               },
-              items: <String>['Male', 'Female'].map((String value) {
+              items: genders.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(translationMap.keys.elementAt(translationMap.values.toList().indexOf(value))),
                 );
               }).toList(),
             ),
@@ -126,21 +145,43 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                     future: _preferences,
                     builder: (BuildContext ctx, AsyncSnapshot<SharedPreferences> snapshot) {
                       if (snapshot.hasData) {
-                        return AnimatedToggle(
-                          initialValue:
-                              snapshot.data?.getBool(MSJ_USE_METRIC_BOOL) ?? true == true ? "Metric" : "Imperial",
-                          values: ["Metric", "Imperial"],
-                          onToggleCallback: (value) {
-                            _preferences.then((SharedPreferences prefs) {
-                              handleSwapSystem(value == 0, prefs);
-                            });
+                        return ToggleButtons(
+                          children: measurementSystems.map((e) => Text(translationMap.keys.elementAt(translationMap.values.toList().indexOf(e)))).toList(),
+                          isSelected: [_isMetric, !_isMetric],
+                          onPressed: (value){
+                            if (!(_isMetric && value == 0 || !_isMetric && value == 1)){
+                              _preferences.then((SharedPreferences prefs) {
+                                handleSwapSystem(value == 0, prefs);
+                              });
+                            }
                           },
-                          buttonColor: Colors.orange.shade700,
-                          backgroundColor: Colors.grey.shade200,
-                          textColor: Colors.black,
+                          borderRadius: const BorderRadius.all(Radius.circular(8)),
+                          selectedBorderColor: Colors.red[700],
+                          selectedColor: Colors.white,
+                          fillColor: Colors.red[200],
+                          color: Colors.red[400],
+                          constraints: const BoxConstraints(
+                            minHeight: 40.0,
+                            minWidth: 160.0,
+                          ),
                         );
+
+                        // return AnimatedToggle(
+                        //   initialValue: snapshot.data?.getBool(MSJ_USE_METRIC_BOOL) ?? true == true
+                        //       ? AppLocalizations.of(context)!.metricOption
+                        //       : AppLocalizations.of(context)!.imperialOption,
+                        //   values: measurementSystems.map((e) => translationMap.keys.elementAt(translationMap.values.toList().indexOf(e))).toList(),
+                        //   onToggleCallback: (value) {
+                        //     _preferences.then((SharedPreferences prefs) {
+                        //       handleSwapSystem(value == 0, prefs);
+                        //     });
+                        //   },
+                        //   buttonColor: Colors.orange.shade700,
+                        //   backgroundColor: Colors.grey.shade200,
+                        //   textColor: Colors.black,
+                        // );
                       } else {
-                        return Text("loading...");
+                        return Text(AppLocalizations.of(context)!.loadingText);
                       }
                     })
               ],
@@ -149,7 +190,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
             TextField(
               controller: _weightController,
               decoration: InputDecoration(
-                labelText: _isMetric ? 'Weight (kg)' : 'Weight (lbs)',
+                labelText: _isMetric ? AppLocalizations.of(context)!.weightKg : AppLocalizations.of(context)!.weightLbs,
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
@@ -169,7 +210,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                           child: TextField(
                             controller: _heightController,
                             decoration: InputDecoration(
-                              labelText: 'Height (cm)',
+                              labelText: AppLocalizations.of(context)!.heightMetric,
                             ),
                             keyboardType: TextInputType.number,
                             onChanged: (value) {
@@ -187,7 +228,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                             child: TextField(
                           controller: _heightFtController,
                           decoration: InputDecoration(
-                            labelText: 'Height (ft)',
+                            labelText: AppLocalizations.of(context)!.heightFeet,
                           ),
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
@@ -202,7 +243,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                             child: TextField(
                           controller: _heightController,
                           decoration: InputDecoration(
-                            labelText: 'Height (in)',
+                            labelText: AppLocalizations.of(context)!.heightInches,
                           ),
                           keyboardType: TextInputType.number,
                           onChanged: (value) {
@@ -217,7 +258,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
             SizedBox(height: 16.0),
             TextField(
               controller: _ageController,
-              decoration: InputDecoration(labelText: 'Age'),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.age),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 setState(() {
@@ -228,7 +269,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
             ),
             SizedBox(height: 16.0),
             DropdownButtonFormField<String>(
-              decoration: InputDecoration(labelText: "Your activity level"),
+              decoration: InputDecoration(labelText: AppLocalizations.of(context)!.activityLevelLabel),
               value: _activityLevel,
               onChanged: (newValue) {
                 setState(() {
@@ -240,7 +281,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
               items: activityLevelOptions.keys.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(translationMap.keys.elementAt(translationMap.values.toList().indexOf(value))),
                 );
               }).toList(),
             ),
@@ -251,13 +292,13 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                 calculateCalories();
               },
               child: Text(
-                'Calculate',
+                AppLocalizations.of(context)!.calculateButtonLabel,
                 style: TextStyle(color: Colors.black, fontSize: Theme.of(context).textTheme.headlineSmall?.fontSize),
               ),
             ),
             SizedBox(height: 16.0),
             Text(
-              'Estimated Daily Calorie Needs: ${_calculatedCalories.round()}',
+              AppLocalizations.of(context)!.estimatedDailyNeedsLabel(_calculatedCalories.round()),
               style: TextStyle(fontSize: 18.0),
             ),
           ],

@@ -1,9 +1,11 @@
+import 'dart:io';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../dto/FoodItemEntry.dart';
 
@@ -30,9 +32,9 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     if (_startDate == null) {
-      return const SafeArea(
+      return SafeArea(
         child: Center(
-          child: Text("You have no entries in your history yet"),
+          child: Text(AppLocalizations.of(context)!.emptyHistoryMsg),
         ),
       );
     } else {
@@ -41,9 +43,11 @@ class _CalendarPageState extends State<CalendarPage> {
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Text("Your first entry was on ${DateFormat.yMMMd().format(_startDate!)}"),
+              child: Text(AppLocalizations.of(context)!.yourFirstEntryText(DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(_startDate!))),
             ),
             TableCalendar(
+              calendarFormat: CalendarFormat.month,
+              locale: Platform.localeName,
               focusedDay: DateTime.now(),
               firstDay: _startDate!,
               lastDay: DateTime.now(),
@@ -66,6 +70,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   shape: BoxShape.circle,
                 ),
               ),
+              availableCalendarFormats: {
+                CalendarFormat.month: "Month"
+              },
             ),
             FutureBuilder<List<FoodItemEntry>>(
               future: DatabaseHelper.instance.getFoodItems(_selectedDay ?? _startDate!),
@@ -75,9 +82,7 @@ class _CalendarPageState extends State<CalendarPage> {
                       child: Column(children: [
                     Center(
                       // can occur on dates between the start and end date that had no entries
-                      child: Text(
-                          "No Calorie Entries for the selected date: ${DateFormat.yMMMd().format(_selectedDay ?? _startDate!)}"),
-                    ),
+                      child: Text(AppLocalizations.of(context)!.loadingText)),
                   ]));
                 } else {
                   final filteredSnapshotData = snapshot.data!.where((element) => element.calorieExpression.isNotEmpty).toList();
@@ -91,7 +96,7 @@ class _CalendarPageState extends State<CalendarPage> {
                           color: Theme.of(context).colorScheme.primaryContainer,
                           child: Center(
                             child: Text(
-                              "Total Calories: ${filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()}",
+                              AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()),
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                           ),
