@@ -1,6 +1,7 @@
 import 'package:calorie_tracker/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../constants/ColorConstants.dart';
 
@@ -24,7 +25,7 @@ class _ThemeChangeState extends State<ThemeChange> {
         child: Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        title: Text("Change App Theme"),
+        title: Text(AppLocalizations.of(context)!.appThemeTitle),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -51,23 +52,23 @@ class _ThemeChangeState extends State<ThemeChange> {
                                   MyApp.of(context).changeTheme(ThemeMode.light);
                                 },
                                 style: getButtonStyle(),
-                                child: Text("Light")),
+                                child: Text(AppLocalizations.of(context)!.lightLabel)),
                             TextButton(
                                 onPressed: () {
                                   MyApp.of(context).changeTheme(ThemeMode.dark);
                                 },
                                 style: getButtonStyle(),
-                                child: Text("Dark")),
+                                child: Text(AppLocalizations.of(context)!.darkLabel)),
                             TextButton(
                                 onPressed: () {
                                   MyApp.of(context).changeTheme(ThemeMode.system);
                                 },
                                 style: getButtonStyle(),
-                                child: Text("System"))
+                                child: Text(AppLocalizations.of(context)!.systemLabel))
                           ],
                         );
                       } else {
-                        return Text("Loading...");
+                        return Text(AppLocalizations.of(context)!.loadingText);
                       }
                     }))
           ],

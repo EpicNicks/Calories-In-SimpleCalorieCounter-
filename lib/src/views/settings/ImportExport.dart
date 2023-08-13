@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:csv/csv.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../dto/FoodItemEntry.dart';
 
@@ -168,21 +169,18 @@ class _ImportExportState extends State<ImportExport> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Import/Export Calorie Data"),
+          title: Text(AppLocalizations.of(context)!.exportImportDataTitle),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         body: Padding(
             padding: EdgeInsets.only(left: 20, right: 20, top: 20),
             child: Column(
               children: [
-                Text(
-                    "You can convert your entry data to a CSV, saved locally. Ensure that you back up data before overwriting."),
+                Text(AppLocalizations.of(context)!.exportImportText1),
                 SizedBox(height: 10),
-                Text(
-                    "For export, this app requires you allow it to write to external storage as it is a .csv file and will ask for permission to do so"),
+                Text(AppLocalizations.of(context)!.exportImportText2),
                 SizedBox(height: 10),
-                Text(
-                    "The resulting file may be opened in Excel or any other program that accepts CSVs, as well as be used to import and overwrite data in this app."),
+                Text(AppLocalizations.of(context)!.exportImportText3),
                 Padding(
                   padding: EdgeInsets.only(top: 50),
                   child: Row(
@@ -191,11 +189,11 @@ class _ImportExportState extends State<ImportExport> {
                       TextButton(
                           style: _buttonStyle,
                           onPressed: () => exportData(),
-                          child: Text("Export", style: TextStyle(color: Colors.black))),
+                          child: Text(AppLocalizations.of(context)!.exportImportExportLabel, style: TextStyle(color: Colors.black))),
                       TextButton(
                           style: _buttonStyle,
                           onPressed: () => importData(context),
-                          child: Text("Import", style: TextStyle(color: Colors.black))),
+                          child: Text(AppLocalizations.of(context)!.exportImportImportLabel, style: TextStyle(color: Colors.black))),
                     ],
                   ),
                 ),

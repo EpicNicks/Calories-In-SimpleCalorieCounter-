@@ -46,6 +46,9 @@
   "caloriesGoalPlanNone": "None",
   "caloriesGoalPlanMSJ": "Mifflin-St Jeor",
   "caloriesGoalPlanCustom": "Custom",
+  "maintenanceCaloriesChartLabel": "Maintenance Calories",
+  "daysCaloriesChartLabel": "Day's Calories",
+  "rangeAverageChartLabel": "Range Average",
 
   "yourPlanMenuItem": "Your Plan",
   "metricOption": "Metric",
@@ -97,7 +100,14 @@
   "exportImportExportLabel": "Export",
   "exportImportImportLabel": "Import",
   "exportImportSavingMsg": "saving file...",
-  "exportImportSavedFileMsg": "Saved file to ",
+  "exportImportSavedFileMsg": "Saved file to {path}",
+  "@exportImportSavedFileMsg": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
   "exportImportFailureMsg": "Export unsuccessful.",
 
   "supportTitle": "Support the Developer",
@@ -107,7 +117,7 @@
   "@versionLabel": {
     "placeholders": {
       "versionNumber": {
-        "type": "int"
+        "type": "String"
       }
     }
   },

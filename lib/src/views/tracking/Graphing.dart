@@ -29,13 +29,13 @@ class _GraphingState extends State<Graphing> {
 
   String getLineTooltipTitle(List<String> rangeOptions, int index, BuildContext context) {
     if (index == 0) {
-      return "Day's Calories";
+      return AppLocalizations.of(context)!.daysCaloriesChartLabel;
     }
     if (rangeOptions[_selectedRangeIndex] != AppLocalizations.of(context)!.caloriesGoalPlanNone) {
-      if (index == 1) return "Maintenance Calories";
+      if (index == 1) return AppLocalizations.of(context)!.maintenanceCaloriesChartLabel;
     }
     // only Average remains
-    return "Range Average";
+    return AppLocalizations.of(context)!.rangeAverageChartLabel;
   }
 
   List<({double totalCalories, DateTime dateTime})> foodItemDailyTotals(List<FoodItemEntry> entries) {
@@ -292,7 +292,7 @@ class _GraphingState extends State<Graphing> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Spacer(flex: 1),
-            Text("Show Average"),
+            Text(AppLocalizations.of(context)!.showAverageLabel),
             Switch(
                 activeColor: ORANGE_FRUIT,
                 inactiveTrackColor: Colors.grey,
@@ -303,7 +303,7 @@ class _GraphingState extends State<Graphing> {
                   });
                 }),
             Spacer(flex: 1),
-            Text("Exclude Today"),
+            Text(AppLocalizations.of(context)!.excludeTodayLabel),
             Switch(
                 activeColor: ORANGE_FRUIT,
                 inactiveTrackColor: Colors.grey,

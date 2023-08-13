@@ -4,6 +4,7 @@ import 'package:calorie_tracker/src/views/settings/TipsHowTo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'dart:io';
 import 'FAQ.dart';
@@ -18,23 +19,27 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  final Map<String, Widget> menuButtons = {
-    "FAQ": Faq(),
-    "Tips and How Tos": TipsHowTo(),
-    "App Theme": ThemeChange(),
-    "Support the Developer": SupportPage(),
-    //"Version/Update": VersionPage(),
-  };
+
+  final Map<String, Widget> menuButtons = {};
 
   @override
   Widget build(BuildContext context) {
+    menuButtons.addAll({
+      AppLocalizations.of(context)!.faqLabel: Faq(),
+      AppLocalizations.of(context)!.tipsLabel: TipsHowTo(),
+      AppLocalizations.of(context)!.themeLabel: ThemeChange(),
+      AppLocalizations.of(context)!.supportLabel: SupportPage(),
+      //"Version/Update": VersionPage(),
+    });
+
     if (Platform.isAndroid){
       final methodChannel = MethodChannel("android_version");
       methodChannel.invokeMethod("version_int").then((value){
         final int version = value as int;
-        if (version >= 30 && !menuButtons.keys.contains("Export/Import Data")){
+        final exportImportTitle = AppLocalizations.of(context)!.exportImportLabel;
+        if (version >= 30 && !menuButtons.keys.contains(exportImportTitle)){
           menuButtons.addAll({
-            "Export/Import Data": ImportExport()
+            exportImportTitle: ImportExport()
           });
           setState(() {});
         }
@@ -44,16 +49,16 @@ class _SettingsState extends State<Settings> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Row(
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Spacer(flex: 5), Text("Settings"), Spacer(flex: 1), Icon(Icons.settings), Spacer(flex: 5)],
+            children: [Spacer(flex: 5), Text(AppLocalizations.of(context)!.settingsTitle), Spacer(flex: 1), Icon(Icons.settings), Spacer(flex: 5)],
           ),
         ),
         bottomNavigationBar: FutureBuilder<PackageInfo>(
           future: PackageInfo.fromPlatform(),
           builder: (context, snapshot){
-            String version = "loading...";
+            String version = AppLocalizations.of(context)!.loadingText;
             if (snapshot.hasData){
               version = snapshot.data!.version;
               print(version);
@@ -61,7 +66,7 @@ class _SettingsState extends State<Settings> {
             else {
               version = "error fetching version";
             }
-            return BottomAppBar(padding: EdgeInsets.zero, height: 48, child: Center(child: Text("version number: $version")));
+            return BottomAppBar(padding: EdgeInsets.zero, height: 48, child: Center(child: Text(AppLocalizations.of(context)!.versionLabel(version))));
           },
         ),
         body: Container(

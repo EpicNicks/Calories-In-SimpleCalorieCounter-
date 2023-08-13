@@ -4,13 +4,6 @@
     "description": "現在の言語"
   },
   "dailyCalorieTotal": "今日のカロリー合計: {totalCalories}",
-  "@dailyCalorieTotal": {
-    "placeholders": {
-      "totalCalories": {
-        "type": "int"
-      }
-    }
-  },
   "clearListWarningTitle": "リストを本当にクリアしますか？",
   "clearListWarningBody": "これで今日の全てのアイテムが削除されます",
 
@@ -18,21 +11,7 @@
   "calorieTrackingSubmenuTitle": "\"進捗トラッキングオプション",
   "calendarMenuItem": "カレンダー",
   "caloriesTotalLabel": "総カロリー: {totalCalories}",
-  "@caloriesTotalLabel": {
-    "placeholders": {
-      "totalCalories": {
-        "type": "int"
-      }
-    }
-  },
   "yourFirstEntryText": "最初の記録は{date}です",
-  "@yourFirstEntryText": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "emptyHistoryMsg": "まだ履歴にエントリーがない",
 
   "chartsMenuItem": "グラフ",
@@ -44,8 +23,11 @@
   "dateRangeMax":  "最大範囲",
   "caloriesGoalPlanLabel": "カロリーゴールプラン",
   "caloriesGoalPlanNone": "なし",
-  "caloriesGoalPlanMSJ": "ミフリンセイントジョア",
+  "caloriesGoalPlanMSJ": "Mifflin-St Jeor",
   "caloriesGoalPlanCustom": "カスタム",
+  "maintenanceCaloriesChartLabel": "維持カロリー",
+  "daysCaloriesChartLabel": "本日のカロリー",
+  "rangeAverageChartLabel": "範囲平均",
 
   "yourPlanMenuItem": "プラン",
   "metricOption": "メートル法",
@@ -67,50 +49,36 @@
   "activityLevelExtreme": "非常に活発（スポーツ・肉体労働）",
   "calculateButtonLabel": "計算する",
   "estimatedDailyNeedsLabel": "推定1日のカロリー必要量: {calories}",
-  "@estimatedDailyNeedsLabel": {
-    "placeholders": {
-      "calories": {
-        "type": "int"
-      }
-    }
-  },
 
-  "customGoalPlanPrompt": "Enter your daily calories target",
+  "customGoalPlanPrompt": "目標カロリーを入力",
 
-  "settingsTitle": "Settings",
-  "faqLabel": "FAQ",
-  "tipsLabel": "Tips and How Tos",
-  "themeLabel": "App Theme",
-  "exportImportLabel": "Export/Import Data",
-  "supportLabel": "Support the Developer",
+  "settingsTitle": "設定",
+  "faqLabel": "よくある質問",
+  "tipsLabel": "ヒントとハウツ",
+  "themeLabel": "アプリのテーマ",
+  "exportImportLabel": "データのエクスポート/インポート",
+  "supportLabel": "開発者への支援",
 
-  "faqMarkdown": "# FAQ\n---\n## Usable Math Symbols for entries\n- +, -, x and *, / for mathematical operations\n- , (comma) to separate items within an entry  \n  \\(this is semantically equivalent to addition\\)\n\n---\n\n## Optional Notes on Entries\nYou may label additional information, such as the name of the food logged or whatever else you would like in a comment\nby adding a : (colon) to your entry and adding your comment after, such as\\\\\n**100+80+50: egg and toast w/ jam**\n\n---\n\n",
-  "tipsMarkdown": "# Tips and How Tos\n---\n## How to Calculate Partial Servings\nPartial Servings can be entered as:\n\ncalories-per-serving x amount / amount-per-serving\n\nSo if you had cereal that was measured in 60 gram servings, you ate 90 grams of it, and the\namount of calories per serving is 200, The total calories can be entered as:\\\\\n**200 x 90 / 60** ***(=300)***\n\n---\n",
-  "appThemeTitle": "Change App Theme",
-  "lightLabel": "Light",
-  "darkLabel": "Dark",
-  "systemLabel": "System",
-  "exportImportDataTitle": "Import/Export Calorie Data",
-  "exportImportText1": "You can convert your entry data to a CSV, saved locally. Ensure that you back up data before overwriting.",
-  "exportImportText2": "For export, this app requires you allow it to write to external storage as it is a .csv file and will ask for permission to do so",
-  "exportImportText3": "The resulting file may be opened in Excel or any other program that accepts CSVs, as well as be used to import and overwrite data in this app.",
-  "exportImportExportLabel": "Export",
-  "exportImportImportLabel": "Import",
-  "exportImportSavingMsg": "saving file...",
-  "exportImportSavedFileMsg": "Saved file to ",
-  "exportImportFailureMsg": "Export unsuccessful.",
+  "faqMarkdown": "# FAQ\n---\n## 記入に使用できる数学記号\n- +、-、x および * は数学の演算に使用します\n- ,（コンマ）はエントリ内の項目を区切るための記号です\n  \\\\（これは意味的には加算と同等です\\\\）\n\n---\n\n## エントリへのオプションのメモ\n食品の名前などの追加情報をラベル付けすることができます。コメントを追加するには、エントリに :（コロン）を追加し、コメントを後ろに追加します。例：\n\n**100+80+50: 卵とトースト（ジャム付き）**\n\n---\n",
+  "tipsMarkdown": "# ヒントとハウツー\n---\n## 部分のサービングの計算方法\n部分のサービングは次のように入力できます：\n\nサービングごとのカロリー x 量 / サービングごとの量\n\n例えば、60グラムのサービングで測定されたシリアルを90グラム食べ、\nサービングごとのカロリーが200だった場合、総カロリーは以下のように入力できます：\n\n**200 x 90 / 60** ***(=300)***\n\n---\n",
+  "appThemeTitle": "アプリテーマの変更",
+  "lightLabel": "ライト",
+  "darkLabel": "ダーク",
+  "systemLabel": "システム",
+  "exportImportDataTitle": "データのエクスポート/インポート",
+  "exportImportText1": "エントリデータをCSVに変換して、ローカルに保存できます。上書きする前にデータをバックアップしてください。",
+  "exportImportText2": "エクスポートには、このアプリが外部ストレージに書き込む許可が必要です。それは .csv ファイルであり、そのための許可を求めます。",
+  "exportImportText3": "結果のファイルは、ExcelやCSVファイルを受け入れる他のプログラムで開けるだけでなく、このアプリにデータをインポートして上書きするためにも使用できます。",
+  "exportImportExportLabel": "エクスポート",
+  "exportImportImportLabel": "インポート",
+  "exportImportSavingMsg": "ファイルを保存しています...",
+  "exportImportSavedFileMsg": "{path} にファイルを保存しました。",
+  "exportImportFailureMsg": "エクスポートが失敗しました。",
 
-  "supportTitle": "Support the Developer",
-  "supportBody": "If this app has helped you achieve your goals, or you appreciate it over other apps available to you, or whatever the reason, consider supporting me by sending me a tip on the ko-fi link below.",
+  "supportTitle": "ご支援を希望の場合",
+  "supportBody": "もしこのアプリがあなたの目標達成に役立ちました、または他の利用可能なアプリと比べて、もしくはその他の理由で、私のサポートを感じていただけるのであれば、以下の ko-fi リンクからお気持ちのサポートをいただければ幸いです。",
 
-  "versionLabel": "version number: {versionNumber}",
-  "@versionLabel": {
-    "placeholders": {
-      "versionNumber": {
-        "type": "int"
-      }
-    }
-  },
+  "versionLabel": "バージョン番号: {versionNumber}",
 
   "continueButton": "OK",
   "cancelButton": "キャンセル",

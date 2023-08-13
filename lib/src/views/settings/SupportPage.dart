@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SupportPage extends StatelessWidget {
   final kofiUrl = "ko-fi.com/epicnicks";
@@ -9,7 +10,7 @@ class SupportPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Support the Developer"),
+          title: Text(AppLocalizations.of(context)!.supportTitle),
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         ),
         bottomNavigationBar: BottomAppBar(
@@ -22,7 +23,7 @@ class SupportPage extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(top: 40),
                   child: Center(
-                      child: Text("If this app has helped you achieve your goals, appreciate it over other apps available to you, or whatever the reason, consider supporting me by sending me a tip on the ko-fi link below",
+                      child: Text(AppLocalizations.of(context)!.supportBody,
                           style: Theme.of(context).textTheme.bodyLarge))),
               Padding(padding: EdgeInsets.only(top: 50), child: Row(
                 children: [
