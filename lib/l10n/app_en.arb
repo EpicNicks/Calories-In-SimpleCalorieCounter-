@@ -3,6 +3,7 @@
   "@language":{
     "description": "The current language"
   },
+
   "dailyCalorieTotal": "Total Daily Calories: {totalCalories}",
   "@dailyCalorieTotal": {
     "placeholders": {
@@ -109,6 +110,12 @@
     }
   },
   "exportImportFailureMsg": "Export unsuccessful.",
+  "exportImportOverwriteWarningHeader": "Really OVERWRITE all data?",
+  "exportImportOverwriteWarningBody": "This will clear all previous content. Ensure you have made a backup of your current data with 'Export' before proceeding",
+  "exportImportOverwriteWarning2Header": "Are you sure?",
+  "exportImportOverwriteWarning2Body": "Ensure you have backed up your data with 'Export'. You cannot recover your initial data after.",
+  "exportImportOverwriteConfirm": "Confirm Overwrite",
+  "exportImportDataMalformedErrorMsg": "Data was malformed, not all rows were length 3",
 
   "supportTitle": "Support the Developer",
   "supportBody": "If this app has helped you achieve your goals, or you appreciate it over other apps available to you, or whatever the reason, consider supporting me by sending me a tip on the ko-fi link below.",

@@ -3,6 +3,7 @@
   "@language":{
     "description": "現在の言語"
   },
+
   "dailyCalorieTotal": "今日のカロリー合計: {totalCalories}",
   "clearListWarningTitle": "リストを本当にクリアしますか？",
   "clearListWarningBody": "これで今日の全てのアイテムが削除されます",
@@ -74,6 +75,13 @@
   "exportImportSavingMsg": "ファイルを保存しています...",
   "exportImportSavedFileMsg": "{path} にファイルを保存しました。",
   "exportImportFailureMsg": "エクスポートが失敗しました。",
+  "exportImportOverwriteWarningHeader": "本当にすべてのデータを上書きしますか？",
+  "exportImportOverwriteWarningBody": "'エクスポート' で現在のデータをバックアップしたことを確認してから進んでください。これにより以前のすべての内容が消去されます。",
+  "exportImportOverwriteWarning2Header": "本当ですか？",
+  "exportImportOverwriteWarning2Body": "'エクスポート' でデータをバックアップしていることを確認してください。初期データは回復できません。",
+  "exportImportOverwriteConfirm": "上書きを確認。",
+  "exportImportDataMalformedErrorMsg": "データが不正で、すべての行が長さ 3 ではありませんでした。",
+
 
   "supportTitle": "ご支援を希望の場合",
   "supportBody": "もしこのアプリがあなたの目標達成に役立ちました、または他の利用可能なアプリと比べて、もしくはその他の理由で、私のサポートを感じていただけるのであれば、以下の ko-fi リンクからお気持ちのサポートをいただければ幸いです。",

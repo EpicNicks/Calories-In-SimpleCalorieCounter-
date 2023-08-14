@@ -29,6 +29,7 @@ class _ImportExportState extends State<ImportExport> {
     }
   }
 
+  /// shows localized overwrite dialogs using [context], return value is only logged so no need to translate
   static Future<({String message, bool success})> uploadCsv(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         dialogTitle: "Select your backup file", type: FileType.custom, withData: true, allowedExtensions: ["csv"]);
@@ -39,33 +40,32 @@ class _ImportExportState extends State<ImportExport> {
           showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                    title: Text("Really OVERWRITE all data?", style: TextStyle(color: Colors.red)),
-                    content: Text(
-                        "This will clear all previous content. Ensure you have made a backup of your current data with 'Export' before proceeding"),
+                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarningHeader, style: TextStyle(color: Colors.red)),
+                    content: Text(AppLocalizations.of(context)!.exportImportOverwriteWarningBody),
                     actions: [
                       TextButton(
                         style: Theme.of(context).textButtonTheme.style,
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text("Cancel", style: Theme.of(context).textTheme.bodyMedium),
+                        child: Text(AppLocalizations.of(context)!.cancelButton, style: Theme.of(context).textTheme.bodyMedium),
                       ),
                       TextButton(
                         style: Theme.of(context).textButtonTheme.style,
-                        child: Text("Continue", style: Theme.of(context).textTheme.bodyMedium),
+                        child: Text(AppLocalizations.of(context)!.continueButton, style: Theme.of(context).textTheme.bodyMedium),
                         onPressed: () {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                    title: Text("Are you sure?", style: TextStyle(color: Colors.red)),
+                                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarning2Header, style: TextStyle(color: Colors.red)),
                                     content: Text(
-                                      "Ensure you have backed up your data with 'Export'. You cannot recover your initial data after.",
+                                      AppLocalizations.of(context)!.exportImportOverwriteWarning2Body,
                                       style: TextStyle(color: Colors.red),
                                     ),
                                     actions: [
                                       TextButton(
                                         style: Theme.of(context).textButtonTheme.style,
-                                        child: Text("Cancel", style: Theme.of(context).textTheme.bodyMedium),
+                                        child: Text(AppLocalizations.of(context)!.cancelButton, style: Theme.of(context).textTheme.bodyMedium),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
@@ -73,7 +73,7 @@ class _ImportExportState extends State<ImportExport> {
                                       ),
                                       TextButton(
                                         style: Theme.of(context).textButtonTheme.style,
-                                        child: Text("Confirm Overwrite", style: Theme.of(context).textTheme.bodyMedium),
+                                        child: Text(AppLocalizations.of(context)!.exportImportOverwriteConfirm, style: Theme.of(context).textTheme.bodyMedium),
                                         onPressed: () async {
                                           // overwrite data (validate data, purge db table, write data)
                                           String csvString = utf8.decode(file.bytes!);
@@ -84,7 +84,7 @@ class _ImportExportState extends State<ImportExport> {
                                               showDialog(
                                                   context: context,
                                                   builder: (context) => AlertDialog(
-                                                        title: Text("Data was malformed, not all rows were length 3"),
+                                                        title: Text(AppLocalizations.of(context)!.exportImportDataMalformedErrorMsg),
                                                         actions: [
                                                           TextButton(
                                                               onPressed: () {
@@ -92,7 +92,7 @@ class _ImportExportState extends State<ImportExport> {
                                                                 Navigator.of(context).pop();
                                                                 Navigator.of(context).pop();
                                                               },
-                                                              child: Text("Ok"))
+                                                              child: Text(AppLocalizations.of(context)!.continueButton))
                                                         ],
                                                       ));
                                               return;
@@ -141,9 +141,9 @@ class _ImportExportState extends State<ImportExport> {
       backgroundColor: MaterialStatePropertyAll(ORANGE_FRUIT),
       textStyle: MaterialStatePropertyAll(TextStyle(color: Colors.black)));
 
-  Future<void> exportData() async {
+  Future<void> exportData(BuildContext context) async {
     setState(() {
-      _progressString = "saving file...";
+      _progressString = AppLocalizations.of(context)!.exportImportSavingMsg;
     });
     final DatabaseHelper db = await DatabaseHelper.instance;
     final List<List<dynamic>> csvRows = await db.getAllItemsAsCsvRows();
@@ -151,7 +151,7 @@ class _ImportExportState extends State<ImportExport> {
     ({String? message, bool success}) result = await downloadCsv(csvString);
     if (result.success) {
       setState(() {
-        _progressString = "Saved file to ${result.message}";
+        _progressString = AppLocalizations.of(context)!.exportImportSavedFileMsg(result.message!);
       });
     } else {
       setState(() {
@@ -188,7 +188,7 @@ class _ImportExportState extends State<ImportExport> {
                     children: [
                       TextButton(
                           style: _buttonStyle,
-                          onPressed: () => exportData(),
+                          onPressed: () => exportData(context),
                           child: Text(AppLocalizations.of(context)!.exportImportExportLabel, style: TextStyle(color: Colors.black))),
                       TextButton(
                           style: _buttonStyle,
