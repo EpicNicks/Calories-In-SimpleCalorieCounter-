@@ -89,7 +89,7 @@
   "supportLabel": "Support the Developer",
 
   "faqMarkdown": "# FAQ\n---\n## Usable Math Symbols for entries\n- +, -, x and *, / for mathematical operations\n- , (comma) to separate items within an entry  \n  \\(this is semantically equivalent to addition\\)\n\n---\n\n## Optional Notes on Entries\nYou may label additional information, such as the name of the food logged or whatever else you would like in a comment\nby adding a : (colon) to your entry and adding your comment after, such as\\\\\n**100+80+50: egg and toast w/ jam**\n\n---\n\n",
-  "tipsMarkdown": "# Tips and How Tos\n---\n## How to Calculate Partial Servings\nPartial Servings can be entered as:\n\ncalories-per-serving x amount / amount-per-serving\n\nSo if you had cereal that was measured in 60 gram servings, you ate 90 grams of it, and the\namount of calories per serving is 200, The total calories can be entered as:\\\\\n**200 x 90 / 60** ***(=300)***\n\n---\n",
+  "tipsMarkdown": "# Tips and How Tos\n---\n## How to Calculate Partial Servings\nPartial Servings can be entered as:\n\ncalories-per-serving x amount / amount-per-serving\n\nSo if you had cereal that was measured in 60 gram servings, you ate 90 grams of it, and the\namount of calories per serving is 200, The total calories can be entered as:\\\n**200 x 90 / 60** ***(=300)***\n\n---\n",
   "appThemeTitle": "Change App Theme",
   "lightLabel": "Light",
   "darkLabel": "Dark",
