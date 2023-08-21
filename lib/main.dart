@@ -2,7 +2,9 @@ import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
-import 'package:calorie_tracker/src/views/tracking/TrackingMain.dart';
+import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
+import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
+import 'package:calorie_tracker/src/views/tracking/plan_calculators/PlanCalculators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -113,16 +115,57 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
       ],
-      home: const BottomTabBar(),
+      home: BottomTabBar(),
     );
   }
 }
 
-class BottomTabBar extends StatelessWidget {
-  const BottomTabBar({super.key});
+class BottomTabBar extends StatefulWidget {
+  BottomTabBar({super.key});
+
+  static _BottomTabBarState of(BuildContext context) => context.findAncestorStateOfType<_BottomTabBarState>()!;
+
+  @override
+  State<StatefulWidget> createState() {
+    return _BottomTabBarState();
+  }
+}
+
+class _BottomTabBarState extends State<BottomTabBar> {
+  int _selectedIndex = 0;
+  int _dailyCaloriesTotal = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void setDailyCaloriesTotal(int calories){
+    setState(() {
+      _dailyCaloriesTotal = calories;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final List<String> appbarTitles = [
+      AppLocalizations.of(context)!.dailyCalorieTotal(_dailyCaloriesTotal),
+      AppLocalizations.of(context)!.calorieEntryHistoryTitle,
+      AppLocalizations.of(context)!.chartsMenuItem,
+      AppLocalizations.of(context)!.yourPlanMenuItem,
+      AppLocalizations.of(context)!.settingsTitle,
+    ];
+
+    Widget getAppBar(){
+      if (_selectedIndex == 4){
+        return Row(
+          children: [Text(AppLocalizations.of(context)!.settingsTitle), Icon(Icons.settings)],
+        );
+      }
+      return Text(appbarTitles[_selectedIndex]);
+    }
+
     return GestureDetector(
         onTap: () {
           FocusNode current = FocusScope.of(context);
@@ -130,44 +173,79 @@ class BottomTabBar extends StatelessWidget {
             current.unfocus();
           }
         },
-        child: DefaultTabController(
-          initialIndex: 1,
-          length: 3,
-          child: Scaffold(
-            bottomNavigationBar: SafeArea(
-              child: TabBar(
-                indicatorColor: Colors.red[500],
-                labelColor: Colors.redAccent,
-                overlayColor: MaterialStatePropertyAll(Colors.redAccent.shade100),
-                tabs: const <Widget>[
-                  Tab(
-                    icon: Icon(Icons.calendar_month),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.restaurant),
-                  ),
-                  Tab(
-                    icon: Icon(Icons.settings),
-                  ),
-                ],
-              ),
-            ),
-            body: const SafeArea(
-              child: TabBarView(
-                children: <Widget>[
-                  Center(
-                    child: TrackingMain(),
-                  ),
-                  Center(
-                    child: DailyCaloriesPage(),
-                  ),
-                  Center(
-                    child: Settings(),
-                  ),
-                ],
-              ),
-            ),
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: getAppBar(),
           ),
+          body: [DailyCaloriesPage(setDailyCalories: (dailyCalories){
+            setState(() {
+              _dailyCaloriesTotal = dailyCalories;
+            });
+          }), CalendarPage(), Graphing(), PlanCalculators(), Settings()][_selectedIndex],
+          drawer: Drawer(
+              child: SafeArea(
+                  child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.dailyCalorieTotal(_dailyCaloriesTotal)),
+                selected: _selectedIndex == 0,
+                selectedColor: ORANGE_FRUIT,
+                trailing: Icon(Icons.restaurant),
+                onTap: () {
+                  _onItemTapped(0);
+                  Navigator.pop(context);
+                },
+              ),
+              ExpansionTile(
+                initiallyExpanded: true,
+                title: Text(AppLocalizations.of(context)!.calorieTrackingSubmenuTitle),
+                children: [
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.calendarMenuItem),
+                    selected: _selectedIndex == 1,
+                    selectedColor: ORANGE_FRUIT,
+                    trailing: Icon(Icons.calendar_month),
+                    onTap: () {
+                      _onItemTapped(1);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.chartsMenuItem),
+                    selected: _selectedIndex == 2,
+                    selectedColor: ORANGE_FRUIT,
+                    trailing: Icon(Icons.stacked_line_chart),
+                    onTap: () {
+                      _onItemTapped(2);
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.yourPlanMenuItem),
+                    selected: _selectedIndex == 3,
+                    selectedColor: ORANGE_FRUIT,
+                    trailing: Icon(Icons.monitor_weight_outlined),
+                    onTap: () {
+                      _onItemTapped(3);
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ),
+              ListTile(
+                title: Text(AppLocalizations.of(context)!.settingsTitle),
+                selected: _selectedIndex == 4,
+                selectedColor: ORANGE_FRUIT,
+                trailing: Icon(Icons.settings),
+                onTap: () {
+                  _onItemTapped(4);
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          ))),
         ));
   }
 }

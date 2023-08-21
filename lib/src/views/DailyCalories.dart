@@ -21,7 +21,8 @@ class Entry {
 }
 
 class DailyCaloriesPage extends StatefulWidget {
-  const DailyCaloriesPage({super.key});
+  final void Function(int dailyCalories) setDailyCalories;
+  DailyCaloriesPage({super.key, required this.setDailyCalories});
 
   @override
   State<DailyCaloriesPage> createState() => _DailyCaloriesPageState();
@@ -40,6 +41,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
       }
       return "";
     };
+    widget.setDailyCalories(foodItemEntries.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0, (prev, cur) => prev + cur.round()));
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();
@@ -80,6 +82,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
               // force update
               await DatabaseHelper.instance
                   .update(FoodItemEntry(id: e.id, calorieExpression: value, date: DateTime.now().dateOnly));
+              widget.setDailyCalories(totalCalories());
               setState(() {});
             },
             onSubmitted: (value) {
@@ -191,9 +194,9 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text(AppLocalizations.of(context)!.dailyCalorieTotal(totalCalories()))),
-        ),
+        // appBar: AppBar(
+        //   title: Center(child: Text(AppLocalizations.of(context)!.dailyCalorieTotal(totalCalories()))),
+        // ),
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

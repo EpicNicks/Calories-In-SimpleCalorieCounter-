@@ -48,13 +48,6 @@ class _SettingsState extends State<Settings> {
 
 
     return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [Spacer(flex: 5), Text(AppLocalizations.of(context)!.settingsTitle), Spacer(flex: 1), Icon(Icons.settings), Spacer(flex: 5)],
-          ),
-        ),
         bottomNavigationBar: FutureBuilder<PackageInfo>(
           future: PackageInfo.fromPlatform(),
           builder: (context, snapshot){
