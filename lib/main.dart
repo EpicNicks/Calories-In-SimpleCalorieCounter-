@@ -135,6 +135,8 @@ class _BottomTabBarState extends State<BottomTabBar> {
   int _selectedIndex = 0;
   int _dailyCaloriesTotal = 0;
 
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -173,7 +175,17 @@ class _BottomTabBarState extends State<BottomTabBar> {
             current.unfocus();
           }
         },
+        onHorizontalDragUpdate: (dragDetails){
+          int sensitivity = 8;
+          print("dragging ${dragDetails.delta.dx}");
+          if (dragDetails.delta.dx > sensitivity){
+            if (!scaffoldKey.currentState!.isDrawerOpen){
+              scaffoldKey.currentState!.openDrawer();
+            }
+          }
+        },
         child: Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             centerTitle: true,
             title: getAppBar(),
