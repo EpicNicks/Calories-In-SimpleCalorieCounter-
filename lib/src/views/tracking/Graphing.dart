@@ -98,7 +98,7 @@ class _GraphingState extends State<Graphing> {
       <= 10 => 1,
       <= 50 => 5,
       <= 100 => 10,
-      _ => 1,
+      _ => dateDifference / 10,
     };
   }
 
