@@ -1,5 +1,5 @@
 # Calories In
-A Simplified Calorie Tracker
+**- A Simplified Calorie Tracker -**
 
 A simplified calorie tracker with over-time analytics tools.
 
