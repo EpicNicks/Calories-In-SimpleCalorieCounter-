@@ -48,7 +48,7 @@ class _CalendarPageState extends State<CalendarPage> {
             TableCalendar(
               calendarFormat: CalendarFormat.month,
               locale: Platform.localeName,
-              focusedDay: DateTime.now(),
+              focusedDay: _focusedDay ?? DateTime.now(),
               firstDay: _startDate!,
               lastDay: DateTime.now(),
               selectedDayPredicate: (day) {
@@ -59,6 +59,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
                 });
+              },
+              onPageChanged: (focusedDay) {
+                _focusedDay = focusedDay;
               },
               calendarStyle: CalendarStyle(
                 selectedDecoration: BoxDecoration(
