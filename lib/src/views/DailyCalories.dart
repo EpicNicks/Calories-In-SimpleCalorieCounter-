@@ -169,6 +169,12 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   void initState() {
     super.initState();
     _today = DateTime.now();
+    setupDayRolloverTimer();
+    WidgetsBinding.instance.addObserver(this);
+    loadItems();
+  }
+
+  void setupDayRolloverTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (Timer timer) {
       final now = DateTime.now();
       if (now.dateOnly != _today?.dateOnly) {
@@ -177,8 +183,6 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
         _today = DateTime.now();
       }
     });
-    WidgetsBinding.instance.addObserver(this);
-    loadItems();
   }
 
   @override

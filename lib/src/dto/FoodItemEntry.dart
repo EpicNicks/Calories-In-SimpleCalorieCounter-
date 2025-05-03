@@ -29,6 +29,9 @@ bool isConstant(String calorieExpression) {
 }
 
 double evaluateFoodItem(String calorieExpression) {
+  if (calorieExpression.isEmpty) {
+    return 0;
+  }
   try {
     // split off optional comment string
     calorieExpression = calorieExpression.split(":")[0].trim();
@@ -49,6 +52,7 @@ double evaluateFoodItem(String calorieExpression) {
     // avoids division by zero
     return result.isFinite ? result : 0;
   } catch (e) {
-    return 0;
+    // retry the string from rtl until there is either a valid expression or null (allows implicit comments this way
+    return evaluateFoodItem(calorieExpression.substring(0, calorieExpression.length - 1));
   }
 }
