@@ -90,5 +90,7 @@
 
   "continueButton": "OK",
   "cancelButton": "キャンセル",
-  "loadingText": "読み込み中..."
+  "loadingText": "読み込み中...",
+
+  "editCaloriesCalendarButton": "エディット"
 }

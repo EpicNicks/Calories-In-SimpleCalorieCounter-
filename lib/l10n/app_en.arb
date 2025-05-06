@@ -131,5 +131,7 @@
 
   "continueButton": "Continue",
   "cancelButton": "Cancel",
-  "loadingText": "Loading..."
+  "loadingText": "Loading...",
+
+  "editCaloriesCalendarButton": "Edit"
 }

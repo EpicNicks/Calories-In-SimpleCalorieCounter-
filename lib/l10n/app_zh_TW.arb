@@ -89,5 +89,7 @@
 
   "continueButton": "繼續",
   "cancelButton": "取消",
-  "loadingText": "載入中..."
+  "loadingText": "載入中...",
+
+  "editCaloriesCalendarButton": "編輯"
 }

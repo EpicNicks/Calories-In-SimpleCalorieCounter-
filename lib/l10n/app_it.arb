@@ -89,5 +89,7 @@
 
   "continueButton": "Continua",
   "cancelButton": "Annulla",
-  "loadingText": "Caricamento..."
+  "loadingText": "Caricamento...",
+
+  "editCaloriesCalendarButton": "Modificare"
 }

@@ -112,7 +112,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                     widget.bottomTabBarState.dayCurrentlyEditing = _selectedDay!;
                                   }
                                 }, 
-                                child: Text("Edit"),
+                                child: Text(AppLocalizations.of(context)!.editCaloriesCalendarButton),
                                 style: new ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
                               ),
                             ],
