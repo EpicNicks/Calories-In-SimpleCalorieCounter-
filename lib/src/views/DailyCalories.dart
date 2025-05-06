@@ -22,7 +22,8 @@ class Entry {
 
 class DailyCaloriesPage extends StatefulWidget {
   final void Function(int dailyCalories) setDailyCalories;
-  DailyCaloriesPage({super.key, required this.setDailyCalories});
+  final DateTime dateCurrentlyEditing;
+  DailyCaloriesPage({super.key, required this.setDailyCalories, required this.dateCurrentlyEditing});
 
   @override
   State<DailyCaloriesPage> createState() => _DailyCaloriesPageState();
@@ -30,11 +31,14 @@ class DailyCaloriesPage extends StatefulWidget {
 
 class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindingObserver {
   List<Entry> entries = [];
+  // for Date rollover to refresh to the current day
   DateTime? _today;
   Timer? _timer;
 
+  DateTime get currentDateEditing => widget.dateCurrentlyEditing;
+
   Future<void> loadItems() async {
-    final foodItemEntries = await DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly);
+    final foodItemEntries = await DatabaseHelper.instance.getFoodItems(currentDateEditing.dateOnly);
     final getLabelText = (FoodItemEntry e) {
       if (e.calorieExpression != "" && double.tryParse(e.calorieExpression) == null) {
         return "= " + evaluateFoodItem(e.calorieExpression).round().toString();
@@ -81,7 +85,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             onChanged: (value) async {
               // force update
               await DatabaseHelper.instance
-                  .update(FoodItemEntry(id: e.id, calorieExpression: value, date: DateTime.now().dateOnly));
+                  .update(FoodItemEntry(id: e.id, calorieExpression: value, date: currentDateEditing.dateOnly));
               widget.setDailyCalories(totalCalories());
               setState(() {});
             },
@@ -106,7 +110,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   }
 
   Future<void> addTextField() async {
-    await DatabaseHelper.instance.add(FoodItemEntry(calorieExpression: "", date: DateTime.now().dateOnly));
+    await DatabaseHelper.instance.add(FoodItemEntry(calorieExpression: "", date: currentDateEditing.dateOnly));
     await loadItems();
     if (entries.isNotEmpty) {
       FocusScope.of(context).unfocus();
@@ -212,6 +216,17 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
           ),
           child: Stack(
             children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: 50, // Adjust the height as needed
+                child: Container(// Or any widget you want
+                  child: Center(
+                    child: Text("${currentDateEditing.dateOnly.day}/${currentDateEditing.dateOnly.month}/${currentDateEditing.dateOnly.year}"),
+                  ),
+                ),
+              ),
               Positioned.fill(
                   child: SingleChildScrollView(
                       child: ListView.builder(

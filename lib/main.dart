@@ -1,4 +1,6 @@
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
+import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
+import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
@@ -123,29 +125,41 @@ class _MyAppState extends State<MyApp> {
 class BottomTabBar extends StatefulWidget {
   BottomTabBar({super.key});
 
-  static _BottomTabBarState of(BuildContext context) => context.findAncestorStateOfType<_BottomTabBarState>()!;
+  static BottomTabBarState of(BuildContext context) => context.findAncestorStateOfType<BottomTabBarState>()!;
 
   @override
   State<StatefulWidget> createState() {
-    return _BottomTabBarState();
+    return BottomTabBarState();
   }
 }
 
-class _BottomTabBarState extends State<BottomTabBar> {
+class BottomTabBarState extends State<BottomTabBar> {
   int _selectedIndex = 0;
   int _dailyCaloriesTotal = 0;
+
+  DateTime _dayCurrentlyEditing = DateTime.now();
+  DateTime get dayCurrentlyEditing => _dayCurrentlyEditing;
+  set dayCurrentlyEditing(DateTime dateTime) {
+    DatabaseHelper.instance.getFoodItems(dateTime.dateOnly).then((value) {
+      setState(() {
+        _dayCurrentlyEditing = dateTime;
+        _dailyCaloriesTotal =
+            value
+                .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
+                .toInt();
+        _selectedIndex = 0;
+      });
+    });
+  }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _onItemTapped(int index) {
     setState(() {
+      if (index == 0 && _selectedIndex != 0) {
+        _dayCurrentlyEditing = DateTime.now().dateOnly;
+      }
       _selectedIndex = index;
-    });
-  }
-
-  void setDailyCaloriesTotal(int calories){
-    setState(() {
-      _dailyCaloriesTotal = calories;
     });
   }
 
@@ -190,11 +204,20 @@ class _BottomTabBarState extends State<BottomTabBar> {
             centerTitle: true,
             title: getAppBar(),
           ),
-          body: [DailyCaloriesPage(setDailyCalories: (dailyCalories){
-            setState(() {
-              _dailyCaloriesTotal = dailyCalories;
-            });
-          }), CalendarPage(), Graphing(), PlanCalculators(), Settings()][_selectedIndex],
+          body: [
+            DailyCaloriesPage(
+                setDailyCalories: (dailyCalories){
+                  setState(() {
+                  _dailyCaloriesTotal = dailyCalories;
+                });
+              },
+              dateCurrentlyEditing: dayCurrentlyEditing,
+            ),
+            CalendarPage(bottomTabBarState: this),
+            Graphing(),
+            PlanCalculators(),
+            Settings()
+          ][_selectedIndex],
           drawer: Drawer(
               child: SafeArea(
                   child: ListView(

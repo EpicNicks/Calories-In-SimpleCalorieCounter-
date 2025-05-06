@@ -36,8 +36,7 @@ class DatabaseHelper {
 
   Future<List<FoodItemEntry>> getFoodItems(DateTime dateTime) async {
     Database db = await instance.database;
-    final foodEntries =
-    await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
+    final foodEntries = await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 

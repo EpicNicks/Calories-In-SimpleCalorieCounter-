@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../main.dart';
 import '../../dto/FoodItemEntry.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  final BottomTabBarState bottomTabBarState;
+  CalendarPage({Key? key, required this.bottomTabBarState}) : super(key: key);
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
@@ -97,11 +99,23 @@ class _CalendarPageState extends State<CalendarPage> {
                         flex: 1,
                         child: Container(
                           color: Theme.of(context).colorScheme.primaryContainer,
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()),
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()),
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  if (_selectedDay != null) {
+                                    widget.bottomTabBarState.dayCurrentlyEditing = _selectedDay!;
+                                  }
+                                }, 
+                                child: Text("Edit"),
+                                style: new ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
+                              ),
+                            ],
                           ),
                         ),
                       ),
