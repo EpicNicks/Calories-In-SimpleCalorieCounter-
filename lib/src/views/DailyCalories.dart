@@ -45,7 +45,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
       }
       return "";
     };
-    widget.setDailyCalories(foodItemEntries.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0, (prev, cur) => prev + cur.round()));
+    widget.setDailyCalories(foodItemEntries.fold(0, (prev, cur) => prev + evaluateFoodItem(cur.calorieExpression).round()));
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();

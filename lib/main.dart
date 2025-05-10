@@ -156,8 +156,13 @@ class BottomTabBarState extends State<BottomTabBar> {
 
   void _onItemTapped(int index) {
     setState(() {
-      if (index == 0 && _selectedIndex != 0) {
+      if (index != 0) {
         _dayCurrentlyEditing = DateTime.now().dateOnly;
+        DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly).then((value) {
+          _dailyCaloriesTotal = value
+              .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
+              .toInt();
+        });
       }
       _selectedIndex = index;
     });
