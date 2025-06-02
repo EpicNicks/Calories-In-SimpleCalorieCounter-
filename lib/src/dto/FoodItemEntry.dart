@@ -1,4 +1,4 @@
-import 'package:math_expressions/math_expressions.dart';
+import 'package:calorie_tracker/src/internal/expression_parser/parse/Parser.dart';
 
 class FoodItemEntry {
   final int? id;
@@ -33,22 +33,11 @@ double evaluateFoodItem(String calorieExpression) {
     return 0;
   }
   try {
-    // split off optional comment string
-    calorieExpression = calorieExpression.split(":")[0].trim();
-    // enable alternate expression symbols here
     calorieExpression = calorieExpression
-        .replaceAll("x", "*")
-        .replaceAll("÷", "/")
         // allows for comma separated values while maintaining the semantics of a list total; fold(+, [1,2,3]) == fold([1+2+3 <6>])
         .replaceAll(",", "+");
-    // trim trailing math symbols
-    if (calorieExpression.length > 1 && ["*", "/", "+"].contains(calorieExpression[calorieExpression.length - 1])){
-      calorieExpression = calorieExpression.substring(0, calorieExpression.length - 1);
-      print(calorieExpression);
-    }
 
-    Expression expression = Parser().parse(calorieExpression);
-    final result = double.parse(expression.evaluate(EvaluationType.REAL, ContextModel()).toString());
+    final (:result, comment: _) = parseWithComment(calorieExpression);
     // avoids division by zero
     return result.isFinite ? result : 0;
   } catch (e) {
