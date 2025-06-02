@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
@@ -45,7 +45,8 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
       }
       return "";
     };
-    widget.setDailyCalories(foodItemEntries.fold(0, (prev, cur) => prev + evaluateFoodItem(cur.calorieExpression).round()));
+    widget.setDailyCalories(
+        foodItemEntries.fold(0, (prev, cur) => prev + evaluateFoodItem(cur.calorieExpression).round()));
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();
@@ -221,9 +222,11 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
                 left: 0,
                 right: 0,
                 height: 50, // Adjust the height as needed
-                child: Container(// Or any widget you want
+                child: Container(
+                  // Or any widget you want
                   child: Center(
-                    child: Text("${currentDateEditing.dateOnly.day}/${currentDateEditing.dateOnly.month}/${currentDateEditing.dateOnly.year}"),
+                    child: Text(
+                        "${currentDateEditing.dateOnly.day}/${currentDateEditing.dateOnly.month}/${currentDateEditing.dateOnly.year}"),
                   ),
                 ),
               ),

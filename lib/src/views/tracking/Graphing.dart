@@ -1,16 +1,16 @@
 import 'dart:math';
 
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
+import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/extensions/list_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
-import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeorCalculator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Graphing extends StatefulWidget {
   Graphing({super.key});
@@ -20,7 +20,6 @@ class Graphing extends StatefulWidget {
 }
 
 class _GraphingState extends State<Graphing> {
-
   int _selectedRangeIndex = 0;
   int _selectedPlanIndex = 0;
 
@@ -194,8 +193,18 @@ class _GraphingState extends State<Graphing> {
                       final dailyTotalsList = dailyTotals.map((e) => e.totalCalories).toList();
                       final dailyTotalsMin = dailyTotalsList.min == double.infinity ? 0.0 : dailyTotalsList.min;
                       final dailyTotalsMax = dailyTotalsList.max == double.negativeInfinity ? 0.0 : dailyTotalsList.max;
-                      final minY = max((planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone ? dailyTotalsMin : min(dailyTotalsMin, planTarget.toDouble())) - 200, 0.0);
-                      final maxY = max((planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone ? dailyTotalsMax : max(dailyTotalsMax, planTarget.toDouble())) + 200, 2000.0);
+                      final minY = max(
+                          (planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone
+                                  ? dailyTotalsMin
+                                  : min(dailyTotalsMin, planTarget.toDouble())) -
+                              200,
+                          0.0);
+                      final maxY = max(
+                          (planOptions[_selectedPlanIndex] == AppLocalizations.of(context)!.caloriesGoalPlanNone
+                                  ? dailyTotalsMax
+                                  : max(dailyTotalsMax, planTarget.toDouble())) +
+                              200,
+                          2000.0);
 
                       return Expanded(
                           child: LineChart(
@@ -244,7 +253,7 @@ class _GraphingState extends State<Graphing> {
                                 touchTooltipData: LineTouchTooltipData(
                                     fitInsideHorizontally: true,
                                     fitInsideVertically: true,
-                                    tooltipBgColor: Colors.orange.shade50,
+                                    getTooltipColor: (_) => Colors.orange.shade50,
                                     tooltipBorder: BorderSide(color: Colors.black),
                                     getTooltipItems: (touchedSpots) => touchedSpots
                                         .map((e) => LineTooltipItem(
@@ -264,7 +273,8 @@ class _GraphingState extends State<Graphing> {
                               ),
                               // needs to be updated for plans variations which aren't constant
                               LineChartBarData(
-                                  show: planOptions[_selectedPlanIndex] != AppLocalizations.of(context)!.caloriesGoalPlanNone,
+                                  show: planOptions[_selectedPlanIndex] !=
+                                      AppLocalizations.of(context)!.caloriesGoalPlanNone,
                                   spots: dailyTotals
                                       .map((e) => FlSpot(
                                           e.dateTime.dateOnly.difference(startDate.dateOnly).inDays.toDouble() + 1,

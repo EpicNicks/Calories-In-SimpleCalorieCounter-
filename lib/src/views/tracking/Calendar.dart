@@ -1,11 +1,12 @@
 import 'dart:io';
+
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../main.dart';
 import '../../dto/FoodItemEntry.dart';
@@ -45,7 +46,8 @@ class _CalendarPageState extends State<CalendarPage> {
           children: [
             Padding(padding: EdgeInsets.only(top: 10)),
             Center(
-              child: Text(AppLocalizations.of(context)!.yourFirstEntryText(DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(_startDate!))),
+              child: Text(AppLocalizations.of(context)!.yourFirstEntryText(
+                  DateFormat.yMMMd(Localizations.localeOf(context).languageCode).format(_startDate!))),
             ),
             TableCalendar(
               calendarFormat: CalendarFormat.month,
@@ -75,9 +77,7 @@ class _CalendarPageState extends State<CalendarPage> {
                   shape: BoxShape.circle,
                 ),
               ),
-              availableCalendarFormats: {
-                CalendarFormat.month: "Month"
-              },
+              availableCalendarFormats: {CalendarFormat.month: "Month"},
             ),
             FutureBuilder<List<FoodItemEntry>>(
               future: DatabaseHelper.instance.getFoodItems(_selectedDay ?? _startDate!),
@@ -86,11 +86,12 @@ class _CalendarPageState extends State<CalendarPage> {
                   return Expanded(
                       child: Column(children: [
                     Center(
-                      // can occur on dates between the start and end date that had no entries
-                      child: Text(AppLocalizations.of(context)!.loadingText)),
+                        // can occur on dates between the start and end date that had no entries
+                        child: Text(AppLocalizations.of(context)!.loadingText)),
                   ]));
                 } else {
-                  final filteredSnapshotData = snapshot.data!.where((element) => element.calorieExpression.isNotEmpty).toList();
+                  final filteredSnapshotData =
+                      snapshot.data!.where((element) => element.calorieExpression.isNotEmpty).toList();
                   return Expanded(
                       child: Column(
                     children: [
@@ -103,7 +104,10 @@ class _CalendarPageState extends State<CalendarPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData.map((e) => evaluateFoodItem(e.calorieExpression)).fold(0.0, (prev, cur) => prev + cur).round()),
+                                AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData
+                                    .map((e) => evaluateFoodItem(e.calorieExpression))
+                                    .fold(0.0, (prev, cur) => prev + cur)
+                                    .round()),
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                               TextButton(
@@ -111,9 +115,11 @@ class _CalendarPageState extends State<CalendarPage> {
                                   if (_selectedDay != null) {
                                     widget.bottomTabBarState.dayCurrentlyEditing = _selectedDay!;
                                   }
-                                }, 
+                                },
                                 child: Text(AppLocalizations.of(context)!.editCaloriesCalendarButton),
-                                style: new ButtonStyle(backgroundColor: MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
+                                style: new ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
                               ),
                             ],
                           ),
@@ -129,7 +135,9 @@ class _CalendarPageState extends State<CalendarPage> {
                               itemCount: filteredSnapshotData.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  tileColor: index % 2 == 0 ? Theme.of(context).colorScheme.secondaryContainer : Theme.of(context).colorScheme.primaryContainer,
+                                  tileColor: index % 2 == 0
+                                      ? Theme.of(context).colorScheme.secondaryContainer
+                                      : Theme.of(context).colorScheme.primaryContainer,
                                   dense: true,
                                   title: Text(
                                     style: Theme.of(context).textTheme.titleSmall,

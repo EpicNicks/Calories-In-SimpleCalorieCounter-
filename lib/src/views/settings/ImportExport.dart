@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
+import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:csv/csv.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../dto/FoodItemEntry.dart';
 
@@ -40,7 +40,8 @@ class _ImportExportState extends State<ImportExport> {
           showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarningHeader, style: TextStyle(color: Colors.red)),
+                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarningHeader,
+                        style: TextStyle(color: Colors.red)),
                     content: Text(AppLocalizations.of(context)!.exportImportOverwriteWarningBody),
                     actions: [
                       TextButton(
@@ -48,16 +49,19 @@ class _ImportExportState extends State<ImportExport> {
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: Text(AppLocalizations.of(context)!.cancelButton, style: Theme.of(context).textTheme.bodyMedium),
+                        child: Text(AppLocalizations.of(context)!.cancelButton,
+                            style: Theme.of(context).textTheme.bodyMedium),
                       ),
                       TextButton(
                         style: Theme.of(context).textButtonTheme.style,
-                        child: Text(AppLocalizations.of(context)!.continueButton, style: Theme.of(context).textTheme.bodyMedium),
+                        child: Text(AppLocalizations.of(context)!.continueButton,
+                            style: Theme.of(context).textTheme.bodyMedium),
                         onPressed: () {
                           showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarning2Header, style: TextStyle(color: Colors.red)),
+                                    title: Text(AppLocalizations.of(context)!.exportImportOverwriteWarning2Header,
+                                        style: TextStyle(color: Colors.red)),
                                     content: Text(
                                       AppLocalizations.of(context)!.exportImportOverwriteWarning2Body,
                                       style: TextStyle(color: Colors.red),
@@ -65,7 +69,8 @@ class _ImportExportState extends State<ImportExport> {
                                     actions: [
                                       TextButton(
                                         style: Theme.of(context).textButtonTheme.style,
-                                        child: Text(AppLocalizations.of(context)!.cancelButton, style: Theme.of(context).textTheme.bodyMedium),
+                                        child: Text(AppLocalizations.of(context)!.cancelButton,
+                                            style: Theme.of(context).textTheme.bodyMedium),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
@@ -73,7 +78,8 @@ class _ImportExportState extends State<ImportExport> {
                                       ),
                                       TextButton(
                                         style: Theme.of(context).textButtonTheme.style,
-                                        child: Text(AppLocalizations.of(context)!.exportImportOverwriteConfirm, style: Theme.of(context).textTheme.bodyMedium),
+                                        child: Text(AppLocalizations.of(context)!.exportImportOverwriteConfirm,
+                                            style: Theme.of(context).textTheme.bodyMedium),
                                         onPressed: () async {
                                           // overwrite data (validate data, purge db table, write data)
                                           String csvString = utf8.decode(file.bytes!);
@@ -84,7 +90,8 @@ class _ImportExportState extends State<ImportExport> {
                                               showDialog(
                                                   context: context,
                                                   builder: (context) => AlertDialog(
-                                                        title: Text(AppLocalizations.of(context)!.exportImportDataMalformedErrorMsg),
+                                                        title: Text(AppLocalizations.of(context)!
+                                                            .exportImportDataMalformedErrorMsg),
                                                         actions: [
                                                           TextButton(
                                                               onPressed: () {
@@ -189,11 +196,13 @@ class _ImportExportState extends State<ImportExport> {
                       TextButton(
                           style: _buttonStyle,
                           onPressed: () => exportData(context),
-                          child: Text(AppLocalizations.of(context)!.exportImportExportLabel, style: TextStyle(color: Colors.black))),
+                          child: Text(AppLocalizations.of(context)!.exportImportExportLabel,
+                              style: TextStyle(color: Colors.black))),
                       TextButton(
                           style: _buttonStyle,
                           onPressed: () => importData(context),
-                          child: Text(AppLocalizations.of(context)!.exportImportImportLabel, style: TextStyle(color: Colors.black))),
+                          child: Text(AppLocalizations.of(context)!.exportImportImportLabel,
+                              style: TextStyle(color: Colors.black))),
                     ],
                   ),
                 ),

@@ -1,7 +1,7 @@
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomPlan extends StatefulWidget {
   @override
@@ -29,7 +29,7 @@ class _CustomPlanState extends State<CustomPlan> {
                   child: Column(children: [
                     TextFormField(
                       initialValue: (snapshot.data?.getInt(USER_CUSTOM_TARGET_INT) ?? 0).toString(),
-                      onChanged: (value){
+                      onChanged: (value) {
                         snapshot.data?.setInt(USER_CUSTOM_TARGET_INT, int.tryParse(value) ?? 0);
                       },
                       keyboardType: TextInputType.number,

@@ -1,7 +1,7 @@
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MifflinStJeorCalculator extends StatefulWidget {
   @override
@@ -145,10 +145,13 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
                     builder: (BuildContext ctx, AsyncSnapshot<SharedPreferences> snapshot) {
                       if (snapshot.hasData) {
                         return ToggleButtons(
-                          children: measurementSystems.map((e) => Text(translationMap.keys.elementAt(translationMap.values.toList().indexOf(e)))).toList(),
+                          children: measurementSystems
+                              .map(
+                                  (e) => Text(translationMap.keys.elementAt(translationMap.values.toList().indexOf(e))))
+                              .toList(),
                           isSelected: [_isMetric, !_isMetric],
-                          onPressed: (value){
-                            if (!(_isMetric && value == 0 || !_isMetric && value == 1)){
+                          onPressed: (value) {
+                            if (!(_isMetric && value == 0 || !_isMetric && value == 1)) {
                               _preferences.then((SharedPreferences prefs) {
                                 handleSwapSystem(value == 0, prefs);
                               });

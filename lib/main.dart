@@ -1,3 +1,4 @@
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'l10n/l10n.dart';
 
@@ -143,10 +143,9 @@ class BottomTabBarState extends State<BottomTabBar> {
     DatabaseHelper.instance.getFoodItems(dateTime.dateOnly).then((value) {
       setState(() {
         _dayCurrentlyEditing = dateTime;
-        _dailyCaloriesTotal =
-            value
-                .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
-                .toInt();
+        _dailyCaloriesTotal = value
+            .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
+            .toInt();
         _selectedIndex = 0;
       });
     });
@@ -178,8 +177,8 @@ class BottomTabBarState extends State<BottomTabBar> {
       AppLocalizations.of(context)!.settingsTitle,
     ];
 
-    Widget getAppBar(){
-      if (_selectedIndex == 4){
+    Widget getAppBar() {
+      if (_selectedIndex == 4) {
         return Row(
           children: [Text(AppLocalizations.of(context)!.settingsTitle), Icon(Icons.settings)],
         );
@@ -194,11 +193,11 @@ class BottomTabBarState extends State<BottomTabBar> {
             current.unfocus();
           }
         },
-        onHorizontalDragUpdate: (dragDetails){
+        onHorizontalDragUpdate: (dragDetails) {
           int sensitivity = 8;
           print("dragging ${dragDetails.delta.dx}");
-          if (dragDetails.delta.dx > sensitivity){
-            if (!scaffoldKey.currentState!.isDrawerOpen){
+          if (dragDetails.delta.dx > sensitivity) {
+            if (!scaffoldKey.currentState!.isDrawerOpen) {
               scaffoldKey.currentState!.openDrawer();
             }
           }
@@ -211,8 +210,8 @@ class BottomTabBarState extends State<BottomTabBar> {
           ),
           body: [
             DailyCaloriesPage(
-                setDailyCalories: (dailyCalories){
-                  setState(() {
+              setDailyCalories: (dailyCalories) {
+                setState(() {
                   _dailyCaloriesTotal = dailyCalories;
                 });
               },
