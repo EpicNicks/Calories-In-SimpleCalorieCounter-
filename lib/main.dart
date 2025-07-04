@@ -9,6 +9,7 @@ import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
 import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/PlanCalculators.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,13 @@ const String THEME_MODE_INT = "THEME_MODE_INT";
 
 void main() async {
   await WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.transparent,
+    systemNavigationBarDividerColor: Colors.transparent, // <- this line
+    systemNavigationBarIconBrightness: Brightness.light, // match your background
+  ));
+
   final themeIndex = await SharedPreferences.getInstance().then((preferences) => preferences.getInt(THEME_MODE_INT)) ??
       ThemeMode.system.index;
   DatabaseHelper.instance.optimize();
@@ -184,6 +192,23 @@ class BottomTabBarState extends State<BottomTabBar> {
       return Text(appbarTitles[_selectedIndex]);
     }
 
+    Widget getCurrentScreen() {
+      return [
+        DailyCaloriesPage(
+          setDailyCalories: (dailyCalories) {
+            setState(() {
+              _dailyCaloriesTotal = dailyCalories;
+            });
+          },
+          dateCurrentlyEditing: dayCurrentlyEditing,
+        ),
+        CalendarPage(bottomTabBarState: this),
+        Graphing(),
+        PlanCalculators(),
+        Settings()
+      ][_selectedIndex];
+    }
+
     return GestureDetector(
         onTap: () {
           FocusNode current = FocusScope.of(context);
@@ -206,20 +231,12 @@ class BottomTabBarState extends State<BottomTabBar> {
             centerTitle: true,
             title: getAppBar(),
           ),
-          body: [
-            DailyCaloriesPage(
-              setDailyCalories: (dailyCalories) {
-                setState(() {
-                  _dailyCaloriesTotal = dailyCalories;
-                });
-              },
-              dateCurrentlyEditing: dayCurrentlyEditing,
-            ),
-            CalendarPage(bottomTabBarState: this),
-            Graphing(),
-            PlanCalculators(),
-            Settings()
-          ][_selectedIndex],
+          body: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: SafeArea(
+                child: getCurrentScreen(),
+                maintainBottomViewPadding: false,
+              )),
           drawer: Drawer(
               child: SafeArea(
                   child: ListView(
