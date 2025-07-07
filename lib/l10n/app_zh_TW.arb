@@ -91,5 +91,25 @@
   "cancelButton": "取消",
   "loadingText": "載入中...",
 
-  "editCaloriesCalendarButton": "編輯"
+  "editCaloriesCalendarButton": "編輯",
+
+  "searchMenuItem": "搜尋",
+  "searchMenuHintText": "按熱量表達式或日期搜尋...",
+  "searchMenuExpressionColumnLabel": "表達式",
+  "searchMenuCaloriesColumnLabel": "卡路里",
+  "searchMenuDateColumnLabel": "日期",
+
+  "searchMenuResultText": "{amount, plural, =1{找到1個結果} other{找到{amount}個結果}}",
+  "@searchMenuResultText": {
+    "description": "Search results count message",
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "searchMenuNoItemsText1": "未找到食物項目",
+  "searchMenuNoItemsText2": "新增一些食物項目來開始使用",
+  "searchMenuNoItemsFoundText1": "未找到結果",
+  "searchMenuNoItemsFoundText2": "嘗試調整搜尋關鍵字"
 }

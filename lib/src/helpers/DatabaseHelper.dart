@@ -36,16 +36,17 @@ class DatabaseHelper {
 
   Future<List<FoodItemEntry>> getFoodItems(DateTime dateTime) async {
     Database db = await instance.database;
-    final foodEntries = await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
+    final foodEntries =
+        await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC', where: 'date=${dateTime.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
   Future<List<FoodItemEntry>> getFoodItemsInRange(DateTime startInclusive, DateTime endInclusive) async {
     Database db = await instance.database;
-    final foodEntries = await db.query(
-        FOOD_ITEM_TABLE,
+    final foodEntries = await db.query(FOOD_ITEM_TABLE,
         orderBy: 'id ASC',
-        where: 'date>=${startInclusive.dateOnly.millisecondsSinceEpoch} AND date <= ${endInclusive.dateOnly.millisecondsSinceEpoch}');
+        where:
+            'date>=${startInclusive.dateOnly.millisecondsSinceEpoch} AND date <= ${endInclusive.dateOnly.millisecondsSinceEpoch}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
@@ -73,15 +74,27 @@ class DatabaseHelper {
     return null;
   }
 
-  Future<List<FoodItemEntry>> getAllFoodItems() async {
+  Future<List<FoodItemEntry>> getAllFoodItems({FoodItemSearchOptions? options}) async {
     Database db = await instance.database;
-    final foodEntries = await db.query(FOOD_ITEM_TABLE, orderBy: 'id ASC');
+
+    final String orderDirection =
+        (options?.entryOrder != null && options?.entryOrder == EntryOrder.DESC ? "DESC" : "ASC");
+    final String column = switch (options?.columnFilterOption) {
+      ColumnFilterOption.CALORIES => "calorieExpression",
+      ColumnFilterOption.DATE => "date",
+      ColumnFilterOption.ID => "id",
+      null => "id",
+    };
+
+    final foodEntries = await db.query(FOOD_ITEM_TABLE, orderBy: '${column} ${orderDirection}');
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
   Future<List<List<dynamic>>> getAllItemsAsCsvRows() async {
     final entries = await getAllFoodItems();
-    List<List<dynamic>> res = [['id', 'calorieExpression', 'date']];
+    List<List<dynamic>> res = [
+      ['id', 'calorieExpression', 'date']
+    ];
     for (final entry in entries) {
       res.add([entry.id, entry.calorieExpression, entry.date]);
     }
@@ -122,12 +135,10 @@ class DatabaseHelper {
   // delete all empty entries from previous days, will probably run in a service
   Future<int> purgePreviousEmpty() async {
     Database db = await instance.database;
-    return await db.delete(FOOD_ITEM_TABLE, where: 'calorieExpression = "" AND date < ${DateTime
-        .now()
-        .dateOnly
-        .millisecondsSinceEpoch - DAY_MILLIS}');
+    return await db.delete(FOOD_ITEM_TABLE,
+        where: 'calorieExpression = "" AND date < ${DateTime.now().dateOnly.millisecondsSinceEpoch - DAY_MILLIS}');
   }
-  
+
   Future<int> clearFoodEntriesTable() async {
     final Database db = await instance.database;
     return await db.delete(FOOD_ITEM_TABLE);
@@ -139,4 +150,15 @@ class DatabaseHelper {
     Database db = await instance.database;
     await db.execute("VACUUM");
   }
+}
+
+enum ColumnFilterOption { ID, CALORIES, DATE }
+
+enum EntryOrder { ASC, DESC }
+
+class FoodItemSearchOptions {
+  final EntryOrder? entryOrder;
+  final ColumnFilterOption? columnFilterOption;
+
+  FoodItemSearchOptions({this.entryOrder, this.columnFilterOption});
 }

@@ -133,5 +133,25 @@
   "cancelButton": "Cancel",
   "loadingText": "Loading...",
 
-  "editCaloriesCalendarButton": "Edit"
+  "editCaloriesCalendarButton": "Edit",
+
+  "searchMenuItem": "Search",
+  "searchMenuHintText": "Search by calorie expression or date...",
+  "searchMenuExpressionColumnLabel": "Expression",
+  "searchMenuCaloriesColumnLabel": "Calories",
+  "searchMenuDateColumnLabel": "Date",
+
+  "searchMenuResultText": "{amount, plural, =1{Found 1 result} other{Found {amount} results}}",
+  "@searchMenuResultText": {
+    "description": "Search results count message",
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "searchMenuNoItemsText1": "No food items found",
+  "searchMenuNoItemsText2": "Add some food items to get started",
+  "searchMenuNoItemsFoundText1": "No results found",
+  "searchMenuNoItemsFoundText2": "Try adjusting your search terms"
 }

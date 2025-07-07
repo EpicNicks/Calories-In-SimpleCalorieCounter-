@@ -265,4 +265,42 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get editCaloriesCalendarButton => 'エディット';
+
+  @override
+  String get searchMenuItem => '検索';
+
+  @override
+  String get searchMenuHintText => 'カロリーの式または日付で検索...';
+
+  @override
+  String get searchMenuExpressionColumnLabel => '式';
+
+  @override
+  String get searchMenuCaloriesColumnLabel => 'カロリー';
+
+  @override
+  String get searchMenuDateColumnLabel => '日付';
+
+  @override
+  String searchMenuResultText(int amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      amount,
+      locale: localeName,
+      other: '$amount件の結果が見つかりました',
+      one: '1件の結果が見つかりました',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchMenuNoItemsText1 => '食品が見つかりませんでした';
+
+  @override
+  String get searchMenuNoItemsText2 => '食品を追加して始めましょう';
+
+  @override
+  String get searchMenuNoItemsFoundText1 => '結果が見つかりませんでした';
+
+  @override
+  String get searchMenuNoItemsFoundText2 => '検索語句を調整してみてください';
 }

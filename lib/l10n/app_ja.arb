@@ -92,5 +92,25 @@
   "cancelButton": "キャンセル",
   "loadingText": "読み込み中...",
 
-  "editCaloriesCalendarButton": "エディット"
+  "editCaloriesCalendarButton": "エディット",
+
+  "searchMenuItem": "検索",
+  "searchMenuHintText": "カロリーの式または日付で検索...",
+  "searchMenuExpressionColumnLabel": "式",
+  "searchMenuCaloriesColumnLabel": "カロリー",
+  "searchMenuDateColumnLabel": "日付",
+
+  "searchMenuResultText": "{amount, plural, =1{1件の結果が見つかりました} other{{amount}件の結果が見つかりました}}",
+  "@searchMenuResultText": {
+    "description": "Search results count message",
+    "placeholders": {
+      "amount": {
+        "type": "int"
+      }
+    }
+  },
+  "searchMenuNoItemsText1": "食品が見つかりませんでした",
+  "searchMenuNoItemsText2": "食品を追加して始めましょう",
+  "searchMenuNoItemsFoundText1": "結果が見つかりませんでした",
+  "searchMenuNoItemsFoundText2": "検索語句を調整してみてください"
 }

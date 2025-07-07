@@ -579,6 +579,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Edit'**
   String get editCaloriesCalendarButton;
+
+  /// No description provided for @searchMenuItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchMenuItem;
+
+  /// No description provided for @searchMenuHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by calorie expression or date...'**
+  String get searchMenuHintText;
+
+  /// No description provided for @searchMenuExpressionColumnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Expression'**
+  String get searchMenuExpressionColumnLabel;
+
+  /// No description provided for @searchMenuCaloriesColumnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get searchMenuCaloriesColumnLabel;
+
+  /// No description provided for @searchMenuDateColumnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get searchMenuDateColumnLabel;
+
+  /// Search results count message
+  ///
+  /// In en, this message translates to:
+  /// **'{amount, plural, =1{Found 1 result} other{Found {amount} results}}'**
+  String searchMenuResultText(int amount);
+
+  /// No description provided for @searchMenuNoItemsText1.
+  ///
+  /// In en, this message translates to:
+  /// **'No food items found'**
+  String get searchMenuNoItemsText1;
+
+  /// No description provided for @searchMenuNoItemsText2.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some food items to get started'**
+  String get searchMenuNoItemsText2;
+
+  /// No description provided for @searchMenuNoItemsFoundText1.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get searchMenuNoItemsFoundText1;
+
+  /// No description provided for @searchMenuNoItemsFoundText2.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search terms'**
+  String get searchMenuNoItemsFoundText2;
 }
 
 class _AppLocalizationsDelegate

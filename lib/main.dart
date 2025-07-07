@@ -4,6 +4,7 @@ import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/DailyCalories.dart';
+import 'package:calorie_tracker/src/views/search/Search.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
 import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
@@ -180,11 +181,12 @@ class BottomTabBarState extends State<BottomTabBar> {
       AppLocalizations.of(context)!.calorieEntryHistoryTitle,
       AppLocalizations.of(context)!.chartsMenuItem,
       AppLocalizations.of(context)!.yourPlanMenuItem,
+      AppLocalizations.of(context)!.searchMenuItem,
       AppLocalizations.of(context)!.settingsTitle,
     ];
 
     Widget getAppBar() {
-      if (_selectedIndex == 4) {
+      if (_selectedIndex == 5) {
         return Row(
           children: [Text(AppLocalizations.of(context)!.settingsTitle), Icon(Icons.settings)],
         );
@@ -205,6 +207,7 @@ class BottomTabBarState extends State<BottomTabBar> {
         CalendarPage(bottomTabBarState: this),
         Graphing(),
         PlanCalculators(),
+        Search(),
         Settings()
       ][_selectedIndex];
     }
@@ -285,16 +288,26 @@ class BottomTabBarState extends State<BottomTabBar> {
                       _onItemTapped(3);
                       Navigator.pop(context);
                     },
+                  ),
+                  ListTile(
+                    title: Text(AppLocalizations.of(context)!.searchMenuItem),
+                    selected: _selectedIndex == 4,
+                    selectedColor: ORANGE_FRUIT,
+                    trailing: Icon(Icons.search_outlined),
+                    onTap: () {
+                      _onItemTapped(4);
+                      Navigator.pop(context);
+                    },
                   )
                 ],
               ),
               ListTile(
                 title: Text(AppLocalizations.of(context)!.settingsTitle),
-                selected: _selectedIndex == 4,
+                selected: _selectedIndex == 5,
                 selectedColor: ORANGE_FRUIT,
                 trailing: Icon(Icons.settings),
                 onTap: () {
-                  _onItemTapped(4);
+                  _onItemTapped(5);
                   Navigator.pop(context);
                 },
               )

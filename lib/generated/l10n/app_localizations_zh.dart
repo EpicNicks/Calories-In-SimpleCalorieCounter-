@@ -263,6 +263,44 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get editCaloriesCalendarButton => '编辑';
+
+  @override
+  String get searchMenuItem => '搜索';
+
+  @override
+  String get searchMenuHintText => '按热量表达式或日期搜索...';
+
+  @override
+  String get searchMenuExpressionColumnLabel => '表达式';
+
+  @override
+  String get searchMenuCaloriesColumnLabel => '卡路里';
+
+  @override
+  String get searchMenuDateColumnLabel => '日期';
+
+  @override
+  String searchMenuResultText(int amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      amount,
+      locale: localeName,
+      other: '找到$amount个结果',
+      one: '找到1个结果',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchMenuNoItemsText1 => '未找到食物项';
+
+  @override
+  String get searchMenuNoItemsText2 => '添加一些食物项以开始使用';
+
+  @override
+  String get searchMenuNoItemsFoundText1 => '未找到结果';
+
+  @override
+  String get searchMenuNoItemsFoundText2 => '尝试调整搜索关键词';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -524,6 +562,44 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get editCaloriesCalendarButton => '编辑';
+
+  @override
+  String get searchMenuItem => '搜索';
+
+  @override
+  String get searchMenuHintText => '按热量表达式或日期搜索...';
+
+  @override
+  String get searchMenuExpressionColumnLabel => '表达式';
+
+  @override
+  String get searchMenuCaloriesColumnLabel => '卡路里';
+
+  @override
+  String get searchMenuDateColumnLabel => '日期';
+
+  @override
+  String searchMenuResultText(int amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      amount,
+      locale: localeName,
+      other: '找到$amount个结果',
+      one: '找到1个结果',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchMenuNoItemsText1 => '未找到食物项';
+
+  @override
+  String get searchMenuNoItemsText2 => '添加一些食物项以开始使用';
+
+  @override
+  String get searchMenuNoItemsFoundText1 => '未找到结果';
+
+  @override
+  String get searchMenuNoItemsFoundText2 => '尝试调整搜索关键词';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -785,4 +861,42 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get editCaloriesCalendarButton => '編輯';
+
+  @override
+  String get searchMenuItem => '搜尋';
+
+  @override
+  String get searchMenuHintText => '按熱量表達式或日期搜尋...';
+
+  @override
+  String get searchMenuExpressionColumnLabel => '表達式';
+
+  @override
+  String get searchMenuCaloriesColumnLabel => '卡路里';
+
+  @override
+  String get searchMenuDateColumnLabel => '日期';
+
+  @override
+  String searchMenuResultText(int amount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      amount,
+      locale: localeName,
+      other: '找到$amount個結果',
+      one: '找到1個結果',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get searchMenuNoItemsText1 => '未找到食物項目';
+
+  @override
+  String get searchMenuNoItemsText2 => '新增一些食物項目來開始使用';
+
+  @override
+  String get searchMenuNoItemsFoundText1 => '未找到結果';
+
+  @override
+  String get searchMenuNoItemsFoundText2 => '嘗試調整搜尋關鍵字';
 }
