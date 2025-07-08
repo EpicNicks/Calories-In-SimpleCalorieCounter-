@@ -170,6 +170,16 @@ class DatabaseHelper {
     return symbolEntries.isNotEmpty ? CustomSymbolEntry.fromMap(symbolEntries.first) : null;
   }
 
+  Future<(List<FoodItemEntry> foodItems, List<CustomSymbolEntry> userSymbols)> getAllFoodItemsAndSymbols(
+      {DateTime? date, DateTime? endDate}) async {
+    List<FoodItemEntry> foodItems = date == null
+        ? await getAllFoodItems()
+        : endDate == null
+            ? await getFoodItems(date)
+            : await getFoodItemsInRange(date, endDate);
+    return (foodItems, await getAllUserSymbols());
+  }
+
   Future<int> clearFoodEntriesTable() async {
     final Database db = await instance.database;
     return await db.delete(FOOD_ITEM_TABLE);

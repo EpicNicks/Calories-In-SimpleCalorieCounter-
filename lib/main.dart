@@ -149,12 +149,17 @@ class BottomTabBarState extends State<BottomTabBar> {
   DateTime get dayCurrentlyEditing => _dayCurrentlyEditing;
   set dayCurrentlyEditing(DateTime dateTime) {
     DatabaseHelper.instance.getFoodItems(dateTime.dateOnly).then((value) {
-      setState(() {
-        _dayCurrentlyEditing = dateTime;
-        _dailyCaloriesTotal = value
-            .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
-            .toInt();
-        _selectedIndex = 0;
+      DatabaseHelper.instance.getAllUserSymbols().then((userSymbols) {
+        setState(() {
+          _dayCurrentlyEditing = dateTime;
+          _dailyCaloriesTotal = value
+              .fold(
+                  0.0,
+                  (previousValue, element) =>
+                      previousValue + evaluateFoodItemWithCommentAndSymbols(element.calorieExpression, userSymbols))
+              .toInt();
+          _selectedIndex = 0;
+        });
       });
     });
   }
@@ -166,9 +171,16 @@ class BottomTabBarState extends State<BottomTabBar> {
       if (index != 0) {
         _dayCurrentlyEditing = DateTime.now().dateOnly;
         DatabaseHelper.instance.getFoodItems(DateTime.now().dateOnly).then((value) {
-          _dailyCaloriesTotal = value
-              .fold(0.0, (previousValue, element) => previousValue + evaluateFoodItem(element.calorieExpression))
-              .toInt();
+          DatabaseHelper.instance.getAllUserSymbols().then((userSymbols) {
+            setState(() {
+              _dailyCaloriesTotal = value
+                  .fold(
+                      0.0,
+                      (previousValue, element) =>
+                          previousValue + evaluateFoodItemWithCommentAndSymbols(element.calorieExpression, userSymbols))
+                  .toInt();
+            });
+          });
         });
       }
       _selectedIndex = index;

@@ -14,8 +14,8 @@ import 'Tokenizer.dart';
   int firstInvalidIndex = tokens.indexWhere((token) => token is InvalidToken);
   String comment = "";
   if (firstInvalidIndex != -1) {
-    tokens = tokens.sublist(0, firstInvalidIndex);
     InvalidToken firstInvalidToken = tokens[firstInvalidIndex] as InvalidToken;
+    tokens = tokens.sublist(0, firstInvalidIndex);
     comment = input.substring(firstInvalidToken.position);
   }
   final List<Token> rpnSolveList = _tokensToRpn(tokens);
@@ -39,6 +39,52 @@ double parseWithUserSymbols(String input, List<CustomSymbolEntry> userSymbols) {
   } catch (e) {
     return 0;
   }
+}
+
+({double result, String comment}) parseWithUserSymbolsAndComment(String input, List<CustomSymbolEntry> userSymbols) {
+  try {
+    List<Token> resolvedTokens = _resolveSymbolsWithCommentsToInput(tokenize(input), userSymbols);
+    int firstInvalidIndex = resolvedTokens.indexWhere((token) => token is InvalidToken);
+    String comment = "";
+    if (firstInvalidIndex != -1) {
+      InvalidToken firstInvalidToken = resolvedTokens[firstInvalidIndex] as InvalidToken;
+      resolvedTokens = resolvedTokens.sublist(0, firstInvalidIndex);
+      print(firstInvalidToken.invalidShard);
+      comment = input.substring(firstInvalidToken.position);
+    }
+    final List<Token> rpnSolveList = _tokensToRpn(resolvedTokens);
+    final SolveResult solveResult = _shuntingYardSolve(rpnSolveList);
+    return (result: solveResult.value, comment: comment);
+  } catch (e) {
+    return (result: 0, comment: "");
+  }
+}
+
+List<Token> _resolveSymbolsWithCommentsToInput(List<Token> tokens, List<CustomSymbolEntry> userSymbols) {
+  for (int i = 0; i < tokens.length; i++) {
+    final Token curToken = tokens[i];
+    if (curToken is InvalidToken) {
+      try {
+        final CustomSymbolEntry? matchedCse =
+            userSymbols.where((symbol) => symbol.name == curToken.invalidShard).firstOrNull;
+        if (matchedCse == null) {
+          // rest is a comment string
+          return tokens;
+        }
+        final List<Token> newTokenData = _resolveSymbolsToInput(tokenize(matchedCse.expression), userSymbols);
+        final List<Token> expandedTokens = [];
+        expandedTokens.addAll(tokens.take(i));
+        expandedTokens.addAll(newTokenData);
+        expandedTokens.addAll(tokens.skip(i + 1)); // Fixed: was i + 2
+        tokens = expandedTokens;
+        i--; // Reset index to reprocess from current position
+      } catch (e) {
+        // Handle missing symbol gracefully or rethrow
+        rethrow;
+      }
+    }
+  }
+  return tokens;
 }
 
 List<Token> _resolveSymbolsToInput(List<Token> tokens, List<CustomSymbolEntry> userSymbols) {

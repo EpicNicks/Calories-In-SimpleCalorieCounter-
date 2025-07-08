@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
 import 'package:calorie_tracker/src/constants/prefs_keys/PlanConstants.dart';
+import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/extensions/list_extensions.dart';
@@ -9,7 +11,6 @@ import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/MifflinStJeorCalculator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Graphing extends StatefulWidget {
@@ -37,15 +38,16 @@ class _GraphingState extends State<Graphing> {
     return AppLocalizations.of(context)!.rangeAverageChartLabel;
   }
 
-  List<({double totalCalories, DateTime dateTime})> foodItemDailyTotals(List<FoodItemEntry> entries) {
+  List<({double totalCalories, DateTime dateTime})> foodItemDailyTotals(
+      List<FoodItemEntry> entries, List<CustomSymbolEntry> userSymbols) {
     // sort the list into lists of entries and then fold them
     Map<DateTime, double> dailyEntriesMap = {};
     for (FoodItemEntry entry in entries) {
       if (!dailyEntriesMap.containsKey(entry.date.dateOnly)) {
         dailyEntriesMap[entry.date.dateOnly] = 0.0;
       }
-      dailyEntriesMap[entry.date.dateOnly] =
-          dailyEntriesMap[entry.date.dateOnly]! + evaluateFoodItem(entry.calorieExpression);
+      dailyEntriesMap[entry.date.dateOnly] = dailyEntriesMap[entry.date.dateOnly]! +
+          evaluateFoodItemWithCommentAndSymbols(entry.calorieExpression, userSymbols);
     }
     final sortedKeys = dailyEntriesMap.keys.toList()..sort((a, b) => a.dateOnly.difference(b.dateOnly).inDays);
     final List<({double totalCalories, DateTime dateTime})> res = [];
@@ -176,12 +178,12 @@ class _GraphingState extends State<Graphing> {
                   2 => endDate.daysAgo(100000000),
                   _ => endDate.daysAgo(6)
                 };
-                return FutureBuilder<List<FoodItemEntry>>(
-                  future: DatabaseHelper.instance.getFoodItemsInRange(startDate, endDate),
-                  builder: (context, foodItemEntries) {
-                    if (foodItemEntries.hasData) {
+                return FutureBuilder<(List<FoodItemEntry>, List<CustomSymbolEntry>)>(
+                  future: DatabaseHelper.instance.getAllFoodItemsAndSymbols(date: startDate, endDate: endDate),
+                  builder: (context, entries) {
+                    if (entries.hasData) {
                       final List<({double totalCalories, DateTime dateTime})> dailyTotals =
-                          foodItemDailyTotals(foodItemEntries.data!);
+                          foodItemDailyTotals(entries.data!.$1, entries.data!.$2);
                       final double average = dailyTotals.length > 0
                           ? dailyTotals.map((t) => t.totalCalories).fold(0.0, (prev, cur) => prev + cur) /
                               dailyTotals.length

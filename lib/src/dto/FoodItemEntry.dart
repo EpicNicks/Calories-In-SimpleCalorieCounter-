@@ -57,6 +57,24 @@ double evaluateFoodItem(String calorieExpression) {
   }
 }
 
+double evaluateFoodItemWithCommentAndSymbols(String calorieExpression, List<CustomSymbolEntry> userSymbols) {
+  if (calorieExpression.isEmpty) {
+    return 0;
+  }
+  try {
+    calorieExpression = calorieExpression.replaceAll(",", "+");
+    final (:result, comment: _) = parseWithUserSymbolsAndComment(calorieExpression, userSymbols);
+    return result.isFinite ? result : 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+Future<double> evaluateFoodItemWithCommentAndSymbolsAsync(String calorieExpression) async {
+  final List<CustomSymbolEntry> userSymbols = await DatabaseHelper.instance.getAllUserSymbols();
+  return evaluateFoodItemWithCommentAndSymbols(calorieExpression, userSymbols);
+}
+
 double evaluateFoodItemNoCommentWithSymbols(String calorieExpression, List<CustomSymbolEntry> userSymbols) {
   if (calorieExpression.isEmpty) {
     return 0;

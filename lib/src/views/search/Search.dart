@@ -1,3 +1,4 @@
+import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class _SearchState extends State<Search> {
   String _searchQuery = '';
   List<FoodItemEntry> _allData = [];
   List<FoodItemEntry> _filteredData = [];
+  List<CustomSymbolEntry> _userSymbols = [];
   bool _isLoading = true;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
 
@@ -36,12 +38,14 @@ class _SearchState extends State<Search> {
 
   Future<void> _loadData() async {
     try {
-      final data = await DatabaseHelper.instance.getAllFoodItems(
+      final List<FoodItemEntry> data = await DatabaseHelper.instance.getAllFoodItems(
           options: FoodItemSearchOptions(entryOrder: EntryOrder.DESC, columnFilterOption: ColumnFilterOption.ID));
+      final List<CustomSymbolEntry> userSymbols = await DatabaseHelper.instance.getAllUserSymbols();
       setState(() {
         _allData = data;
         _filteredData = data;
         _isLoading = false;
+        _userSymbols = userSymbols;
       });
     } catch (e) {
       setState(() {
@@ -62,7 +66,7 @@ class _SearchState extends State<Search> {
       _filteredData = _allData.where((item) {
         final String expression = item.calorieExpression.toLowerCase();
         final String dateStr = _dateFormat.format(item.date).toLowerCase();
-        final String caloriesString = evaluateFoodItem(expression).toInt().toString();
+        final String caloriesString = evaluateFoodItemNoCommentWithSymbols(expression, _userSymbols).toInt().toString();
         final String query = _searchQuery.toLowerCase();
 
         return expression.contains(query) || dateStr.contains(query) || caloriesString.contains(query);
@@ -197,7 +201,8 @@ class _SearchState extends State<Search> {
                               ),
                             ],
                             rows: _filteredData.map((item) {
-                              final int calories = evaluateFoodItem(item.calorieExpression).toInt();
+                              final int calories =
+                                  evaluateFoodItemNoCommentWithSymbols(item.calorieExpression, _userSymbols).toInt();
                               return DataRow(
                                 cells: [
                                   DataCell(

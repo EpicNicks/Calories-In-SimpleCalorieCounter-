@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
+import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
 import 'package:flutter/material.dart';
@@ -79,9 +80,10 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
               availableCalendarFormats: {CalendarFormat.month: "Month"},
             ),
-            FutureBuilder<List<FoodItemEntry>>(
-              future: DatabaseHelper.instance.getFoodItems(_selectedDay ?? _startDate!),
-              builder: (BuildContext context, AsyncSnapshot<List<FoodItemEntry>> snapshot) {
+            FutureBuilder<(List<FoodItemEntry> foodItems, List<CustomSymbolEntry> userSymbols)>(
+              future: DatabaseHelper.instance.getAllFoodItemsAndSymbols(date: _selectedDay ?? _startDate!),
+              builder: (BuildContext context,
+                  AsyncSnapshot<(List<FoodItemEntry> foodItems, List<CustomSymbolEntry> userSymbols)> snapshot) {
                 if (!snapshot.hasData) {
                   return Expanded(
                       child: Column(children: [
@@ -90,8 +92,9 @@ class _CalendarPageState extends State<CalendarPage> {
                         child: Text(AppLocalizations.of(context)!.loadingText)),
                   ]));
                 } else {
-                  final filteredSnapshotData =
-                      snapshot.data!.where((element) => element.calorieExpression.isNotEmpty).toList();
+                  final List<FoodItemEntry> filteredSnapshotData =
+                      snapshot.data!.$1.where((element) => element.calorieExpression.isNotEmpty).toList();
+                  final List<CustomSymbolEntry> userSymbols = snapshot.data?.$2 ?? [];
                   return Expanded(
                       child: Column(
                     children: [
@@ -105,7 +108,7 @@ class _CalendarPageState extends State<CalendarPage> {
                             children: [
                               Text(
                                 AppLocalizations.of(context)!.caloriesTotalLabel(filteredSnapshotData
-                                    .map((e) => evaluateFoodItem(e.calorieExpression))
+                                    .map((e) => evaluateFoodItemWithCommentAndSymbols(e.calorieExpression, userSymbols))
                                     .fold(0.0, (prev, cur) => prev + cur)
                                     .round()),
                                 style: Theme.of(context).textTheme.titleLarge,
@@ -142,7 +145,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                   title: Text(
                                     style: Theme.of(context).textTheme.titleSmall,
                                     (!isConstant(filteredSnapshotData[index].calorieExpression)
-                                            ? "( = ${evaluateFoodItem(filteredSnapshotData[index].calorieExpression).round()} )   "
+                                            ? "( = ${evaluateFoodItemWithCommentAndSymbols(filteredSnapshotData[index].calorieExpression, userSymbols).round()} )   "
                                             : "") +
                                         filteredSnapshotData[index].calorieExpression,
                                   ),

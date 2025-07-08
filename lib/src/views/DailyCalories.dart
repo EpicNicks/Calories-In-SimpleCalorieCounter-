@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:calorie_tracker/generated/l10n/app_localizations.dart';
 import 'package:calorie_tracker/src/constants/ColorConstants.dart';
+import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
@@ -38,15 +39,16 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   DateTime get currentDateEditing => widget.dateCurrentlyEditing;
 
   Future<void> loadItems() async {
-    final foodItemEntries = await DatabaseHelper.instance.getFoodItems(currentDateEditing.dateOnly);
+    final List<FoodItemEntry> foodItemEntries = await DatabaseHelper.instance.getFoodItems(currentDateEditing.dateOnly);
+    final List<CustomSymbolEntry> userSymbols = await DatabaseHelper.instance.getAllUserSymbols();
     final getLabelText = (FoodItemEntry e) {
       if (e.calorieExpression != "" && double.tryParse(e.calorieExpression) == null) {
-        return "= " + evaluateFoodItem(e.calorieExpression).round().toString();
+        return "= " + evaluateFoodItemWithCommentAndSymbols(e.calorieExpression, userSymbols).round().toString();
       }
       return "";
     };
-    widget.setDailyCalories(
-        foodItemEntries.fold(0, (prev, cur) => prev + evaluateFoodItem(cur.calorieExpression).round()));
+    widget.setDailyCalories(foodItemEntries.fold(
+        0, (prev, cur) => prev + evaluateFoodItemWithCommentAndSymbols(cur.calorieExpression, userSymbols).round()));
     setState(() {
       entries = foodItemEntries.map((e) {
         final focusNode = FocusNode();
@@ -87,7 +89,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
               // force update
               await DatabaseHelper.instance.updateFoodEntry(
                   FoodItemEntry(id: e.id, calorieExpression: value, date: currentDateEditing.dateOnly));
-              widget.setDailyCalories(totalCalories());
+              widget.setDailyCalories(await totalCalories());
               setState(() {});
             },
             onSubmitted: (value) {
@@ -155,10 +157,10 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
     await loadItems();
   }
 
-  int totalCalories() {
+  Future<int> totalCalories() async {
     int total = 0;
     for (var item in entries) {
-      total += evaluateFoodItem(item.controller.text).round();
+      total += (await evaluateFoodItemWithCommentAndSymbolsAsync(item.controller.text)).round();
     }
     return total;
   }
