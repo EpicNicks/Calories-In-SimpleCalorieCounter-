@@ -35,7 +35,8 @@ List<Token> tokenize(String input) {
       flushInvalidBuffer();
 
       final value = matchResult.group(numberCapture)!;
-      if (collectedTokens.length > 0 && collectedTokens.last is LiteralToken) {
+      if (collectedTokens.length > 0 &&
+          (collectedTokens.last is LiteralToken || collectedTokens.last == OperatorToken.RPAREN)) {
         // This number following another number is invalid
         invalidStartPosition = matchResult.start;
         invalidBuffer = value;

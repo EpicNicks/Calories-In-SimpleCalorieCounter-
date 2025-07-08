@@ -64,10 +64,11 @@ class _SearchState extends State<Search> {
       _filteredData = _allData;
     } else {
       _filteredData = _allData.where((item) {
-        final String expression = item.calorieExpression.toLowerCase();
-        final String dateStr = _dateFormat.format(item.date).toLowerCase();
-        final String caloriesString = evaluateFoodItemNoCommentWithSymbols(expression, _userSymbols).toInt().toString();
-        final String query = _searchQuery.toLowerCase();
+        final String expression = item.calorieExpression;
+        final String dateStr = _dateFormat.format(item.date);
+        final String caloriesString =
+            evaluateFoodItemWithCommentAndSymbols(expression, _userSymbols).toInt().toString();
+        final String query = _searchQuery;
 
         return expression.contains(query) || dateStr.contains(query) || caloriesString.contains(query);
       }).toList();
@@ -202,7 +203,7 @@ class _SearchState extends State<Search> {
                             ],
                             rows: _filteredData.map((item) {
                               final int calories =
-                                  evaluateFoodItemNoCommentWithSymbols(item.calorieExpression, _userSymbols).toInt();
+                                  evaluateFoodItemWithCommentAndSymbols(item.calorieExpression, _userSymbols).toInt();
                               return DataRow(
                                 cells: [
                                   DataCell(
@@ -330,14 +331,14 @@ class _SearchState extends State<Search> {
     int start = 0;
     int index = lowerText.indexOf(lowerQuery, start);
 
-    // Base style for non-highlighted text
+    // Base style for non-highlighted text - use regular textTheme instead of primaryTextTheme
     final TextStyle baseStyle = emptyStyle
         ? TextStyle(
-            color: Theme.of(context).primaryTextTheme.bodyMedium!.color,
+            color: Colors.grey,
             fontStyle: FontStyle.italic,
           ).merge(style)
         : TextStyle(
-            color: Theme.of(context).primaryTextTheme.bodyMedium!.color, // Ensure non-highlighted text is visible
+            color: Theme.of(context).textTheme.bodyMedium?.color, // Changed from primaryTextTheme to textTheme
           ).merge(style);
 
     while (index != -1) {
