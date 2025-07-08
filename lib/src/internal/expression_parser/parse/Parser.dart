@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:math' as math;
 
+import '../../../dto/CustomSymbolEntry.dart';
 import '../exceptions/AggregateException.dart';
 import '../token/InvalidToken.dart';
 import '../token/LiteralToken.dart';
@@ -24,10 +25,43 @@ import 'Tokenizer.dart';
 
 double parse(String input) {
   final List<Token> tokens = tokenize(input);
-  print(tokens.join(', '));
   final List<Token> rpnSolveList = _tokensToRpn(tokens);
   final SolveResult solveResult = _shuntingYardSolve(rpnSolveList);
   return solveResult.value;
+}
+
+double parseWithUserSymbols(String input, List<CustomSymbolEntry> userSymbols) {
+  try {
+    final List<Token> resolvedTokens = _resolveSymbolsToInput(tokenize(input), userSymbols);
+    final List<Token> rpnSolveList = _tokensToRpn(resolvedTokens);
+    final SolveResult solveResult = _shuntingYardSolve(rpnSolveList);
+    return solveResult.value;
+  } catch (e) {
+    return 0;
+  }
+}
+
+List<Token> _resolveSymbolsToInput(List<Token> tokens, List<CustomSymbolEntry> userSymbols) {
+  for (int i = 0; i < tokens.length; i++) {
+    final Token curToken = tokens[i];
+    if (curToken is InvalidToken) {
+      try {
+        final CustomSymbolEntry matchedCse = userSymbols.firstWhere((symbol) => symbol.name == curToken.invalidShard,
+            orElse: () => throw ArgumentError('Symbol not found: ${curToken.invalidShard}'));
+        final List<Token> newTokenData = _resolveSymbolsToInput(tokenize(matchedCse.expression), userSymbols);
+        final List<Token> expandedTokens = [];
+        expandedTokens.addAll(tokens.take(i));
+        expandedTokens.addAll(newTokenData);
+        expandedTokens.addAll(tokens.skip(i + 1)); // Fixed: was i + 2
+        tokens = expandedTokens;
+        i--; // Reset index to reprocess from current position
+      } catch (e) {
+        // Handle missing symbol gracefully or rethrow
+        rethrow;
+      }
+    }
+  }
+  return tokens;
 }
 
 List<Token> _tokensToRpn(List<Token> tokens) {
@@ -57,8 +91,7 @@ List<Token> _tokensToRpn(List<Token> tokens) {
           }
         }
       } else {
-        while (operatorStack.isNotEmpty &&
-            _precedenceCompare(token, operatorStack.last)) {
+        while (operatorStack.isNotEmpty && _precedenceCompare(token, operatorStack.last)) {
           rpnSolveList.add(operatorStack.removeLast());
         }
         operatorStack.addLast(token);
@@ -105,8 +138,7 @@ SolveResult _shuntingYardSolve(List<Token> rpnSolveList) {
           final lhs = solveStack.removeLast();
 
           if (lhs is! LiteralToken || rhs is! LiteralToken) {
-            throw ArgumentError(
-                'Operator arguments were not both literals. lhs: ${lhs} rhs: ${rhs}.');
+            throw ArgumentError('Operator arguments were not both literals. lhs: ${lhs} rhs: ${rhs}.');
           }
 
           final double arithmeticResult;
@@ -138,8 +170,7 @@ SolveResult _shuntingYardSolve(List<Token> rpnSolveList) {
           final operand = solveStack.removeLast();
 
           if (operand is! LiteralToken) {
-            throw ArgumentError(
-                'Operator argument was not a literal. operand: ${operand}.');
+            throw ArgumentError('Operator argument was not a literal. operand: ${operand}.');
           }
 
           final double arithmeticResult;
@@ -159,8 +190,7 @@ SolveResult _shuntingYardSolve(List<Token> rpnSolveList) {
           break;
 
         default:
-          throw ArgumentError(
-              'Invalid number of operands ${token.numOperands} for operator ${token.operator}');
+          throw ArgumentError('Invalid number of operands ${token.numOperands} for operator ${token.operator}');
       }
     }
   }
@@ -183,11 +213,9 @@ extension TokenListValidation on List<Token> {
     final invalidTokens = whereType<InvalidToken>().toList();
     if (invalidTokens.isNotEmpty) {
       final errors = invalidTokens
-          .map((token) => ArgumentError(
-              'Invalid token: ${token.invalidShard} at position ${token.position}'))
+          .map((token) => ArgumentError('Invalid token: ${token.invalidShard} at position ${token.position}'))
           .toList();
-      throw AggregateException(
-          'Parsing errors encountered:', errors.cast<Exception>());
+      throw AggregateException('Parsing errors encountered:', errors.cast<Exception>());
     }
   }
 }

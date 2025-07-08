@@ -268,6 +268,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get loadingText => 'Cargando...';
 
   @override
+  String get updateButton => 'Actualizar';
+
+  @override
+  String get deleteButton => 'Eliminar';
+
+  @override
   String get editCaloriesCalendarButton => 'Editar';
 
   @override
@@ -309,4 +315,53 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get searchMenuNoItemsFoundText2 =>
       'Intenta ajustar tus términos de búsqueda';
+
+  @override
+  String get symbolTableMenu => 'Nombres personalizados';
+
+  @override
+  String get symbolTableDescription =>
+      'Define tus propios nombres reutilizables (ej: Nombre: huevo, Expresión: 80)';
+
+  @override
+  String get symbolTableDescriptionExtended =>
+      'Las expresiones pueden incluir símbolos matemáticos habituales y otros nombres que definas';
+
+  @override
+  String get symbolTableNameColumnHeader => 'Nombre';
+
+  @override
+  String get symbolTableExpressionColumnHeader => 'Expresión';
+
+  @override
+  String get symbolTableNameRequiredError => 'El nombre es obligatorio';
+
+  @override
+  String get symbolTableExpressionRequiredError =>
+      'La expresión es obligatoria';
+
+  @override
+  String get symbolTableLoadingFailure => 'No se pudieron cargar los símbolos';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure =>
+      'Expresión inválida: la expresión debe ser positiva';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 =>
+      'Aún no se han definido símbolos personalizados.';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 =>
+      '¡Agrega tu primer símbolo arriba!';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return 'El nombre $name ya existe. Por favor elige otro nombre.';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return '¿Eliminar: $name?';
+  }
 }

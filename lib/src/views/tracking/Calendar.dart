@@ -25,7 +25,7 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   void initState() {
     super.initState();
-    DatabaseHelper.instance.getFirstEntry().then((firstEntry) {
+    DatabaseHelper.instance.getFirstFoodEntry().then((firstEntry) {
       setState(() {
         _startDate = firstEntry?.date;
       });

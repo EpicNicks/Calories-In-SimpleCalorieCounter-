@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:path/path.dart';
@@ -9,6 +10,7 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   static const DAY_MILLIS = 86400000;
   static const FOOD_ITEM_TABLE = 'food_item';
+  static const USER_SYMBOLS_TABLE = 'user_symbols';
 
   DatabaseHelper._privateConstructor();
 
@@ -21,15 +23,22 @@ class DatabaseHelper {
   Future<Database> _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, 'simple_calorie_tracker.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(path, version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future _onCreate(Database db, int version) async {
     await db.execute('''
-      CREATE TABLE food_item(
+      CREATE TABLE $FOOD_ITEM_TABLE(
         id INTEGER PRIMARY KEY,
         calorieExpression TEXT,
         date INTEGER
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE $USER_SYMBOLS_TABLE(
+        id INTEGER PRIMARY KEY,
+        name TEXT UNIQUE NOT NULL,
+        expression TEXT
       )
     ''');
   }
@@ -50,7 +59,7 @@ class DatabaseHelper {
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
-  Future<FoodItemEntry?> getFirstEntry() async {
+  Future<FoodItemEntry?> getFirstFoodEntry() async {
     Database db = await instance.database;
     final topEntry = await db.query(FOOD_ITEM_TABLE, orderBy: 'date ASC', limit: 1);
     if (topEntry.isNotEmpty) {
@@ -62,7 +71,7 @@ class DatabaseHelper {
     return null;
   }
 
-  Future<FoodItemEntry?> getLastEntry() async {
+  Future<FoodItemEntry?> getLastFoodEntry() async {
     Database db = await instance.database;
     final lastEntry = await db.query(FOOD_ITEM_TABLE, orderBy: 'date DESC', limit: 1);
     if (lastEntry.isNotEmpty) {
@@ -90,7 +99,7 @@ class DatabaseHelper {
     return foodEntries.isNotEmpty ? foodEntries.map((c) => FoodItemEntry.fromMap(c)).toList() : [];
   }
 
-  Future<List<List<dynamic>>> getAllItemsAsCsvRows() async {
+  Future<List<List<dynamic>>> getAllFoodItemsAsCsvRows() async {
     final entries = await getAllFoodItems();
     List<List<dynamic>> res = [
       ['id', 'calorieExpression', 'date']
@@ -101,12 +110,17 @@ class DatabaseHelper {
     return res;
   }
 
-  Future<int> add(FoodItemEntry foodItemEntry) async {
+  Future<int> addFoodEntry(FoodItemEntry foodItemEntry) async {
     Database db = await instance.database;
     return await db.insert(FOOD_ITEM_TABLE, foodItemEntry.toMap());
   }
 
-  Future<void> batchAdd(List<FoodItemEntry> foodItemEntries) async {
+  Future<int> addUserSymbol(CustomSymbolEntry symbolEntry) async {
+    Database db = await instance.database;
+    return await db.insert(USER_SYMBOLS_TABLE, symbolEntry.toMap());
+  }
+
+  Future<void> batchAddFoodEntries(List<FoodItemEntry> foodItemEntries) async {
     Database db = await instance.database;
     final Batch batch = db.batch();
     for (final entry in foodItemEntries) {
@@ -115,7 +129,7 @@ class DatabaseHelper {
     await batch.commit(noResult: true);
   }
 
-  Future<int> update(FoodItemEntry foodItemEntry) async {
+  Future<int> updateFoodEntry(FoodItemEntry foodItemEntry) async {
     Database db = await instance.database;
     return await db.update(
         FOOD_ITEM_TABLE,
@@ -127,9 +141,38 @@ class DatabaseHelper {
         where: 'id=${foodItemEntry.id}');
   }
 
-  Future<int> delete(int id) async {
+  Future<int> updateUserSymbol(CustomSymbolEntry symbolEntry) async {
+    Database db = await instance.database;
+    return await db.update(
+        USER_SYMBOLS_TABLE, {'id': symbolEntry.id, 'name': symbolEntry.name, 'expression': symbolEntry.expression},
+        where: 'id=${symbolEntry.id}');
+  }
+
+  Future<int> deleteFoodEntry(int id) async {
     Database db = await instance.database;
     return await db.delete(FOOD_ITEM_TABLE, where: "id=$id");
+  }
+
+  Future<int> deleteUserSymbol(int id) async {
+    Database db = await instance.database;
+    return await db.delete(USER_SYMBOLS_TABLE, where: "id=$id");
+  }
+
+  Future<List<CustomSymbolEntry>> getAllUserSymbols() async {
+    Database db = await instance.database;
+    final symbolEntries = await db.query(USER_SYMBOLS_TABLE, orderBy: 'id ASC');
+    return symbolEntries.isNotEmpty ? symbolEntries.map((c) => CustomSymbolEntry.fromMap(c)).toList() : [];
+  }
+
+  Future<CustomSymbolEntry?> getUserSymbolByName(String name) async {
+    Database db = await instance.database;
+    final symbolEntries = await db.query(USER_SYMBOLS_TABLE, where: 'name = ?', whereArgs: [name]);
+    return symbolEntries.isNotEmpty ? CustomSymbolEntry.fromMap(symbolEntries.first) : null;
+  }
+
+  Future<int> clearFoodEntriesTable() async {
+    final Database db = await instance.database;
+    return await db.delete(FOOD_ITEM_TABLE);
   }
 
   // delete all empty entries from previous days, will probably run in a service
@@ -139,16 +182,24 @@ class DatabaseHelper {
         where: 'calorieExpression = "" AND date < ${DateTime.now().dateOnly.millisecondsSinceEpoch - DAY_MILLIS}');
   }
 
-  Future<int> clearFoodEntriesTable() async {
-    final Database db = await instance.database;
-    return await db.delete(FOOD_ITEM_TABLE);
-  }
-
   // purges previous entries and runs VACUUM on the db
   Future<void> optimize() async {
     await purgePreviousEmpty();
     Database db = await instance.database;
     await db.execute("VACUUM");
+  }
+
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Add the user_symbols table for users upgrading from version 1
+      await db.execute('''
+      CREATE TABLE $USER_SYMBOLS_TABLE(
+        id INTEGER PRIMARY KEY,
+        name TEXT UNIQUE NOT NULL,
+        expression TEXT
+      )
+    ''');
+    }
   }
 }
 

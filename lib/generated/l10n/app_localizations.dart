@@ -574,6 +574,18 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get loadingText;
 
+  /// No description provided for @updateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get updateButton;
+
+  /// No description provided for @deleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
   /// No description provided for @editCaloriesCalendarButton.
   ///
   /// In en, this message translates to:
@@ -639,6 +651,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Try adjusting your search terms'**
   String get searchMenuNoItemsFoundText2;
+
+  /// No description provided for @symbolTableMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Entry Names'**
+  String get symbolTableMenu;
+
+  /// No description provided for @symbolTableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Define your own reusable names (ex: Name: egg, Expression: 80)'**
+  String get symbolTableDescription;
+
+  /// No description provided for @symbolTableDescriptionExtended.
+  ///
+  /// In en, this message translates to:
+  /// **'Expressions can include the usual math symbols as well as other names you define'**
+  String get symbolTableDescriptionExtended;
+
+  /// No description provided for @symbolTableNameColumnHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get symbolTableNameColumnHeader;
+
+  /// No description provided for @symbolTableExpressionColumnHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Expression'**
+  String get symbolTableExpressionColumnHeader;
+
+  /// No description provided for @symbolTableNameRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get symbolTableNameRequiredError;
+
+  /// No description provided for @symbolTableExpressionRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Expression is required'**
+  String get symbolTableExpressionRequiredError;
+
+  /// No description provided for @symbolTableLoadingFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load symbols'**
+  String get symbolTableLoadingFailure;
+
+  /// No description provided for @symbolExpressionPositiveConstraintFailure.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid expression: expression must be positive'**
+  String get symbolExpressionPositiveConstraintFailure;
+
+  /// No description provided for @symbolExpressionNoneDefinedHint1.
+  ///
+  /// In en, this message translates to:
+  /// **'No custom symbols defined yet.'**
+  String get symbolExpressionNoneDefinedHint1;
+
+  /// No description provided for @symbolExpressionNoneDefinedHint2.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your first symbol above!'**
+  String get symbolExpressionNoneDefinedHint2;
+
+  /// No description provided for @symbolTableNameExistsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Name {name} already exists. Please choose a different name.'**
+  String symbolTableNameExistsError(String name);
+
+  /// No description provided for @symbolTableConfirmDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete: {name}?'**
+  String symbolTableConfirmDelete(String name);
 }
 
 class _AppLocalizationsDelegate

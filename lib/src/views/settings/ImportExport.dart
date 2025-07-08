@@ -116,7 +116,7 @@ class _ImportExportState extends State<ImportExport> {
                                               .toList();
 
                                           await DatabaseHelper.instance.clearFoodEntriesTable();
-                                          await DatabaseHelper.instance.batchAdd(entries);
+                                          await DatabaseHelper.instance.batchAddFoodEntries(entries);
 
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
@@ -153,7 +153,7 @@ class _ImportExportState extends State<ImportExport> {
       _progressString = AppLocalizations.of(context)!.exportImportSavingMsg;
     });
     final DatabaseHelper db = await DatabaseHelper.instance;
-    final List<List<dynamic>> csvRows = await db.getAllItemsAsCsvRows();
+    final List<List<dynamic>> csvRows = await db.getAllFoodItemsAsCsvRows();
     final String csvString = ListToCsvConverter().convert(csvRows);
     ({String? message, bool success}) result = await downloadCsv(csvString);
     if (result.success) {

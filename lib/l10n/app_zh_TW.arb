@@ -90,6 +90,8 @@
   "continueButton": "繼續",
   "cancelButton": "取消",
   "loadingText": "載入中...",
+  "updateButton": "更新",
+  "deleteButton": "刪除",
 
   "editCaloriesCalendarButton": "編輯",
 
@@ -100,16 +102,25 @@
   "searchMenuDateColumnLabel": "日期",
 
   "searchMenuResultText": "{amount, plural, =1{找到1個結果} other{找到{amount}個結果}}",
-  "@searchMenuResultText": {
-    "description": "Search results count message",
-    "placeholders": {
-      "amount": {
-        "type": "int"
-      }
-    }
-  },
+
   "searchMenuNoItemsText1": "未找到食物項目",
   "searchMenuNoItemsText2": "新增一些食物項目來開始使用",
   "searchMenuNoItemsFoundText1": "未找到結果",
-  "searchMenuNoItemsFoundText2": "嘗試調整搜尋關鍵字"
+  "searchMenuNoItemsFoundText2": "嘗試調整搜尋關鍵字",
+
+  "symbolTableMenu": "自訂名稱",
+  "symbolTableDescription": "定義你自己的可重複使用名稱（例如：名稱：雞蛋，運算式：80）",
+  "symbolTableDescriptionExtended": "運算式可以包含一般數學符號以及你定義的其他名稱",
+  "symbolTableNameColumnHeader": "名稱",
+  "symbolTableExpressionColumnHeader": "運算式",
+  "symbolTableNameRequiredError": "名稱為必填",
+  "symbolTableExpressionRequiredError": "運算式為必填",
+  "symbolTableLoadingFailure": "載入符號失敗",
+  "symbolExpressionPositiveConstraintFailure": "無效運算式：必須為正數",
+
+  "symbolExpressionNoneDefinedHint1": "尚未定義任何自訂符號。",
+  "symbolExpressionNoneDefinedHint2": "請在上方新增你的第一個符號！",
+
+  "symbolTableNameExistsError": "名稱 {name} 已存在。請選擇其他名稱。",
+  "symbolTableConfirmDelete": "刪除：{name}？"
 }

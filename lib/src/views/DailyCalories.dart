@@ -85,8 +85,8 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             focusNode: focusNode,
             onChanged: (value) async {
               // force update
-              await DatabaseHelper.instance
-                  .update(FoodItemEntry(id: e.id, calorieExpression: value, date: currentDateEditing.dateOnly));
+              await DatabaseHelper.instance.updateFoodEntry(
+                  FoodItemEntry(id: e.id, calorieExpression: value, date: currentDateEditing.dateOnly));
               widget.setDailyCalories(totalCalories());
               setState(() {});
             },
@@ -111,7 +111,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
   }
 
   Future<void> addTextField() async {
-    await DatabaseHelper.instance.add(FoodItemEntry(calorieExpression: "", date: currentDateEditing.dateOnly));
+    await DatabaseHelper.instance.addFoodEntry(FoodItemEntry(calorieExpression: "", date: currentDateEditing.dateOnly));
     await loadItems();
     if (entries.isNotEmpty) {
       FocusScope.of(context).unfocus();
@@ -138,7 +138,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
                 onPressed: () async {
                   List<int> ids = entries.map((e) => e.dbId).toList();
                   for (int id in ids) {
-                    DatabaseHelper.instance.delete(id);
+                    DatabaseHelper.instance.deleteFoodEntry(id);
                   }
                   Navigator.of(context).pop();
                   await loadItems();
@@ -151,7 +151,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
 
   Future<void> deleteTextField(int id) async {
     FocusScope.of(context).unfocus();
-    await DatabaseHelper.instance.delete(id);
+    await DatabaseHelper.instance.deleteFoodEntry(id);
     await loadItems();
   }
 

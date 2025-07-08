@@ -262,6 +262,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loadingText => '加载中...';
 
   @override
+  String get updateButton => '更新';
+
+  @override
+  String get deleteButton => '删除';
+
+  @override
   String get editCaloriesCalendarButton => '编辑';
 
   @override
@@ -301,6 +307,49 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get searchMenuNoItemsFoundText2 => '尝试调整搜索关键词';
+
+  @override
+  String get symbolTableMenu => '自定义名称';
+
+  @override
+  String get symbolTableDescription => '定义你自己的可重用名称（例如：名称：鸡蛋，表达式：80）';
+
+  @override
+  String get symbolTableDescriptionExtended => '表达式可以包含常见数学符号以及你定义的其他名称';
+
+  @override
+  String get symbolTableNameColumnHeader => '名称';
+
+  @override
+  String get symbolTableExpressionColumnHeader => '表达式';
+
+  @override
+  String get symbolTableNameRequiredError => '名称为必填项';
+
+  @override
+  String get symbolTableExpressionRequiredError => '表达式为必填项';
+
+  @override
+  String get symbolTableLoadingFailure => '加载符号失败';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure => '无效表达式：表达式必须为正数';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 => '尚未定义任何自定义符号。';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 => '请在上方添加第一个符号！';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return '名称 $name 已存在。请选择其他名称。';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return '删除：$name？';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -561,6 +610,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String get loadingText => '加载中...';
 
   @override
+  String get updateButton => '更新';
+
+  @override
+  String get deleteButton => '删除';
+
+  @override
   String get editCaloriesCalendarButton => '编辑';
 
   @override
@@ -600,6 +655,49 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get searchMenuNoItemsFoundText2 => '尝试调整搜索关键词';
+
+  @override
+  String get symbolTableMenu => '自定义名称';
+
+  @override
+  String get symbolTableDescription => '定义你自己的可重用名称（例如：名称：鸡蛋，表达式：80）';
+
+  @override
+  String get symbolTableDescriptionExtended => '表达式可以包含常见数学符号以及你定义的其他名称';
+
+  @override
+  String get symbolTableNameColumnHeader => '名称';
+
+  @override
+  String get symbolTableExpressionColumnHeader => '表达式';
+
+  @override
+  String get symbolTableNameRequiredError => '名称为必填项';
+
+  @override
+  String get symbolTableExpressionRequiredError => '表达式为必填项';
+
+  @override
+  String get symbolTableLoadingFailure => '加载符号失败';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure => '无效表达式：表达式必须为正数';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 => '尚未定义任何自定义符号。';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 => '请在上方添加第一个符号！';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return '名称 $name 已存在。请选择其他名称。';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return '删除：$name？';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -860,6 +958,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get loadingText => '載入中...';
 
   @override
+  String get updateButton => '更新';
+
+  @override
+  String get deleteButton => '刪除';
+
+  @override
   String get editCaloriesCalendarButton => '編輯';
 
   @override
@@ -899,4 +1003,47 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get searchMenuNoItemsFoundText2 => '嘗試調整搜尋關鍵字';
+
+  @override
+  String get symbolTableMenu => '自訂名稱';
+
+  @override
+  String get symbolTableDescription => '定義你自己的可重複使用名稱（例如：名稱：雞蛋，運算式：80）';
+
+  @override
+  String get symbolTableDescriptionExtended => '運算式可以包含一般數學符號以及你定義的其他名稱';
+
+  @override
+  String get symbolTableNameColumnHeader => '名稱';
+
+  @override
+  String get symbolTableExpressionColumnHeader => '運算式';
+
+  @override
+  String get symbolTableNameRequiredError => '名稱為必填';
+
+  @override
+  String get symbolTableExpressionRequiredError => '運算式為必填';
+
+  @override
+  String get symbolTableLoadingFailure => '載入符號失敗';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure => '無效運算式：必須為正數';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 => '尚未定義任何自訂符號。';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 => '請在上方新增你的第一個符號！';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return '名稱 $name 已存在。請選擇其他名稱。';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return '刪除：$name？';
+  }
 }

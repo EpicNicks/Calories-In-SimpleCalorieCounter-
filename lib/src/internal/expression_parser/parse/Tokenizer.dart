@@ -14,17 +14,38 @@ List<Token> tokenize(String input) {
       r'(\s+)|'
       r'(.)');
 
+  String invalidBuffer = '';
+  int invalidStartPosition = -1;
+
+  void flushInvalidBuffer() {
+    if (invalidBuffer.isNotEmpty) {
+      collectedTokens.add(InvalidToken(invalidStartPosition, invalidBuffer));
+      invalidBuffer = '';
+      invalidStartPosition = -1;
+    }
+  }
+
   for (final matchResult in tokenRegex.allMatches(input)) {
     if (matchResult.group(skipCapture) != null) {
+      // Whitespace ends any invalid token collection
+      flushInvalidBuffer();
       // Skip whitespace
     } else if (matchResult.group(numberCapture) != null) {
+      // Valid number found, flush any accumulated invalid tokens
+      flushInvalidBuffer();
+
       final value = matchResult.group(numberCapture)!;
       if (collectedTokens.length > 0 && collectedTokens.last is LiteralToken) {
-        collectedTokens.add(InvalidToken(matchResult.start, value));
+        // This number following another number is invalid
+        invalidStartPosition = matchResult.start;
+        invalidBuffer = value;
       } else {
         collectedTokens.add(LiteralToken(double.parse(value)));
       }
     } else if (matchResult.group(operatorCapture) != null) {
+      // Valid operator found, flush any accumulated invalid tokens
+      flushInvalidBuffer();
+
       final operatorChar = matchResult.group(operatorCapture)![0];
       if ({'-', '+'}.contains(operatorChar) &&
           (collectedTokens.isEmpty ||
@@ -43,10 +64,17 @@ List<Token> tokenize(String input) {
         collectedTokens.add(operatorToken);
       }
     } else if (matchResult.group(mismatchCapture) != null) {
+      // Invalid character found, add to buffer
       final value = matchResult.group(mismatchCapture)!;
-      collectedTokens.add(InvalidToken(matchResult.start, value));
+      if (invalidBuffer.isEmpty) {
+        invalidStartPosition = matchResult.start;
+      }
+      invalidBuffer += value;
     }
   }
+
+  // Flush any remaining invalid tokens at the end
+  flushInvalidBuffer();
 
   return collectedTokens;
 }

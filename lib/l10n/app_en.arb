@@ -132,6 +132,8 @@
   "continueButton": "Continue",
   "cancelButton": "Cancel",
   "loadingText": "Loading...",
+  "updateButton": "Update",
+  "deleteButton": "Delete",
 
   "editCaloriesCalendarButton": "Edit",
 
@@ -153,5 +155,36 @@
   "searchMenuNoItemsText1": "No food items found",
   "searchMenuNoItemsText2": "Add some food items to get started",
   "searchMenuNoItemsFoundText1": "No results found",
-  "searchMenuNoItemsFoundText2": "Try adjusting your search terms"
+  "searchMenuNoItemsFoundText2": "Try adjusting your search terms",
+
+  "symbolTableMenu": "Custom Entry Names",
+  "symbolTableDescription": "Define your own reusable names (ex: Name: egg, Expression: 80)",
+  "symbolTableDescriptionExtended": "Expressions can include the usual math symbols as well as other names you define",
+  "symbolTableNameColumnHeader": "Name",
+  "symbolTableExpressionColumnHeader": "Expression",
+  "symbolTableNameRequiredError": "Name is required",
+  "symbolTableExpressionRequiredError": "Expression is required",
+  "symbolTableLoadingFailure": "Failed to load symbols",
+  "symbolExpressionPositiveConstraintFailure": "Invalid expression: expression must be positive",
+
+  "symbolExpressionNoneDefinedHint1": "No custom symbols defined yet.",
+  "symbolExpressionNoneDefinedHint2": "Add your first symbol above!",
+
+  "symbolTableNameExistsError": "Name {name} already exists. Please choose a different name.",
+  "@symbolTableNameExistsError": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "symbolTableConfirmDelete": "Delete: {name}?",
+  "@symbolTableConfirmDelete": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  }
 }

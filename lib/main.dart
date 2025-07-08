@@ -7,6 +7,7 @@ import 'package:calorie_tracker/src/views/DailyCalories.dart';
 import 'package:calorie_tracker/src/views/search/Search.dart';
 import 'package:calorie_tracker/src/views/settings/Settings.dart';
 import 'package:calorie_tracker/src/views/tracking/Calendar.dart';
+import 'package:calorie_tracker/src/views/tracking/CustomEntryTable.dart';
 import 'package:calorie_tracker/src/views/tracking/Graphing.dart';
 import 'package:calorie_tracker/src/views/tracking/plan_calculators/PlanCalculators.dart';
 import 'package:flutter/material.dart';
@@ -182,11 +183,12 @@ class BottomTabBarState extends State<BottomTabBar> {
       AppLocalizations.of(context)!.chartsMenuItem,
       AppLocalizations.of(context)!.yourPlanMenuItem,
       AppLocalizations.of(context)!.searchMenuItem,
+      AppLocalizations.of(context)!.symbolTableMenu,
       AppLocalizations.of(context)!.settingsTitle,
     ];
 
     Widget getAppBar() {
-      if (_selectedIndex == 5) {
+      if (_selectedIndex == 6) {
         return Row(
           children: [Text(AppLocalizations.of(context)!.settingsTitle), Icon(Icons.settings)],
         );
@@ -208,6 +210,7 @@ class BottomTabBarState extends State<BottomTabBar> {
         Graphing(),
         PlanCalculators(),
         Search(),
+        CustomEntryTable(),
         Settings()
       ][_selectedIndex];
     }
@@ -245,74 +248,32 @@ class BottomTabBarState extends State<BottomTabBar> {
                   child: ListView(
             padding: EdgeInsets.zero,
             children: [
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.dailyCalorieTotal(_dailyCaloriesTotal)),
-                selected: _selectedIndex == 0,
-                selectedColor: ORANGE_FRUIT,
-                trailing: Icon(Icons.restaurant),
-                onTap: () {
-                  _onItemTapped(0);
-                  Navigator.pop(context);
-                },
-              ),
+              createListTile(AppLocalizations.of(context)!.dailyCalorieTotal(_dailyCaloriesTotal), Icons.restaurant, 0),
               ExpansionTile(
-                initiallyExpanded: true,
-                title: Text(AppLocalizations.of(context)!.calorieTrackingSubmenuTitle),
-                children: [
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.calendarMenuItem),
-                    selected: _selectedIndex == 1,
-                    selectedColor: ORANGE_FRUIT,
-                    trailing: Icon(Icons.calendar_month),
-                    onTap: () {
-                      _onItemTapped(1);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.chartsMenuItem),
-                    selected: _selectedIndex == 2,
-                    selectedColor: ORANGE_FRUIT,
-                    trailing: Icon(Icons.stacked_line_chart),
-                    onTap: () {
-                      _onItemTapped(2);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.yourPlanMenuItem),
-                    selected: _selectedIndex == 3,
-                    selectedColor: ORANGE_FRUIT,
-                    trailing: Icon(Icons.monitor_weight_outlined),
-                    onTap: () {
-                      _onItemTapped(3);
-                      Navigator.pop(context);
-                    },
-                  ),
-                  ListTile(
-                    title: Text(AppLocalizations.of(context)!.searchMenuItem),
-                    selected: _selectedIndex == 4,
-                    selectedColor: ORANGE_FRUIT,
-                    trailing: Icon(Icons.search_outlined),
-                    onTap: () {
-                      _onItemTapped(4);
-                      Navigator.pop(context);
-                    },
-                  )
-                ],
-              ),
-              ListTile(
-                title: Text(AppLocalizations.of(context)!.settingsTitle),
-                selected: _selectedIndex == 5,
-                selectedColor: ORANGE_FRUIT,
-                trailing: Icon(Icons.settings),
-                onTap: () {
-                  _onItemTapped(5);
-                  Navigator.pop(context);
-                },
-              )
+                  initiallyExpanded: true,
+                  title: Text(AppLocalizations.of(context)!.calorieTrackingSubmenuTitle),
+                  children: [
+                    createListTile(AppLocalizations.of(context)!.calendarMenuItem, Icons.calendar_month, 1),
+                    createListTile(AppLocalizations.of(context)!.chartsMenuItem, Icons.stacked_line_chart, 2),
+                    createListTile(AppLocalizations.of(context)!.yourPlanMenuItem, Icons.monitor_weight_outlined, 3),
+                    createListTile(AppLocalizations.of(context)!.searchMenuItem, Icons.search_outlined, 4),
+                    createListTile(AppLocalizations.of(context)!.symbolTableMenu, Icons.table_chart_outlined, 5)
+                  ]),
+              createListTile(AppLocalizations.of(context)!.settingsTitle, Icons.settings, 6)
             ],
           ))),
         ));
+  }
+
+  ListTile createListTile(String title, IconData icon, int index) {
+    return ListTile(
+      title: Text(title),
+      selected: _selectedIndex == index,
+      trailing: Icon(icon),
+      onTap: () {
+        _onItemTapped(index);
+        Navigator.pop(context);
+      },
+    );
   }
 }

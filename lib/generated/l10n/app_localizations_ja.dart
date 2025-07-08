@@ -264,6 +264,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get loadingText => '読み込み中...';
 
   @override
+  String get updateButton => '更新';
+
+  @override
+  String get deleteButton => '削除';
+
+  @override
   String get editCaloriesCalendarButton => 'エディット';
 
   @override
@@ -303,4 +309,47 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get searchMenuNoItemsFoundText2 => '検索語句を調整してみてください';
+
+  @override
+  String get symbolTableMenu => 'カスタムエントリ名';
+
+  @override
+  String get symbolTableDescription => '再利用可能な名前を定義します（例：名前：卵、式：80）';
+
+  @override
+  String get symbolTableDescriptionExtended => '式には通常の数学記号や定義した他の名前を使用できます';
+
+  @override
+  String get symbolTableNameColumnHeader => '名前';
+
+  @override
+  String get symbolTableExpressionColumnHeader => '式';
+
+  @override
+  String get symbolTableNameRequiredError => '名前は必須です';
+
+  @override
+  String get symbolTableExpressionRequiredError => '式は必須です';
+
+  @override
+  String get symbolTableLoadingFailure => 'シンボルの読み込みに失敗しました';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure => '無効な式：正の値である必要があります';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 => 'カスタムシンボルはまだ定義されていません。';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 => '上で最初のシンボルを追加しましょう！';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return '名前 $name はすでに存在します。別の名前を選んでください。';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return '削除しますか: $name？';
+  }
 }

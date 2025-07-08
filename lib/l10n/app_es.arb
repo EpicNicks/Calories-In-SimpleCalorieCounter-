@@ -90,6 +90,8 @@
   "continueButton": "Continuar",
   "cancelButton": "Cancelar",
   "loadingText": "Cargando...",
+  "updateButton": "Actualizar",
+  "deleteButton": "Eliminar",
 
   "editCaloriesCalendarButton": "Editar",
 
@@ -100,16 +102,24 @@
   "searchMenuDateColumnLabel": "Fecha",
 
   "searchMenuResultText": "{amount, plural, =1{Se encontró 1 resultado} other{Se encontraron {amount} resultados}}",
-  "@searchMenuResultText": {
-    "description": "Search results count message",
-    "placeholders": {
-      "amount": {
-        "type": "int"
-      }
-    }
-  },
   "searchMenuNoItemsText1": "No se encontraron alimentos",
   "searchMenuNoItemsText2": "Agrega algunos alimentos para comenzar",
   "searchMenuNoItemsFoundText1": "No se encontraron resultados",
-  "searchMenuNoItemsFoundText2": "Intenta ajustar tus términos de búsqueda"
+  "searchMenuNoItemsFoundText2": "Intenta ajustar tus términos de búsqueda",
+
+  "symbolTableMenu": "Nombres personalizados",
+  "symbolTableDescription": "Define tus propios nombres reutilizables (ej: Nombre: huevo, Expresión: 80)",
+  "symbolTableDescriptionExtended": "Las expresiones pueden incluir símbolos matemáticos habituales y otros nombres que definas",
+  "symbolTableNameColumnHeader": "Nombre",
+  "symbolTableExpressionColumnHeader": "Expresión",
+  "symbolTableNameRequiredError": "El nombre es obligatorio",
+  "symbolTableExpressionRequiredError": "La expresión es obligatoria",
+  "symbolTableLoadingFailure": "No se pudieron cargar los símbolos",
+  "symbolExpressionPositiveConstraintFailure": "Expresión inválida: la expresión debe ser positiva",
+
+  "symbolExpressionNoneDefinedHint1": "Aún no se han definido símbolos personalizados.",
+  "symbolExpressionNoneDefinedHint2": "¡Agrega tu primer símbolo arriba!",
+
+  "symbolTableNameExistsError": "El nombre {name} ya existe. Por favor elige otro nombre.",
+  "symbolTableConfirmDelete": "¿Eliminar: {name}?"
 }

@@ -264,6 +264,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loadingText => 'Loading...';
 
   @override
+  String get updateButton => 'Update';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
   String get editCaloriesCalendarButton => 'Edit';
 
   @override
@@ -303,4 +309,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchMenuNoItemsFoundText2 => 'Try adjusting your search terms';
+
+  @override
+  String get symbolTableMenu => 'Custom Entry Names';
+
+  @override
+  String get symbolTableDescription =>
+      'Define your own reusable names (ex: Name: egg, Expression: 80)';
+
+  @override
+  String get symbolTableDescriptionExtended =>
+      'Expressions can include the usual math symbols as well as other names you define';
+
+  @override
+  String get symbolTableNameColumnHeader => 'Name';
+
+  @override
+  String get symbolTableExpressionColumnHeader => 'Expression';
+
+  @override
+  String get symbolTableNameRequiredError => 'Name is required';
+
+  @override
+  String get symbolTableExpressionRequiredError => 'Expression is required';
+
+  @override
+  String get symbolTableLoadingFailure => 'Failed to load symbols';
+
+  @override
+  String get symbolExpressionPositiveConstraintFailure =>
+      'Invalid expression: expression must be positive';
+
+  @override
+  String get symbolExpressionNoneDefinedHint1 =>
+      'No custom symbols defined yet.';
+
+  @override
+  String get symbolExpressionNoneDefinedHint2 => 'Add your first symbol above!';
+
+  @override
+  String symbolTableNameExistsError(String name) {
+    return 'Name $name already exists. Please choose a different name.';
+  }
+
+  @override
+  String symbolTableConfirmDelete(String name) {
+    return 'Delete: $name?';
+  }
 }
