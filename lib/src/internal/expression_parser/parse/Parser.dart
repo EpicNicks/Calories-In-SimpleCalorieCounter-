@@ -74,7 +74,9 @@ List<Token> _resolveSymbolsWithCommentsToInput(List<Token> tokens, List<CustomSy
         final List<Token> newTokenData = _resolveSymbolsToInput(tokenize(matchedCse.expression), userSymbols);
         final List<Token> expandedTokens = [];
         expandedTokens.addAll(tokens.take(i));
+        expandedTokens.add(OperatorToken.LPAREN);
         expandedTokens.addAll(newTokenData);
+        expandedTokens.add(OperatorToken.RPAREN);
         expandedTokens.addAll(tokens.skip(i + 1)); // Fixed: was i + 2
         tokens = expandedTokens;
         i--; // Reset index to reprocess from current position
@@ -97,7 +99,9 @@ List<Token> _resolveSymbolsToInput(List<Token> tokens, List<CustomSymbolEntry> u
         final List<Token> newTokenData = _resolveSymbolsToInput(tokenize(matchedCse.expression), userSymbols);
         final List<Token> expandedTokens = [];
         expandedTokens.addAll(tokens.take(i));
+        expandedTokens.add(OperatorToken.LPAREN);
         expandedTokens.addAll(newTokenData);
+        expandedTokens.add(OperatorToken.RPAREN);
         expandedTokens.addAll(tokens.skip(i + 1)); // Fixed: was i + 2
         tokens = expandedTokens;
         i--; // Reset index to reprocess from current position
