@@ -66,7 +66,7 @@ class _SettingsState extends State<Settings> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: FractionalOffset.bottomCenter,
-                colors: [Theme.of(context).colorScheme.background, ORANGE_FRUIT],
+                colors: [Theme.of(context).colorScheme.surface, ORANGE_FRUIT],
                 stops: const [0, 1],
               ),
             ),
@@ -80,13 +80,13 @@ class _SettingsState extends State<Settings> {
                               Navigator.push(context, MaterialPageRoute(builder: (context) => menuButtons[k]!));
                             },
                             style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.resolveWith((materialState) {
-                                  if (materialState.contains(MaterialState.pressed)) {
-                                    return Theme.of(context).colorScheme.background;
+                                backgroundColor: WidgetStateProperty.resolveWith((materialState) {
+                                  if (materialState.contains(WidgetState.pressed)) {
+                                    return Theme.of(context).colorScheme.surface;
                                   }
-                                  return Theme.of(context).colorScheme.background;
+                                  return Theme.of(context).colorScheme.surface;
                                 }),
-                                shape: MaterialStatePropertyAll(
+                                shape: WidgetStatePropertyAll(
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.zero, side: BorderSide(color: Colors.orange)),
                                 )),

@@ -14,10 +14,10 @@ class ThemeChange extends StatefulWidget {
 
 class _ThemeChangeState extends State<ThemeChange> {
   ButtonStyle getButtonStyle() => ButtonStyle(
-      minimumSize: MaterialStatePropertyAll(Size(MediaQuery.of(context).size.width / 4, 70)),
-      shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3)))),
-      backgroundColor: MaterialStatePropertyAll(ORANGE_FRUIT),
-      textStyle: MaterialStatePropertyAll(TextStyle(color: Colors.black)));
+      minimumSize: WidgetStatePropertyAll(Size(MediaQuery.of(context).size.width / 4, 70)),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3)))),
+      backgroundColor: WidgetStatePropertyAll(ORANGE_FRUIT),
+      textStyle: WidgetStatePropertyAll(TextStyle(color: Colors.black)));
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _ThemeChangeState extends State<ThemeChange> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: FractionalOffset.bottomCenter,
-            colors: [Theme.of(context).colorScheme.background, ORANGE_FRUIT],
+            colors: [Theme.of(context).colorScheme.surface, ORANGE_FRUIT],
             stops: const [0, 1],
           ),
         ),

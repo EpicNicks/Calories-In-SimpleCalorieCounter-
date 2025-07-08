@@ -18,7 +18,6 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
 
   final _nameController = TextEditingController();
   final _expressionController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
 
   // Add these focus nodes to maintain focus state
   final _nameFocusNode = FocusNode();
@@ -228,16 +227,6 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
     );
   }
 
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
   void _confirmDelete(CustomSymbolEntry symbol) {
     showDialog(
       context: context,
@@ -265,11 +254,9 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = AppLocalizations.of(context)!;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations.symbolTableMenu),
+        title: Text(AppLocalizations.of(context)!.symbolTableMenu),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -278,14 +265,14 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
           children: [
             // Description
             Text(
-              localizations.symbolTableDescription,
+              AppLocalizations.of(context)!.symbolTableDescription,
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             SizedBox(height: 8),
             Text(
-              localizations.symbolTableDescriptionExtended,
+              AppLocalizations.of(context)!.symbolTableDescriptionExtended,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
             ),
             SizedBox(height: 24),
@@ -302,7 +289,7 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
                         controller: _nameController,
                         focusNode: _nameFocusNode,
                         decoration: InputDecoration(
-                          labelText: localizations.symbolTableNameColumnHeader,
+                          labelText: AppLocalizations.of(context)!.symbolTableNameColumnHeader,
                           border: OutlineInputBorder(),
                           isDense: true,
                         ),
@@ -315,7 +302,7 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
                         controller: _expressionController,
                         focusNode: _expressionFocusNode,
                         decoration: InputDecoration(
-                          labelText: localizations.symbolTableExpressionColumnHeader,
+                          labelText: AppLocalizations.of(context)!.symbolTableExpressionColumnHeader,
                           border: OutlineInputBorder(),
                           isDense: true,
                         ),

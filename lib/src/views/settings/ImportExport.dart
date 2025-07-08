@@ -143,10 +143,10 @@ class _ImportExportState extends State<ImportExport> {
 
   String _progressString = "";
   final _buttonStyle = ButtonStyle(
-      minimumSize: MaterialStatePropertyAll(Size(150, 70)),
-      shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3)))),
-      backgroundColor: MaterialStatePropertyAll(ORANGE_FRUIT),
-      textStyle: MaterialStatePropertyAll(TextStyle(color: Colors.black)));
+      minimumSize: WidgetStatePropertyAll(Size(150, 70)),
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(3)))),
+      backgroundColor: WidgetStatePropertyAll(ORANGE_FRUIT),
+      textStyle: WidgetStatePropertyAll(TextStyle(color: Colors.black)));
 
   Future<void> exportData(BuildContext context) async {
     setState(() {

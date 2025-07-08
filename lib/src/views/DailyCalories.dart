@@ -81,7 +81,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
               border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blueGrey)),
               focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
               filled: true,
-              fillColor: Theme.of(context).colorScheme.background,
+              fillColor: Theme.of(context).colorScheme.surface,
             ),
             keyboardType: TextInputType.text,
             focusNode: focusNode,
@@ -213,7 +213,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: FractionalOffset.bottomCenter,
-              colors: [Theme.of(context).colorScheme.background, ORANGE_FRUIT],
+              colors: [Theme.of(context).colorScheme.surface, ORANGE_FRUIT],
               stops: const [0, 1],
             ),
           ),

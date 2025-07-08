@@ -289,7 +289,7 @@ class MifflinStJeorCalculatorState extends State<MifflinStJeorCalculator> {
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
-              style: ButtonStyle(backgroundColor: MaterialStatePropertyAll<Color>(Colors.orange.shade500)),
+              style: ButtonStyle(backgroundColor: WidgetStatePropertyAll<Color>(Colors.orange.shade500)),
               onPressed: () {
                 calculateCalories();
               },

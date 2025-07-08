@@ -122,7 +122,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 child: Text(AppLocalizations.of(context)!.editCaloriesCalendarButton),
                                 style: new ButtonStyle(
                                     backgroundColor:
-                                        MaterialStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
+                                        WidgetStateColor.resolveWith((states) => Color.fromARGB(255, 200, 200, 100))),
                               ),
                             ],
                           ),
