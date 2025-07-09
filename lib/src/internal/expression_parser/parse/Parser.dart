@@ -49,7 +49,6 @@ double parseWithUserSymbols(String input, List<CustomSymbolEntry> userSymbols) {
     if (firstInvalidIndex != -1) {
       InvalidToken firstInvalidToken = resolvedTokens[firstInvalidIndex] as InvalidToken;
       resolvedTokens = resolvedTokens.sublist(0, firstInvalidIndex);
-      print(firstInvalidToken.invalidShard);
       comment = input.substring(firstInvalidToken.position);
     }
     final List<Token> rpnSolveList = _tokensToRpn(resolvedTokens);

@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,7 +23,9 @@ class _SearchState extends State<Search> {
   List<FoodItemEntry> _filteredData = [];
   List<CustomSymbolEntry> _userSymbols = [];
   bool _isLoading = true;
+  bool _isSearching = false;
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -29,9 +34,13 @@ class _SearchState extends State<Search> {
 
     // Listen to search input changes
     _searchController.addListener(() {
-      setState(() {
-        _searchQuery = _searchController.text;
-        _filterData();
+      _debounceTimer?.cancel();
+
+      _debounceTimer = Timer(const Duration(milliseconds: 300), () {
+        setState(() {
+          _searchQuery = _searchController.text;
+        });
+        _filterDataAsync();
       });
     });
   }
@@ -59,24 +68,63 @@ class _SearchState extends State<Search> {
     }
   }
 
-  void _filterData() {
+  Future<void> _filterDataAsync() async {
     if (_searchQuery.isEmpty) {
-      _filteredData = _allData;
-    } else {
-      _filteredData = _allData.where((item) {
-        final String expression = item.calorieExpression;
-        final String dateStr = _dateFormat.format(item.date);
-        final String caloriesString =
-            evaluateFoodItemWithCommentAndSymbols(expression, _userSymbols).toInt().toString();
-        final String query = _searchQuery;
-
-        return expression.contains(query) || dateStr.contains(query) || caloriesString.contains(query);
-      }).toList();
+      setState(() {
+        _filteredData = _allData;
+        _isSearching = false;
+      });
+      return;
     }
+
+    setState(() {
+      _isSearching = true;
+    });
+
+    try {
+      // Move heavy work to background isolate
+      final filteredData = await compute(_filterItems, {
+        'allData': _allData,
+        'searchQuery': _searchQuery,
+        'userSymbols': _userSymbols,
+      });
+
+      if (mounted) {
+        setState(() {
+          _filteredData = filteredData;
+          _isSearching = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isSearching = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error filtering data: $e')),
+        );
+      }
+    }
+  }
+
+  static List<FoodItemEntry> _filterItems(Map<String, dynamic> params) {
+    final List<FoodItemEntry> allData = params['allData'];
+    final String searchQuery = params['searchQuery'];
+    final List<CustomSymbolEntry> userSymbols = params['userSymbols'];
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+
+    return allData.where((item) {
+      final String expression = item.calorieExpression;
+      final String dateStr = dateFormat.format(item.date);
+      final String caloriesString = evaluateFoodItemWithCommentAndSymbols(expression, userSymbols).toInt().toString();
+
+      return expression.contains(searchQuery) || dateStr.contains(searchQuery) || caloriesString.contains(searchQuery);
+    }).toList();
   }
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -86,14 +134,22 @@ class _SearchState extends State<Search> {
     return Scaffold(
       body: Column(
         children: [
-          // Search Bar
           Container(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.searchMenuHintText,
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: _isSearching
+                    ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      )
+                    : const Icon(Icons.search),
                 suffixIcon: _searchQuery.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
@@ -101,8 +157,8 @@ class _SearchState extends State<Search> {
                           _searchController.clear();
                           setState(() {
                             _searchQuery = '';
-                            _filterData();
                           });
+                          _filterDataAsync();
                         },
                       )
                     : null,
@@ -114,8 +170,6 @@ class _SearchState extends State<Search> {
               ),
             ),
           ),
-
-          // Results count and total calories
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -128,10 +182,7 @@ class _SearchState extends State<Search> {
               ],
             ),
           ),
-
           const SizedBox(height: 8),
-
-          // Table
           Expanded(
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
@@ -261,7 +312,6 @@ class _SearchState extends State<Search> {
 
     final ScrollController scrollController = ScrollController();
 
-    // Calculate the position of the first match to scroll to
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (scrollController.hasClients) {
         final String lowerText = text.toLowerCase();
@@ -269,23 +319,18 @@ class _SearchState extends State<Search> {
         final int matchIndex = lowerText.indexOf(lowerQuery);
 
         if (matchIndex != -1) {
-          // Estimate character width (approximate)
           const double estimatedCharWidth = 8.0;
           final double highlightStartPosition = matchIndex * estimatedCharWidth;
           final double highlightWidth = query.length * estimatedCharWidth;
 
-          // Get the viewport width (constrained to 150px as per the Container)
           const double viewportWidth = 150.0;
 
-          // Calculate position to center the highlighted text
           final double highlightCenterPosition = highlightStartPosition + (highlightWidth / 2);
           final double targetPosition = highlightCenterPosition - (viewportWidth / 2);
 
-          // Ensure we don't scroll beyond the bounds
           final double maxScrollExtent = scrollController.position.maxScrollExtent;
           final double clampedPosition = targetPosition.clamp(0.0, maxScrollExtent);
 
-          // Only scroll if the highlight is not already visible
           final double currentScroll = scrollController.offset;
           final bool isHighlightVisible = highlightStartPosition >= currentScroll &&
               (highlightStartPosition + highlightWidth) <= (currentScroll + viewportWidth);
@@ -331,18 +376,16 @@ class _SearchState extends State<Search> {
     int start = 0;
     int index = lowerText.indexOf(lowerQuery, start);
 
-    // Base style for non-highlighted text - use regular textTheme instead of primaryTextTheme
     final TextStyle baseStyle = emptyStyle
         ? TextStyle(
             color: Colors.grey,
             fontStyle: FontStyle.italic,
           ).merge(style)
         : TextStyle(
-            color: Theme.of(context).textTheme.bodyMedium?.color, // Changed from primaryTextTheme to textTheme
+            color: Theme.of(context).textTheme.bodyMedium?.color,
           ).merge(style);
 
     while (index != -1) {
-      // Add text before the match
       if (index > start) {
         spans.add(TextSpan(
           text: text.substring(start, index),
@@ -350,7 +393,6 @@ class _SearchState extends State<Search> {
         ));
       }
 
-      // Add the highlighted match
       spans.add(TextSpan(
         text: text.substring(index, index + query.length),
         style: TextStyle(
@@ -364,7 +406,6 @@ class _SearchState extends State<Search> {
       index = lowerText.indexOf(lowerQuery, start);
     }
 
-    // Add remaining text
     if (start < text.length) {
       spans.add(TextSpan(
         text: text.substring(start),
