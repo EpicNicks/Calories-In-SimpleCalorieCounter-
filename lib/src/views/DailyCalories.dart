@@ -6,6 +6,7 @@ import 'package:calorie_tracker/src/dto/CustomSymbolEntry.dart';
 import 'package:calorie_tracker/src/dto/FoodItemEntry.dart';
 import 'package:calorie_tracker/src/extensions/datetime_extensions.dart';
 import 'package:calorie_tracker/src/helpers/DatabaseHelper.dart';
+import 'package:calorie_tracker/src/widgets/SymbolBoldingTextEditingController.dart';
 import 'package:flutter/material.dart';
 
 class Entry {
@@ -57,7 +58,7 @@ class _DailyCaloriesPageState extends State<DailyCaloriesPage> with WidgetsBindi
             loadItems();
           }
         });
-        final controller = TextEditingController()..text = e.calorieExpression;
+        final controller = SymbolBoldingTextEditingController(userSymbols: userSymbols)..text = e.calorieExpression;
         return Entry(
           controller: controller,
           dbId: e.id!,

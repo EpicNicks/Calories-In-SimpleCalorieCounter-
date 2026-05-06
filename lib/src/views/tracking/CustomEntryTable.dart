@@ -288,6 +288,8 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
                       child: TextFormField(
                         controller: _nameController,
                         focusNode: _nameFocusNode,
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) => _expressionFocusNode.requestFocus(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.symbolTableNameColumnHeader,
                           border: OutlineInputBorder(),
@@ -301,6 +303,7 @@ class _CustomEntryTableState extends State<CustomEntryTable> {
                       child: TextFormField(
                         controller: _expressionController,
                         focusNode: _expressionFocusNode,
+                        onFieldSubmitted: (_) => _addSymbol(),
                         decoration: InputDecoration(
                           labelText: AppLocalizations.of(context)!.symbolTableExpressionColumnHeader,
                           border: OutlineInputBorder(),
